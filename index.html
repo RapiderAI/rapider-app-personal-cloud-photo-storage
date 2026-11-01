@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapider Personal Cloud Photo Storage</title>
+  <script src="https://kit.fontawesome.com/5b23df26dc.js" crossorigin="anonymous" defer></script>
+  <script src="/assets/js/rapider-components.js" defer></script>
+  <link rel="stylesheet" href="/assets/themes/rapider-tailwind-theme.css">
+  <link rel="stylesheet" href="/assets/themes/crm-expenses-design.css">
+  <style>
+    body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; }
+    iframe#appFrame { width: 100%; height: 100%; border: none; }
+  </style>
+</head>
+<body>
+  <iframe id="appFrame" src="pages/photos-timeline/photos-timeline.html"></iframe>
+  <script>
+    const routes = {
+  "photos-timeline": "pages/photos-timeline/photos-timeline.html",
+  "search-explore": "pages/search-explore/search-explore.html",
+  "people-and-pets": "pages/people-and-pets/people-and-pets.html",
+  "albums-collections": "pages/albums-collections/albums-collections.html",
+  "curation-board": "pages/curation-board/curation-board.html",
+  "shared-with-family": "pages/shared-with-family/shared-with-family.html",
+  "locked-vault": "pages/locked-vault/locked-vault.html",
+  "storage-cleanup": "pages/storage-cleanup/storage-cleanup.html",
+  "privacy-portability": "pages/privacy-portability/privacy-portability.html",
+  "photo-detail": "pages/photo-detail/photo-detail.html",
+  "album-detail": "pages/album-detail/album-detail.html",
+  "upload-import-drawer": "pages/upload-import-drawer/upload-import-drawer.html",
+  "share-album-drawer": "pages/share-album-drawer/share-album-drawer.html"
+};
+    function handleHash() {
+      const hash = window.location.hash.replace(/^#\/?/, '').split('?')[0];
+      const route = hash || 'photos-timeline';
+      const target = routes[route] || routes['photos-timeline'];
+      const iframe = document.getElementById('appFrame');
+      if (iframe) iframe.src = target;
+    }
+    window.addEventListener('hashchange', handleHash);
+    window.addEventListener('load', handleHash);
+  </script>
+</body>
+</html>

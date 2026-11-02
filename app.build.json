@@ -4,8 +4,8 @@
   "appName": "Rapider Personal Cloud Photo Storage",
   "repository": "",
   "version": "1.0.0",
-  "lastBuildTimestamp": "2026-11-01T12:37:41.298Z",
-  "lastCommit": "ca6eb4b",
+  "lastBuildTimestamp": "2026-11-02T09:49:20.966Z",
+  "lastCommit": "649cc29",
   "summary": {
     "status": "qa_passed",
     "complianceRate": 100,
@@ -18,147 +18,147 @@
     "failedQaPasses": 0,
     "e2eSuitesCount": 0,
     "e2ePassedCount": 0,
-    "lastFullAudit": "2026-11-01T12:37:41.298Z",
+    "lastFullAudit": "2026-11-02T09:49:20.966Z",
     "lastE2ERun": null
   },
   "qaPasses": {
     "pass-01-routing": {
       "name": "pass-01-routing",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-02-swr": {
       "name": "pass-02-swr",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-03-data-models": {
       "name": "pass-03-data-models",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-04-modals": {
       "name": "pass-04-modals",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-05-drawers": {
       "name": "pass-05-drawers",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-06-responsive": {
       "name": "pass-06-responsive",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-07-themes": {
       "name": "pass-07-themes",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-08-notifications": {
       "name": "pass-08-notifications",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-09-payloads": {
       "name": "pass-09-payloads",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-10-components": {
       "name": "pass-10-components",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-11-e2e-expectations": {
       "name": "pass-11-e2e-expectations",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-12-asset-externalization": {
       "name": "pass-12-asset-externalization",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-13-manifest-sync": {
       "name": "pass-13-manifest-sync",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-14-ui-states": {
       "name": "pass-14-ui-states",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-15-security": {
       "name": "pass-15-security",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-16-accessibility": {
       "name": "pass-16-accessibility",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-17-input-formatting": {
       "name": "pass-17-input-formatting",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-18-kanban-list-views": {
       "name": "pass-18-kanban-list-views",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-19-ui-best-practices": {
       "name": "pass-19-ui-best-practices",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     },
     "pass-20-search-filters": {
       "name": "pass-20-search-filters",
       "status": "passed",
-      "lastRun": "2026-11-01T12:37:41.298Z",
+      "lastRun": "2026-11-02T09:49:20.966Z",
       "pagesCovered": 13,
       "issuesFound": 0
     }
@@ -167,442 +167,285 @@
     "pages/photos-timeline/photos-timeline.html": {
       "pageName": "Photos Timeline",
       "route": "photos-timeline",
-      "fileHash": "sha256:34caeb4e3afd5a713e668b5a5ffd153634b381df9da3aa14182a39c0b2e5c8ca",
-      "lastModified": "2026-11-01T12:37:41.185Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
+      "fileHash": "sha256:d8e5bd30e8b646260de66f5a82da400e7c1fac25eb38ec5cfc7d8f9b87ddffdd",
+      "lastModified": "2026-11-02T09:49:20.849Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
       "status": "passed",
       "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
+        "buttonsTotal": 5,
+        "buttonsWithActions": 5,
         "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
+        "linksTotal": 15,
+        "linksValid": 15,
         "nativeAlerts": 0,
         "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
+        "swrCalls": 0,
+        "modalsTotal": 0
       },
       "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
+      "warnings": []
     },
     "pages/search-explore/search-explore.html": {
       "pageName": "Search, OCR & Places",
       "route": "search-explore",
-      "fileHash": "sha256:44547798ef2db227c762243d98d25798ad2fc1326e32600e23b7bdb9dbd1b74e",
-      "lastModified": "2026-11-01T12:37:41.185Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
+      "fileHash": "sha256:88a9fcf48674af0664e8e6c8301cde1b09d36c464ec629317eaa6c18d9e71229",
+      "lastModified": "2026-11-02T09:49:20.849Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
       "status": "passed",
       "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
+        "buttonsTotal": 6,
+        "buttonsWithActions": 6,
         "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
+        "linksTotal": 14,
+        "linksValid": 14,
         "nativeAlerts": 0,
         "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
+        "swrCalls": 0,
+        "modalsTotal": 0
       },
       "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
+      "warnings": []
     },
     "pages/people-and-pets/people-and-pets.html": {
       "pageName": "People, Pets & Memories",
       "route": "people-and-pets",
-      "fileHash": "sha256:2508a7cd12c19e5554f37ebf5fdd195108f732fca4ef6369b898b109dc3b2523",
-      "lastModified": "2026-11-01T12:37:41.186Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
+      "fileHash": "sha256:55bbbaf2fcdb81bf2d983b6226d844dc91436b86109a84c7c5b996872f7ca1b4",
+      "lastModified": "2026-11-02T09:49:20.850Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
       "status": "passed",
       "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
-        "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/albums-collections/albums-collections.html": {
-      "pageName": "Albums & Collections",
-      "route": "albums-collections",
-      "fileHash": "sha256:5b3a2374daf4fde3a33d743399e9c06801cd610bb9b6196d70588131fc98355f",
-      "lastModified": "2026-11-01T12:37:41.186Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
-        "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/curation-board/curation-board.html": {
-      "pageName": "Photo Curation Board",
-      "route": "curation-board",
-      "fileHash": "sha256:dc9ececc919fc1cbcdc7a8ab205edf442a499c4a8f6b6804870f9861f3087f40",
-      "lastModified": "2026-11-01T12:37:41.186Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
-        "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/shared-with-family/shared-with-family.html": {
-      "pageName": "Shared & Partner Library",
-      "route": "shared-with-family",
-      "fileHash": "sha256:69df24c58bae18c2c305cdd6b3367b193793d6a628391fa203321af7d0e56d5e",
-      "lastModified": "2026-11-01T12:37:41.186Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
-        "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/locked-vault/locked-vault.html": {
-      "pageName": "Locked Vault",
-      "route": "locked-vault",
-      "fileHash": "sha256:b1bb326ab9f4f884eabccab489a6fa45cf684294f69c98de9cce72ba70e70da9",
-      "lastModified": "2026-11-01T12:37:41.187Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
-        "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/storage-cleanup/storage-cleanup.html": {
-      "pageName": "Storage & Deduplication",
-      "route": "storage-cleanup",
-      "fileHash": "sha256:77929b4625fe8c387a4ee2f151907882b955af38e323effa916c3e7d0dca0932",
-      "lastModified": "2026-11-01T12:37:41.187Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
-        "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/privacy-portability/privacy-portability.html": {
-      "pageName": "Import, Export & Privacy",
-      "route": "privacy-portability",
-      "fileHash": "sha256:a8d32322ae6873cb0eac0ccede837eb42408f288c333fad5f5b96ae365b68bf2",
-      "lastModified": "2026-11-01T12:37:41.187Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 8,
-        "buttonsWithActions": 8,
-        "deadButtons": 0,
-        "linksTotal": 12,
-        "linksValid": 12,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 2,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/photo-detail/photo-detail.html": {
-      "pageName": "Photo Lightbox & Non-Destructive Editor",
-      "route": "photo-detail",
-      "fileHash": "sha256:af51c8f54d345282748ab153aa08f359f95b8c6c1159cd2b6cf552dfc37aacd1",
-      "lastModified": "2026-11-01T12:37:41.188Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 9,
-        "buttonsWithActions": 9,
-        "deadButtons": 0,
-        "linksTotal": 14,
-        "linksValid": 14,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 0,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/album-detail/album-detail.html": {
-      "pageName": "Album Story & Gallery",
-      "route": "album-detail",
-      "fileHash": "sha256:a936d8f828ec4f4b98bcec6fbca0e2cdb80900b54d18bc3c16c4edff6a3d47fe",
-      "lastModified": "2026-11-01T12:37:41.188Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 9,
-        "buttonsWithActions": 9,
-        "deadButtons": 0,
-        "linksTotal": 14,
-        "linksValid": 14,
-        "nativeAlerts": 0,
-        "contrastCompliant": true,
-        "swrCalls": 0,
-        "modalsTotal": 1
-      },
-      "issues": [],
-      "warnings": [
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
-        }
-      ]
-    },
-    "pages/upload-import-drawer/upload-import-drawer.html": {
-      "pageName": "Upload & Batch EXIF Drawer",
-      "route": "upload-import-drawer",
-      "fileHash": "sha256:f080dcd1b031ba84925b52403c27d63facadb6a93a7bb04ae41d2616320f2ff1",
-      "lastModified": "2026-11-01T12:37:41.188Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
-      "status": "passed",
-      "metrics": {
-        "buttonsTotal": 7,
-        "buttonsWithActions": 7,
+        "buttonsTotal": 6,
+        "buttonsWithActions": 6,
         "deadButtons": 0,
         "linksTotal": 14,
         "linksValid": 14,
         "nativeAlerts": 0,
         "contrastCompliant": true,
         "swrCalls": 1,
-        "modalsTotal": 1
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/albums-collections/albums-collections.html": {
+      "pageName": "Albums & Collections",
+      "route": "albums-collections",
+      "fileHash": "sha256:0eb6217d846fbaf7d8b97246639b4ea1f946c24c82598639a882f89709790c6c",
+      "lastModified": "2026-11-02T09:49:20.850Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 6,
+        "buttonsWithActions": 6,
+        "deadButtons": 0,
+        "linksTotal": 14,
+        "linksValid": 14,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 1,
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/curation-board/curation-board.html": {
+      "pageName": "Photo Curation Board",
+      "route": "curation-board",
+      "fileHash": "sha256:deda19790bb6ff4fa294264711d1d5d157c7d25f6d50ab32d62d9ceab9dcd826",
+      "lastModified": "2026-11-02T09:49:20.850Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 6,
+        "buttonsWithActions": 6,
+        "deadButtons": 0,
+        "linksTotal": 14,
+        "linksValid": 14,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 0,
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/shared-with-family/shared-with-family.html": {
+      "pageName": "Shared & Partner Library",
+      "route": "shared-with-family",
+      "fileHash": "sha256:962721445a319faab820156aaf25826100d29a0c62c1a846da167ef417a1c7a5",
+      "lastModified": "2026-11-02T09:49:20.851Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 6,
+        "buttonsWithActions": 6,
+        "deadButtons": 0,
+        "linksTotal": 14,
+        "linksValid": 14,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 1,
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/locked-vault/locked-vault.html": {
+      "pageName": "Locked Vault",
+      "route": "locked-vault",
+      "fileHash": "sha256:6afa7be71203b31e46b62613af831cff6bd09b2c8d4326117689d1739d63cb76",
+      "lastModified": "2026-11-02T09:49:20.851Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 6,
+        "buttonsWithActions": 6,
+        "deadButtons": 0,
+        "linksTotal": 14,
+        "linksValid": 14,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 1,
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/storage-cleanup/storage-cleanup.html": {
+      "pageName": "Storage & Deduplication",
+      "route": "storage-cleanup",
+      "fileHash": "sha256:b4e3a74cf67ded5780f6c12b51c84f800661a44e35afe0d3873f4a2f89e7353a",
+      "lastModified": "2026-11-02T09:49:20.851Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 6,
+        "buttonsWithActions": 6,
+        "deadButtons": 0,
+        "linksTotal": 14,
+        "linksValid": 14,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 1,
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/privacy-portability/privacy-portability.html": {
+      "pageName": "Import, Export & Privacy",
+      "route": "privacy-portability",
+      "fileHash": "sha256:18e12ad22f211250bd575f629e03c26668559922a8a5f12ef27f30d665566ca3",
+      "lastModified": "2026-11-02T09:49:20.852Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 6,
+        "buttonsWithActions": 6,
+        "deadButtons": 0,
+        "linksTotal": 14,
+        "linksValid": 14,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 1,
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/photo-detail/photo-detail.html": {
+      "pageName": "Photo Lightbox & Non-Destructive Editor",
+      "route": "photo-detail",
+      "fileHash": "sha256:f5916192333720d626298ce0361b6eadd5ae35eb0c74a81fed2617190808e1f8",
+      "lastModified": "2026-11-02T09:49:20.853Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 5,
+        "buttonsWithActions": 5,
+        "deadButtons": 0,
+        "linksTotal": 15,
+        "linksValid": 15,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 0,
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/album-detail/album-detail.html": {
+      "pageName": "Album Story & Gallery",
+      "route": "album-detail",
+      "fileHash": "sha256:7a305b19d8196137bf99595875c478e5c1099076ea1e70e9fc3cbd7e3968db82",
+      "lastModified": "2026-11-02T09:49:20.853Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 5,
+        "buttonsWithActions": 5,
+        "deadButtons": 0,
+        "linksTotal": 15,
+        "linksValid": 15,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 0,
+        "modalsTotal": 0
+      },
+      "issues": [],
+      "warnings": []
+    },
+    "pages/upload-import-drawer/upload-import-drawer.html": {
+      "pageName": "Upload & Batch EXIF Drawer",
+      "route": "upload-import-drawer",
+      "fileHash": "sha256:0e7bfed6debe83f8ab962841b8bae8ac28aeae7cb3a7d72dad271bffd4488436",
+      "lastModified": "2026-11-02T09:49:20.854Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
+      "status": "passed",
+      "metrics": {
+        "buttonsTotal": 9,
+        "buttonsWithActions": 9,
+        "deadButtons": 0,
+        "linksTotal": 13,
+        "linksValid": 13,
+        "nativeAlerts": 0,
+        "contrastCompliant": true,
+        "swrCalls": 1,
+        "modalsTotal": 0
       },
       "issues": [],
       "warnings": [
         {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
+          "rule": "Pass 04: Modals Usage (Universal Dismissal)",
+          "type": "MODAL_DISMISSAL_MISSING",
+          "message": "Modal element detected, but script lacks standard backdrop click dismissal or Escape key listener to close active overlays."
         }
       ]
     },
     "pages/share-album-drawer/share-album-drawer.html": {
       "pageName": "Share Album / Partner Rule Drawer",
       "route": "share-album-drawer",
-      "fileHash": "sha256:c32d755495c3aa946ad3a8a935a4c2aebddfdff18a448821587d0be268cd7bc8",
-      "lastModified": "2026-11-01T12:37:41.189Z",
-      "lastTested": "2026-11-01T12:37:41.298Z",
+      "fileHash": "sha256:63c8e0798a119c11841e4ada2b8f4b9f94d7eaadf77cfd3ade1e40f64783170c",
+      "lastModified": "2026-11-02T09:49:20.854Z",
+      "lastTested": "2026-11-02T09:49:20.966Z",
       "status": "passed",
       "metrics": {
-        "buttonsTotal": 7,
-        "buttonsWithActions": 7,
+        "buttonsTotal": 9,
+        "buttonsWithActions": 9,
         "deadButtons": 0,
-        "linksTotal": 14,
-        "linksValid": 14,
+        "linksTotal": 13,
+        "linksValid": 13,
         "nativeAlerts": 0,
         "contrastCompliant": true,
         "swrCalls": 1,
-        "modalsTotal": 1
+        "modalsTotal": 0
       },
       "issues": [],
       "warnings": [
         {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_LIGHT_BACKGROUND",
-          "message": "Container has \"bg-white\" without a corresponding \"dark:bg-*\" variant class (sidebar w-64 bg-white border-r border-slate-200 fl).",
-          "snippet": "<div class=\"sidebar w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none\">"
-        },
-        {
-          "rule": "Pass 11: Dark & Light Theme Compliance",
-          "type": "HARDCODED_DARK_TEXT",
-          "message": "Text has hardcoded dark color without a corresponding \"dark:text-*\" variant (bg-slate-50 text-slate-900 font-sans antialiased m).",
-          "snippet": "<div class=\"bg-slate-50 text-slate-900 font-sans antialiased min-h-screen flex\">"
+          "rule": "Pass 04: Modals Usage (Universal Dismissal)",
+          "type": "MODAL_DISMISSAL_MISSING",
+          "message": "Modal element detected, but script lacks standard backdrop click dismissal or Escape key listener to close active overlays."
         }
       ]
     }
@@ -614,6 +457,16 @@
     "suites": []
   },
   "history": [
+    {
+      "timestamp": "2026-11-02T09:49:20.966Z",
+      "action": "qa_full_audit",
+      "commit": "649cc29",
+      "complianceRate": 100,
+      "pagesAudited": 13,
+      "status": "passed",
+      "agent": "Antigravity",
+      "details": "13/13 pages passed. Completed 20/20 QA passes."
+    },
     {
       "timestamp": "2026-11-01T12:37:41.298Z",
       "action": "qa_full_audit",

@@ -47,17 +47,17 @@ Every app's `app.manifest.json` MUST define an `appSuite` object containing:
 ---
 
 ## 3. Sidebar Header HTML Structure
-Replace legacy `.brand` elements containing `<span class="brandmark">r</span>rapider` with the following canonical structure:
+Replace legacy `.brand` elements containing `<span class="brandmark">r</span>rapider` with the following canonical structure (CRITICAL: `.brand` MUST be a `<button type="button" class="brand" data-action="expand-sidebar">`, NEVER an `<a href="#/...">` tag, so the Rapider iframe host's `document` capture-phase `<a>` click interceptor never hijacks expanding the collapsed sidebar):
 
 ```html
 <div class="brand-row">
-  <a class="brand" href="#/overview" title="HR Suite">
+  <button type="button" class="brand" data-action="expand-sidebar" title="HR Suite" aria-label="HR Suite">
     <span class="suite-icon-container">
       <i class="suite-icon fas fa-users"></i>
       <i class="suite-expand-icon fas fa-chevron-right"></i>
     </span>
     <span class="suite-title">HR Suite</span>
-  </a>
+  </button>
   <button type="button" class="sidebar-collapse-btn" title="Collapse sidebar" aria-label="Collapse sidebar">
     <i class="fas fa-chevron-left"></i>
   </button>
@@ -252,76 +252,66 @@ Replace legacy `.brand` elements containing `<span class="brandmark">r</span>rap
 ---
 
 ## 5. JavaScript Implementation (`<script data-collapsible-sidebar>`)
+> **CRITICAL IFRAME HOST RULE:** In the Rapider Preview Harness and production iframe sandbox (`html-preview.component.ts`), a capture-phase `document.addEventListener('click', ..., true)` listener intercepts `<a href>` clicks. Therefore, `<script data-collapsible-sidebar>` **MUST** register its expand/collapse click handler on **`window` in the capture phase (`window.addEventListener('click', ..., true)`)**, which executes before `document` capture-phase listeners!
+
 ```javascript
 (function() {
   function initCollapsibleSidebar() {
-    const sidebar = document.querySelector('aside.sidebar, #apm-sidebar, aside');
-    if (!sidebar) return;
-    const layout = document.querySelector('.layout') || document.querySelector('.flex.h-screen') || document.body;
+    var sidebar = document.querySelector("aside.sidebar, #suiteSidebar, #apm-sidebar");
+    if (!sidebar || sidebar.dataset.collapsibleBound === "true") return;
+    sidebar.dataset.collapsibleBound = "true";
+    var layout = sidebar.closest(".layout, .ds-shell") || document.querySelector(".layout, .ds-shell") || document.body;
+
+    function isCollapsed() {
+      return sidebar.classList.contains("sidebar-collapsed") || (layout && layout.classList.contains("sidebar-collapsed"));
+    }
 
     function setCollapsed(collapsed) {
       if (collapsed) {
-        sidebar.classList.add('sidebar-collapsed');
-        if (layout) layout.classList.add('sidebar-collapsed');
-        try { localStorage.setItem('rapider_sidebar_collapsed', 'true'); } catch(e) {}
+        sidebar.classList.add("sidebar-collapsed");
+        if (layout) layout.classList.add("sidebar-collapsed");
+        try { localStorage.setItem("rapider_sidebar_collapsed", "true"); } catch(e) {}
       } else {
-        sidebar.classList.remove('sidebar-collapsed');
-        if (layout) layout.classList.remove('sidebar-collapsed');
-        try { localStorage.setItem('rapider_sidebar_collapsed', 'false'); } catch(e) {}
+        sidebar.classList.remove("sidebar-collapsed");
+        if (layout) layout.classList.remove("sidebar-collapsed");
+        try { localStorage.setItem("rapider_sidebar_collapsed", "false"); } catch(e) {}
       }
     }
 
-    // Collapse button click handler
-    const collapseBtns = sidebar.querySelectorAll('.sidebar-collapse-btn, #btn-sidebar-collapse');
-    collapseBtns.forEach(btn => {
-      btn.addEventListener('click', function(e) {
+    // Use window capture-phase listener so it executes BEFORE any host/SDK document capture-phase anchor listener
+    window.addEventListener("click", function(e) {
+      var target = e.target;
+      if (!target || typeof target.closest !== "function") return;
+
+      var collapseBtn = target.closest(".sidebar-collapse-btn, #btn-sidebar-collapse");
+      if (collapseBtn && sidebar.contains(collapseBtn)) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
         setCollapsed(true);
-      });
-    });
+        return;
+      }
 
-    // Expand click on top Suite icon / right caret when collapsed
-    const brand = sidebar.querySelector('.brand');
-    const brandRow = sidebar.querySelector('.brand-row');
-    const suiteIconContainer = sidebar.querySelector('.suite-icon-container');
-
-    function handleExpandClick(e) {
-      if (sidebar.classList.contains('sidebar-collapsed') || (layout && layout.classList.contains('sidebar-collapsed'))) {
+      var expandTrigger = target.closest(".brand-row, .brand, .suite-icon-container, .suite-expand-icon, [data-action='expand-sidebar']");
+      if (expandTrigger && sidebar.contains(expandTrigger) && isCollapsed()) {
         e.preventDefault();
         e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
         setCollapsed(false);
+        return;
       }
-    }
-
-    if (suiteIconContainer) {
-      suiteIconContainer.addEventListener('click', handleExpandClick);
-    }
-    if (brand) {
-      brand.addEventListener('click', function(e) {
-        if (sidebar.classList.contains('sidebar-collapsed') || (layout && layout.classList.contains('sidebar-collapsed'))) {
-          handleExpandClick(e);
-        }
-      });
-    }
-    if (brandRow) {
-      brandRow.addEventListener('click', function(e) {
-        if (sidebar.classList.contains('sidebar-collapsed') || (layout && layout.classList.contains('sidebar-collapsed'))) {
-          handleExpandClick(e);
-        }
-      });
-    }
+    }, true);
 
     // Restore persistent state from localStorage
     try {
-      if (localStorage.getItem('rapider_sidebar_collapsed') === 'true') {
+      if (localStorage.getItem("rapider_sidebar_collapsed") === "true") {
         setCollapsed(true);
       }
     } catch(e) {}
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCollapsibleSidebar);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCollapsibleSidebar);
   } else {
     initCollapsibleSidebar();
   }

@@ -27,11 +27,24 @@
 - **Credentials:** S3 credentials (`AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`) must be dynamically loaded from `.env` files (e.g. `rapider-server/rappider/.server.env` as `SPACES_KEY` and `SPACES_SECRET`) and exported into the bash context before running the AWS CLI command.
 - **Markdown Embedding:** Always construct the public URL (`https://rapider.nyc3.digitaloceanspaces.com/_qa_assets/...`) and embed it inside markdown reports using `![Alt Text](URL)`. Do not leave local paths.
 
+## Screenshot Retention & Historical Day-Stamp Standard (ZERO DELETION - MANDATORY)
+- **Zero Deletion Standard:** Agents, App Builders, Single Isolated Page Builders, Scheduled Task Builders, test runners, and harnesses **MUST NEVER DELETE, UNLINK, PRUNE, OR REMOVE** existing screenshot files from the app repositories (`e2e/screenshots/` or `screenshots/`).
+- **Day-Stamped Historical Evidence:** Whenever a new screenshot is captured, a permanent historical copy MUST be saved with a day-stamp suffix:
+  - Light Mode: `e2e/screenshots/{route}_{YYYYMMDD}.png` (e.g. `e2e/screenshots/dashboard_20261017.png`, `e2e/screenshots/dashboard_20261103.png`).
+  - Dark Mode: `e2e/screenshots/{route}-dark_{YYYYMMDD}.png` (e.g. `e2e/screenshots/dashboard-dark_20261017.png`, `e2e/screenshots/dashboard-dark_20261103.png`).
+- **Maintain Canonical Active Files:** In addition to the day-stamped file, maintain the active canonical files (`e2e/screenshots/{route}.png` and `e2e/screenshots/{route}-dark.png`) so existing links in `e2e/analysis/{route}.md`, `e2e/README.md`, `app.manifest.json`, and live App Builder studio previews continue resolving cleanly without broken images.
+- **Preserve Prior Historical Un-stamped Files:** If a canonical screenshot already exists without a day-stamp, preserve a copy stamped with its modification date (`{route}_{prevDate}.png`) before writing a new one so no prior visual snapshot is ever lost.
+- **Commit All Screenshots to Git:** All day-stamped and active screenshots must be staged (`git add -f e2e/screenshots/`) and committed into git history so visual progress across iterations is preserved indefinitely in the folder.
+
 ## Session Isolation
 - When working in a session, you MUST NOT check the data, memory, or information from other sessions. Sessions are specifically created to isolate issues and work.
 - You should always focus entirely on the current session and the repository. Do not draw on or reference context from other, unrelated sessions, as this can break the intended isolation and introduce irrelevant or incorrect information.
-## Sidebar Menu Visibility & Grouping
+## Sidebar Menu Visibility, Grouping & Enabled / Draft Pages (`enabled: false`)
 - **Visibility:** To hide a page from the app sidebar (e.g. for detail, edit, or new item pages accessed via buttons), set the `displayOnMenu: false` (and/or `displayInMenu: false`) flag on the `webPages` definition in `app.manifest.json`.
+- **Enabled vs. Draft Pages (`enabled: true | false` - STRICT):**
+  1. **Draft Flag (`"enabled": false`):** A page in `app.manifest.json` (`webPages`) with `"enabled": false` is a **Draft** page actively in development (when `"enabled"` is omitted or `true`, the page is **Enabled**).
+  2. **Visible in Application Builder & `develop` Version / Preview Harness:** Non-enabled / Draft pages (`"enabled": false`) **MUST remain visible and editable** in Application Builder, in `compileAppDevelopVersion` (`version === 'develop'`), and in the App Builder Preview Harness (where a `DRAFT` badge with tooltip `"This page is marked as a draft and will not be published in new version releases until it is enabled."` is shown). AI agents and builders **MUST NEVER delete** draft pages or overwrite `"enabled": false` unless explicitly instructed to enable them.
+  3. **Excluded from Menus & Production Version Deployments:** Any page with `"enabled": false` **MUST be excluded/discarded** from navigation sidebar menus and **MUST be filtered/discarded** when publishing/deploying production versions (`publishAppVersion`, `regenerateAppVersionS3`, and published version viewers) until `"enabled": true` is switched on.
 - **Ordering:** Use the `order` property (number) in the `webPages` definition to explicitly sort the pages numerically within their groups (ascending from 1 to N).
 - **Section Grouping Standard (Minimum 3 Items Rule - STRICT):**
   1. **Minimum 3 Items Required per Title:** When assigning a section header/title (`"title"` or `"group"`) to menu items in `app.manifest.json`, the section MUST contain **at least 3 menu items** (`count >= 3`).
@@ -64,18 +77,20 @@
   3. **Container Query Scoping:** Utility classes `@sm:`, `@md:`, `@lg:`, and `@xl:` may ONLY be used when an ancestor element explicitly declares `@container`.
   4. **Non-wrapping Status Badges:** Status pills, tags, chips, and badges must declare `whitespace-nowrap shrink-0 inline-flex items-center`.
 
-- **Suite Brand & Collapsible Sidebar Navigation Standard (STRICT):**
-  1. **Mandatory Manifest Suite Icon & Short Title:** Every `app.manifest.json` MUST define `appSuite.icon` with a valid FontAwesome icon class (e.g. `fas fa-users`, `fas fa-wallet`, `fas fa-layer-group`) and `appSuite.shortTitle` (e.g. `HR Suite`, `Finance Suite`, `Projects Suite`).
-  2. **Elimination of Fake Rapider Logos:** App sidebars MUST NOT render fake "Rapider" logo marks (e.g. purple square with "r"), "rapider ai" superscript, or generic Rapider text in the sidebar brand header.
-  3. **Suite Icon & Title Header:** The brand header MUST render the Suite Icon (`manifest.appSuite.icon`) and the Suite Name (`manifest.appSuite.shortTitle`).
-  4. **Collapsible Sidebar Mechanics:**
+- **Suite Brand & Collapsible Sidebar Navigation Standard (STRICT — Pass 21):**
+  1. **Every App Page Must Include `<aside class="sidebar" id="suiteSidebar">`:** Every application HTML page (`pages/{route}/{route}.html`) MUST render the canonical Collapsible Suite Left Sidebar (`<aside class="sidebar" id="suiteSidebar">`) inside `<div class="ds-shell layout @container">` alongside `<main class="ds-main">`.
+  2. **Mandatory Manifest Suite Icon & Short Title:** Every `app.manifest.json` MUST define `appSuite.icon` with a valid FontAwesome icon class (e.g. `fas fa-users`, `fas fa-wallet`, `fas fa-layer-group`) and `appSuite.shortTitle` (e.g. `HR Suite`, `Finance Suite`, `Projects Suite`).
+  3. **Elimination of Fake Rapider Logos:** App sidebars MUST NOT render fake "Rapider" logo marks (e.g. purple square with "r"), "rapider ai" superscript, or generic Rapider text in the sidebar brand header.
+  4. **Suite Icon & Title Header Button (`.brand-row` — NEVER an `<a href>` Anchor):** The brand header inside `.brand-row` MUST use `<button type="button" class="brand" data-action="expand-sidebar" title="{Suite Short Title}">` (NEVER `<a class="brand" href="#/...">`) to display the Suite Icon (`manifest.appSuite.icon`), `.suite-expand-icon` (`fas fa-chevron-right`), and the Suite Name (`manifest.appSuite.shortTitle`). Using `<a href>` on `.brand` is forbidden because the Rapider iframe host (`html-preview.component.ts`) attaches a capture-phase `document` click listener on `<a>` tags that would intercept clicks when collapsed and trigger route navigation instead of expanding the sidebar.
+  5. **Collapsible Sidebar Mechanics & Capture-Phase `window` Listener:**
      - Sidebars MUST feature a collapse button (`.sidebar-collapse-btn`) with a collapse icon (`fas fa-chevron-left`).
+     - `<script data-collapsible-sidebar>` MUST register its expand/collapse click handler on `window` in the **capture phase** (`window.addEventListener("click", ..., true)`) so it executes before any `document` capture-phase listener.
      - In collapsed state (`sidebar-collapsed`), sidebar width shrinks to ~68px, text labels (`.sidebar-label`, `.suite-title`, `.navlabel`, `.appbox span:not(.appicon)`, footer names) are hidden via `display: none !important;` (and `font-size: 0 !important;` on nav links), and icons remain centered.
      - State must persist in `localStorage.setItem('rapider_sidebar_collapsed', 'true' | 'false')`.
-  5. **Hover Expand Indicator on Top Suite Icon:**
+  6. **Hover Expand Indicator on Top Suite Icon:**
      - When collapsed, the top Suite icon remains visible by default.
      - When mouse hovers over the collapsed sidebar or its icons (`.sidebar.sidebar-collapsed:hover` or `.sidebar-collapsed .brand:hover`), the top Suite icon MUST automatically transform into a right caret / expand icon (`<i class="suite-expand-icon fas fa-chevron-right"></i>`).
-     - Clicking this top icon/caret while collapsed immediately expands the sidebar back to full width.
+     - Clicking this top icon/caret while collapsed immediately expands the sidebar back to full width (`setCollapsed(false)`).
 
 - **Collapsed Sidebar CSS Standard & Ban on JS Inline Display (STRICT):**
   1. **Enforce CSS `display: none !important;`:** When the sidebar is collapsed, text labels must be completely hidden via CSS:
@@ -99,8 +114,11 @@
 
 - **Sample Data Standard & Zeroed-Out ID Block (MANDATORY - STRICT):**
   1. **Existence:** Every microapplication repository MUST contain a `sample-data.json` file in its root directory containing rich, realistic mock records matching the canonical data models in `app.manifest.json`.
-  2. **Mandatory Zeroed-Out 8-Character Prefix:** All sample records **MUST** use UUIDs where the first 8-character block is zeroed out: `00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx` (e.g. `00000000-74c6-417b-b141-468b9dbf3d5e` or `00000000-1111-4111-8111-111111111111`).
-  3. **Foreign Key Alignment:** Any foreign key or reference field linking to another sample entity (e.g., `accountId`, `categoryId`, `ownerId`) must use the target record's matching `00000000-...` ID.
+  2. **Mandatory Zeroed-Out 8-Character Prefix with Truly Random Remaining Digits:**
+     - All sample records **MUST** use UUIDs where the first 8-character block is zeroed out: `00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx`.
+     - **The remaining 24 hex digits MUST BE TRULY RANDOM hex characters** (e.g. `00000000-74c6-417b-b141-468b9dbf3d5e`, `00000000-a8f3-4e2b-9c1d-8f7a6b5c4d3e`).
+     - **STRICT BAN ON ALL-ZERO OR SEQUENTIAL IDS:** NEVER generate sequential or zero-padded IDs (e.g., `00000000-0000-0000-0000-000000000001`, `00000000-0001-4000-a000-000000000001`, `00000000-1111-4111-8111-111111111111`). When multiple entities, tables, or microapps generate records, all-zero endings cause duplicate primary key collisions. Use `'00000000-' + crypto.randomUUID().slice(9)` to generate unique sample IDs.
+  3. **Foreign Key Alignment:** Any foreign key or reference field linking to another sample entity (e.g., `accountId`, `categoryId`, `ownerId`, `epicId`, `sprintId`) must use the target record's matching `00000000-...` ID.
   4. **Purpose:** This enables safe, bulk deletion of all sample records via regex (`/^00000000-/`) without risking data loss of actual user-created or tenant records.
 
 - **SOW Document Quality & Markdown Standard (STRICT):** `rapider-sow.md` MUST be a fully formatted, rich, comprehensive Markdown document (NEVER a single escaped line with literal `\n` or truncated summary). It must faithfully synthesize all content from `rapider-idea-request.md` and `_design/{appKey}/`: Executive Outcome, In/Out Scope, Primary Pages breakdown, Core User Journeys, Consolidated Feature Priorities (P0 Foundation, P1 Scale, P2 Adjacent), Roles & Permissions, Technical APIs/Workflows, Security/Compliance (GDPR, retention, immutable versions), and Acceptance Criteria. The `scopeOfWork` field in `app.manifest.json` must mirror this clean, readable Markdown structure.
@@ -161,9 +179,9 @@
 - **Pre-Designed HTML Wireframe Conversion, Record ID Routing & Detail Page Integrity Standard (MANDATORY - STRICT):**
   When converting pre-designed HTML wireframes (`_design/`) into functional microapplication pages:
   1. **Strip All Wireframe Preview Stubs:** Completely remove static design preview scripts (`window.PEOPLE_PAGE`, `rapider.people.design.v1`, `"No AI request or business action was sent"`, `"Design preview · AI not connected"`, `"Sample data for design review · Reset preview"`, `data-action="reset-preview"`).
-  2. **Route & Resolve Records Strictly by ID (`?id=<uuid>`):**
-     - Never link to detail/profile/edit/change pages by person or display name (`?person=Marcus+Vance` or `?name=...`). Always pass `?id=${record.id}`.
-     - Detail and edit pages must resolve `id` from `window.rapiderApi?.getRouteParam?.('id') || new URLSearchParams(window.location.hash.split('?')[1] || window.location.search).get('id')`.
+  2. **Route & Resolve Records Strictly by Path ID (`#/<route>/<uuid>`, NEVER `?id=`):**
+     - `rapider-ui` maps entity detail/edit routes as `/:pageKey/:entityId`. Always pass the unique database `id` as a path segment (`#/<route>/${encodeURIComponent(record.id)}` or `window.rapiderApi.navigate(['<route>', record.id])`) — NEVER use `?id=` or name-based `?person=` / `?name=` params.
+     - Detail and edit pages must resolve `id` from `window.rapiderApi?.getRouteParam?.('id')` first, then the hash/pathname segment after `/<route>/`, then `URLSearchParams` fallback.
   3. **Complete Detail Page Hydration (Zero Hardcoded Persona Fields):**
      - On detail/profile pages, updating only the hero heading while leaving `.detailfields`, related people lists, timelines, or AI input placeholders hardcoded to a wireframe persona (e.g. `Amelia Brooks` / `amelia.brooks@example.com` / `EMP-0108`) is a **critical QA failure**. Every field, badge, link (`Edit profile`, `Propose a change`), peer card, and history item must be hydrated dynamically from the resolved record and its related entities.
   4. **In-Page Detail Tabs (`<button type="button" data-tab="...">`):**
@@ -227,12 +245,12 @@ Prior to marking any microapplication as completed in `apps-status.json`, the ag
 
 9. **QA Pass: Sample Data & Zeroed-Out ID Block Standard**
    - Verify `sample-data.json` exists in the application root and covers all canonical `dataModels`.
-   - Verify that EVERY sample record's `id` and `_id` starts with eight zeros: `00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx` (e.g., `00000000-74c6-417b-b141-468b9dbf3d5e`).
-   - Verify all foreign keys pointing to sample records reference these `00000000-...` UUIDs so that sample data can be purged cleanly by regex (`/^00000000-/`).
+   - Verify that EVERY sample record's `id` and `_id` starts with eight zeros followed by truly random hex characters: `00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx` (e.g., `00000000-74c6-417b-b141-468b9dbf3d5e`). BANNED: all-zero or sequential IDs like `00000000-0000-...` or `00000000-0001-...`.
+   - Verify all foreign keys pointing to sample records reference these matching `00000000-...` UUIDs so that sample data can be purged cleanly by regex (`/^00000000-/`).
 
 10. **QA Pass: Wireframe Conversion, Record ID Routing, Detail Page Integrity & Form SDK Persistence**
    - Verify zero leftover static design-preview stubs (`"No AI request or business action was sent"`, `"Design preview · AI not connected"`, `"Sample data for design review"`, `data-action="reset-preview"`, or hardcoded `Amelia Brooks` / `EMP-0108` persona strings).
-   - Verify all detail, profile, edit, and change-request links pass and resolve records strictly by unique ID (`?id=<uuid>`), never by display name (`?person=...`).
+   - Verify all detail, profile, edit, and change-request links pass and resolve records strictly by canonical path ID (`#/<route>/<uuid>` or `navigate(['<route>', id])`), NEVER `?id=` and never by display name (`?person=...`).
    - Verify detail-page tab bars (`<nav class="tabs">`) use `<button type="button" data-tab="...">` to switch in-page record-scoped panels rather than `<a href="#/...">` links that navigate away to root pages.
    - Verify all `[data-action="ai"]`, `[data-ai-inline]`, and `[data-ai-form]` elements are wired to `window.rapiderApi` SDK methods with active record context.
    - Verify all `<form data-save-form>` elements dispatch real `window.rapiderApi` mutations (`create`, `updateById`, `startWorkflow`, `triggerWorkflow`) and invalidate SWR cache.

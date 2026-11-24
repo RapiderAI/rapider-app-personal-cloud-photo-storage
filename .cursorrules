@@ -15,6 +15,6 @@ Before modifying or creating anything in this repository, you MUST read the foll
 3. Read `.agents/rules/app-data-models.md` for instructions on how to define database schemas and AI configurations in the manifest.
 4. Read `.agents/rules/app-page.md` for instructions on how to structure the manifest definitions for new UI pages.
 5. Read `.agents/rules/app-page-html.md` for instructions on how to build the frontend `pages/[route]/[route].html` files using Tailwind and `window.rapiderApi`.
-6. Read `.agents/rules/app-sample-data.md` for sample data generation rules and the mandatory zeroed-out initial 8-character block ID standard (`00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx`).
+6. Read `.agents/rules/app-sample-data.md` for sample data generation rules and the mandatory zeroed-out initial 8-character block ID standard (`00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx` with truly random remaining hex digits, strictly banning all-zero or sequential IDs).
 7. Read `.agents/rules/app-qa-workflow.md` for the mandatory 20-pass QA loop and deterministic page verification standards.
 8. **AI Rules Source of Truth (`rapider-ai-rules`):** Whenever any AI rules or QA passes (`.agents/rules/**`, `AGENTS.md`, `.cursorrules`, `.windsurfrules`) are updated, ALWAYS update the canonical source-of-truth repository (`rapider-ai-rules`), commit/push it to `origin/main`, and sync via `sync-app-rules.js` — never update rules only in an individual app repo.

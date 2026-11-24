@@ -1,6 +1,10 @@
-# Pass 21: Suite Brand & Collapsible Sidebar Navigation Standards
+# Pass 21: Suite Brand & Collapsible Left Sidebar Navigation Standards
 
-**Goal:** Ensure every Rapider application displays an authentic Suite Icon and Suite Name in its sidebar header (completely replacing legacy fake "Rapider" logos and "rapider ai" branding), implements full collapsible sidebar navigation, conforms to clean muted navigation colors (never saturated primary blue), supports seamless off-canvas mobile view with a top-left hamburger menu, hides all text labels in collapsed mode, provides right-caret expand hover mechanics on the top suite icon, and persists collapsed state in localStorage.
+**Goal:** Ensure every Rapider application page renders a consistent, well-designed **Collapsible Suite Left Sidebar (`<aside class="sidebar">`)** inside `.ds-shell` / `.layout` — displaying the authentic Suite Icon and Suite Short Title in the brand header, an App Identity box (`.appbox`), all enabled menu pages (`enabled !== false && displayOnMenu !== false && displayInMenu !== false`) from `app.manifest.json`, full desktop collapse/expand mechanics (`68px` collapsed rail, hover right-caret expand indicator on the top Suite icon, `localStorage` persistence under `rapider_sidebar_collapsed`), clean semantic navigation colors (never saturated primary blue), and mobile off-canvas drawer responsiveness (`.mobile-menu` + `.shade`).
+
+## 0. Mandatory In-App Collapsible Left Sidebar Shell (`.ds-shell.layout` + `<aside class="sidebar">`)
+- Every application page (`pages/[route]/[route].html`) **MUST** include the canonical left `<aside class="sidebar">` navigation rail alongside `<main class="ds-main">` inside `<div class="ds-shell layout @container">`.
+- **Draft & Hidden Pages Exclusion:** Never include pages where `"enabled": false` (draft pages) or `"displayOnMenu": false` / `"displayInMenu": false` (detail/edit/new sub-views) in the `<aside class="sidebar">` menu links. Detail/edit pages themselves still render the `<aside class="sidebar">` so the user always has the left navigation rail visible while viewing a record!
 
 ## 1. Manifest Suite Definition (`app.manifest.json`)
 Every app manifest MUST include an `appSuite` object with:
@@ -24,8 +28,8 @@ Every app manifest MUST include an `appSuite` object with:
   - "rapider ai" superscript or subtitle text in the brand header.
   - Generic "rapider" text in the left navigation header.
 - **MANDATORY:**
-  - Sidebar header MUST display the Suite Icon (`manifest.appSuite.icon`) and the Suite Name (`manifest.appSuite.shortTitle`).
-  - Example: `<a class="brand" href="#/overview"><span class="suite-icon-container"><i class="suite-icon fas fa-users"></i><i class="suite-expand-icon fas fa-chevron-right"></i></span><span class="suite-title">HR Suite</span></a>`
+  - Sidebar header MUST display the Suite Icon (`manifest.appSuite.icon`) and the Suite Name (`manifest.appSuite.shortTitle`) inside a `<button type="button" class="brand" data-action="expand-sidebar">` (NEVER an `<a class="brand" href="#/...">` tag, because the Rapider iframe host registers a capture-phase `document` click listener on `<a>` tags that would hijack clicks on the collapsed sidebar header and trigger route navigation instead of expanding the menu!).
+  - Example: `<button type="button" class="brand" data-action="expand-sidebar" title="HR Suite" aria-label="HR Suite"><span class="suite-icon-container"><i class="suite-icon fas fa-users"></i><i class="suite-expand-icon fas fa-chevron-right"></i></span><span class="suite-title">HR Suite</span></button>`
 
 ## 3. Navigation Menu Item Styling (Strictly Prohibit Saturated Blue)
 - **FORBIDDEN:**
@@ -88,8 +92,9 @@ Every app manifest MUST include an `appSuite` object with:
    - In collapsed state, the sidebar collapses to ~64-68px width.
    - All text labels (`.sidebar-label`, `.suite-title`, `.navlabel`, `.appbox span:not(.appicon)`, unwrapped nav link text, footer profile names) MUST be hidden with `display: none !important;` (and `font-size: 0 !important;` for text nodes).
    - Navigation icons remain visible and centered.
-3. **Hover Expand Indicator on Top Suite Icon:**
+3. **Hover Expand Indicator on Top Suite Icon & Capture-Phase Expand Listener (CRITICAL):**
    - When collapsed, hovering anywhere on the collapsed sidebar (`.sidebar.sidebar-collapsed:hover` or `aside.collapsed:hover`) transforms the top Suite icon into a right caret / expand icon (`<i class="suite-expand-icon fas fa-chevron-right"></i>`) with `pulse-caret` animation.
-   - Clicking `.brand`, `.suite-icon-container`, `.brand-row`, or the top area while collapsed immediately re-expands the sidebar (`setCollapsed(false)`).
+   - **MANDATORY `window` Capture-Phase Listener:** `<script data-collapsible-sidebar>` MUST attach its expand/collapse click listener on `window` in the **capture phase** (`window.addEventListener("click", ..., true)`) so it executes BEFORE any `document` capture-phase anchor interceptor injected by the Rapider preview iframe SDK (`html-preview.component.ts`).
+   - Clicking `.brand`, `.suite-icon-container`, `.brand-row`, or `[data-action="expand-sidebar"]` while collapsed immediately calls `e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation(); setCollapsed(false);`.
 4. **State Persistence:**
    - The collapsed state MUST be saved in `localStorage.setItem('rapider_sidebar_collapsed', 'true' | 'false')` and restored immediately on page load so user preference persists seamlessly across navigation.

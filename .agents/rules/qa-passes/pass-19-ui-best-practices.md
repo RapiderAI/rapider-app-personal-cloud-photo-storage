@@ -113,7 +113,7 @@ Agents and QA reviewers MUST check all phone number input fields across the appl
     }
     const tr = e.target.closest('tr[data-id]');
     if (tr) {
-      window.rapiderApi.navigate(`/detail?id=${tr.dataset.id}`);
+      window.rapiderApi.navigate(['detail', tr.dataset.id]);
     }
   });
   ```
@@ -148,7 +148,7 @@ Agents and QA reviewers MUST check all phone number input fields across the appl
   ```
 
 ## 14. Scoped Secondary Detail Queries & Immediate Post-Save Hydration
-- When a detail page (e.g., `/profile?id=...`) queries secondary entities (`HrEmergencyContact`, `HrDocumentRef`, `HrLifecycleEvent`, `HrChangeRequest`), always scope the query by the parent foreign key (`{ where: { employeeId: String(state.employeeId) }, limit: 100 }`) rather than fetching an unscoped `{ limit: 200 }` batch that omits new rows once the shared table exceeds 200 records.
+- When a detail page (e.g., `/profile/:id`) queries secondary entities (`HrEmergencyContact`, `HrDocumentRef`, `HrLifecycleEvent`, `HrChangeRequest`), always scope the query by the parent foreign key (`{ where: { employeeId: String(state.employeeId) }, limit: 100 }`) rather than fetching an unscoped `{ limit: 200 }` batch that omits new rows once the shared table exceeds 200 records.
 - Immediately prepend the record returned by `window.rapiderApi.create(...)` into local state before re-rendering so the UI reflects the saved record without delay.
 
 

@@ -87,6 +87,22 @@ The E2E expectations builder agent MUST develop at least these 6 deterministic t
   }
   ```
 
+### 7. Pure Page Content Screenshots, Consistent 12:8 Aspect Ratio & Screenshot Retention History
+- **Pure Content Framing (Zero Harness Chrome):** E2E screenshots (`e2e/screenshots/{route}.png` and `{route}-dark.png`) MUST capture strictly the pure rendered microapp page (the sandbox iframe content), never the surrounding test harness UI, headers, navigation bars, or devtools panels.
+- **Dynamic Content Height & Consistent 12:8 Aspect Ratio:**
+  - The E2E screenshot engine dynamically inspects the pure page's rendered content height (clamped between 800px and 1000px, e.g. 800, 860, 960, 1000).
+  - Width is computed to enforce a strictly consistent **12:8 (1.5:1)** aspect ratio (`targetWidth = Math.round(targetHeight * 1.5)`, e.g. `1200x800`, `1290x860`, `1440x960`, `1500x1000`).
+  - This ensures that desktop overview cards, tables, and headers fit completely on screen without scrollbars, clipping, or letterboxed distortion.
+- **Twin Theme Evidence:** Both Light Mode and Dark Mode screenshots must be generated at the exact same aspect ratio and resolution, visually inspected via `read_file`, and embedded into `e2e/analysis/{route}.md`.
+- **Screenshot Retention & Historical Day-Stamp Standard (ZERO DELETION - STRICT):**
+  - **Strict Prohibition on Screenshot Deletion:** Agents, builders (App Builder, Single Isolated Page Builder, Scheduled Task Builder), test runners, and harnesses **MUST NEVER DELETE, UNLINK, PRUNE, OR REMOVE** existing screenshot files from the app repositories (`e2e/screenshots/`).
+  - **Day-Stamped Historical Evidence:** Whenever a new screenshot is captured, a permanent historical copy MUST be saved with a day-stamp suffix:
+    - Light Mode: `e2e/screenshots/{route}_{YYYYMMDD}.png` (e.g. `e2e/screenshots/dashboard_20261017.png`, `e2e/screenshots/dashboard_20261103.png`).
+    - Dark Mode: `e2e/screenshots/{route}-dark_{YYYYMMDD}.png` (e.g. `e2e/screenshots/dashboard-dark_20261017.png`, `e2e/screenshots/dashboard-dark_20261103.png`).
+  - **Maintain Canonical Active Files:** In addition to the day-stamped file, maintain the active canonical files (`e2e/screenshots/{route}.png` and `e2e/screenshots/{route}-dark.png`) so existing links in `e2e/analysis/{route}.md`, `e2e/README.md`, `app.manifest.json`, and live App Builder studio previews continue resolving cleanly without broken links.
+  - **Preserve Prior Historical Un-stamped Files:** If a canonical screenshot already exists without a day-stamp, preserve a copy stamped with its modification date (`{route}_{prevDate}.png`) before writing a new one.
+  - **Commit All Screenshots to Git:** All day-stamped and active screenshots must be staged (`git add -f e2e/screenshots/`) and committed into git history so visual progress across iterations is preserved indefinitely in the folder.
+
 ---
 
 ### Critical Prohibitions & Mandatory Real E2E Verification Rules
@@ -94,9 +110,9 @@ The E2E expectations builder agent MUST develop at least these 6 deterministic t
 - **ZERO Silent False Positives on Missing Selectors:** E2E test runners (`run-employees-e2e.js`) MUST NEVER treat a missing DOM element in a `click`, `type`, `select`, or `assert_text` step as a conditional pass (`PASS (conditional/hidden element)`). If a required selector does not exist or is not visible, the step MUST fail (`FAIL`).
 - **ZERO HTTP 4xx/5xx Tolerance:** Every E2E suite MUST attach `page.on('response')` and `page.on('pageerror')` listeners and fail immediately if any API call to `/api/` returns status `>= 400` (such as `400 Bad Request` or `422 Unprocessable Entity` from schema mismatches).
 - **Mandatory Detail-Page Hydration & Anti-Leak Assertions:** For every detail/profile/edit/change page (`profile`, `edit-employee`, `change-employee`), the E2E suite MUST:
-  1. Navigate from a list row in `directory` using `?id=<uuid>` and assert the URL contains `?id=` and NEVER `?person=`.
+  1. Navigate from a list row in `directory` using path routing (`#/<route>/<uuid>`) and assert the URL contains `<route>/` (NEVER `?id=` or `?person=`).
   2. Assert that the loaded page displays the clicked record's exact name, email, employee number, and role, and contains **ZERO** hardcoded wireframe strings (`Amelia Brooks`, `amelia.brooks@example.com`, `EMP-0108`, `People around Amelia`).
-  3. Click every in-page tab (`[data-tab="overview"]`, `[data-tab="job"]`, `[data-tab="documents"]`, `[data-tab="history"]`) and assert that `window.location.hash` stays on `#/profile?id=<uuid>` (never navigating away to root routes like `#/documents` or `#/lifecycle`) while toggling the corresponding `[data-tab-panel]`.
+  3. Click every in-page tab (`[data-tab="overview"]`, `[data-tab="job"]`, `[data-tab="documents"]`, `[data-tab="history"]`) and assert that `window.location.hash` stays on `#/profile/<uuid>` (never navigating away to root routes like `#/documents` or `#/lifecycle`) while toggling the corresponding `[data-tab-panel]`.
 - **Mandatory Connected AI Assistant Verification:** Every E2E suite MUST test opening the `Ask Rapider` drawer (and inline AI thread on pages that have one), submitting a prompt, and asserting that a contextual response bubble renders in `#chat-messages` / `#ai-log`.
 - **NO Synchronous Local SDK Calls:** The `assert_api_payload` action is strictly for network requests (`find`, `create`, `update`, `updateById`, `delete`, `deleteById`, `findSWR`, `countSWR`). NEVER add expectations for synchronous local SDK helper methods like `getRouteParam` or `closePageDrawer`.
 - **NO Phantom Mutations:** Never assert `delete`, `deleteById`, or `update` if the corresponding action (e.g. clicking delete and confirming in dialog) was not physically triggered in the test sequence.

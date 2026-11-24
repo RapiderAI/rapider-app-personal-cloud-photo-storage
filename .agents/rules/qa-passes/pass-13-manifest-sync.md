@@ -11,6 +11,10 @@ trigger: always_on
   - Unnecessary touches to `app.manifest.json` cause Git merge collisions and accidentally overwrite routes or data models.
 - **Route Sync:** Check that every HTML file in `pages/` has a corresponding route in the `webPages` array of `app.manifest.json`.
 - **Menu Visibility (No Bloat):** Do NOT bloat the menu by displaying every single page. Only main index/list pages (e.g., `dashboard`, `accounts`, `leads`) should have `"displayOnMenu": true`. All sub-pages, edit pages, detail pages, and hidden features (e.g., `new-lead`, `account-detail`) MUST have `"displayOnMenu": false`.
+- **Enabled vs. Draft Pages (`enabled: false` Preservation & Filtering):**
+  - Pages in `webPages` can have `"enabled": false` (Draft mode) or `"enabled": true` (Enabled mode, default).
+  - **Preserve `"enabled": false`:** Never delete draft pages or overwrite `"enabled": false` during manifest sync. Draft pages remain in `app.manifest.json` and in the `develop` build / App Builder Preview Harness so development can continue.
+  - **Exclude from Menus & Production Releases:** Any page with `"enabled": false` MUST be excluded from sidebar navigation menus and discarded from production version deployments until `"enabled": true` is set.
 - **Formatting `name` and `icon`:** The `name` property is used directly as the display label in the sidebar, so it MUST be properly capitalized (e.g., `"name": "Dashboard"`, not `"name": "dashboard"`). The `icon` property MUST include the full FontAwesome classes (e.g., `"icon": "fas fa-chart-pie"`, not `"icon": "chart-pie"`).
 - **Sidebar Grouping (Minimum 3 Items Rule - STRICT):**
   - When grouping pages under a section header in the sidebar, **each section title MUST contain at least 3 menu items** (`count >= 3`).

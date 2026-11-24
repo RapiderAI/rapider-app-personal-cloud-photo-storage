@@ -72,7 +72,7 @@ showConfirmModal({
     const tr = e.target.closest('tr[data-id]');
     if (tr) {
       const recordId = tr.dataset.id;
-      window.rapiderApi.navigate(`/detail?id=${recordId}`);
+      window.rapiderApi.navigate(['detail', recordId]);
     }
   });
   ```

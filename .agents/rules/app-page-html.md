@@ -13,67 +13,75 @@ Generate a complete, valid HTML5 document containing `<html>`, `<head>`, and `<b
 1. **FontAwesome:** `<script src="https://kit.fontawesome.com/5b23df26dc.js" crossorigin="anonymous"></script>`
 2. **Custom Components Bundle:** `<script src="/assets/js/rapider-components.js" defer></script>`
 3. **Tailwind CDN:** `<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>`
-4. **Custom Theme Import:** `<link rel="stylesheet" href="/assets/themes/rapider-tailwind-theme.css">` (Assume `/assets/` is available at the root).
+4. **Semantic Theme Base:** `<link rel="stylesheet" href="/assets/themes/rapider-tailwind-theme.css">`
+5. **Canonical Rapider Design System — Default Theme & Multi-Theme Contract (MANDATORY):** `<link rel="stylesheet" href="/assets/themes/rapider-design-system.css">` (Must be loaded **after** `rapider-tailwind-theme.css`. It defines the **Rapider Default Theme** in `:root` / `.dark` using strictly **semantic role variables** — `--primary-color`, `--secondary-color`, `--tertiary-color`, `--hero-surface-bg`, `--body-background-color`, `--component-inner-background-color`, `--primary-text-color`, `--secondary-text-color`, `--primary-border-color`, `--success-color`, `--warning-color`, `--danger-color`, `--info-color`, `--neutral-color` — so any user, workspace, or app can switch to another theme CSS later without changing a single line of page HTML or JS).
 
-## 2. Strict Semantic Tailwind Styling
+## 2. Design-Guided Evolution, Multi-Theme Tokens & Archetype-Diverse Architecture
 
-Standard Tailwind colors are globally overridden by the custom theme. You **MUST STRICTLY** use the following semantic utility classes to ensure dark/light mode compatibility.
+Every microapp page MUST use the **Semantic Multi-Theme Tokens** (`rapider-tailwind-theme.css` + `rapider-design-system.css`) and the **Collapsible Suite Left Sidebar (`<aside class="sidebar" id="suiteSidebar">`)**, while **preserving `_design/` visual architecture as your guide and tailoring `<main class="ds-main">` to the SOW requirement** — **NEVER** blindly wiping bespoke designs or stamping every route into a single `KPI Strip + Tabs + CRUD Table` template!
 
-* **❌ BANNED:** Arbitrary bracket values (e.g., `w-[150px]`, `text-[13px]`) and hardcoded hex colors (e.g., `bg-[#ff0000]`). Use standard Tailwind sizing (e.g., `w-32`, `p-4`) and the semantic colors below.
-* **✅ Backgrounds:** `bg-body-background`, `bg-component-header`, `bg-component-inner`, `bg-alt-background`, `bg-input-background`, `bg-section-background`, `bg-table-background`.
-* **✅ Text & Typography:** `text-primary-text`, `text-secondary-text`, `text-heading` (for h1-h6), `text-placeholder`, `text-link`.
-* **✅ Borders:** `border-primary-border`, `border-secondary-border`.
-* **✅ Interactive & Buttons:** `bg-primary`, `bg-button-bg`, `text-primary-button-text`, `text-secondary-button-text`.
-* **✅ States & Hovers:** `hover:bg-hover-default`, `hover:bg-hover-primary`, `hover:bg-hover-danger`, `text-danger`, `text-success`, `text-warning`, `text-info`.
-* **✅ Focus & Shadows:** `focus:ring-focus-ring`, `shadow-default`, `shadow-thick`.
+Before authoring or editing any page HTML, read BOTH local skills (when present):
+- `.agents/skills/rapider-design-guided-page-evolution/SKILL.md`
+- `.agents/skills/rapider-modern-saas-page-craft/SKILL.md`
 
-### Responsive Layouts & Canonical App Shell Hierarchy
-Because your output is rendered inside a resizable preview iframe/pane, you MUST NOT use standard viewport media queries (e.g., `sm:`, `md:`, `lg:`). 
-* Always wrap your main layout container with `@container`.
-* Use container query modifiers (`@sm:`, `@md:`, `@lg:`) on child elements so the UI adapts accurately to the container's physical width. Container query classes (`@md:`) **MUST NOT** be used unless the container explicitly declares `@container`.
-* **Canonical App Shell Structure (Fixed `h-16` Header & Single Scrollbar):**
-  ```html
-  <div class="layout">
-    <!-- Sidebar (Collapsible) -->
-    <aside class="sidebar w-64 border-r border-border-color flex flex-col shrink-0">
-      <!-- Suite Brand Header with Collapse Button -->
-      <div class="brand-row">
-        <a class="brand" href="#/overview" title="HR Suite">
-          <span class="suite-icon-container">
-            <i class="suite-icon fas fa-users"></i>
-            <i class="suite-expand-icon fas fa-chevron-right"></i>
-          </span>
-          <span class="suite-title">HR Suite</span>
-        </a>
-        <button type="button" class="sidebar-collapse-btn" title="Collapse sidebar" aria-label="Collapse sidebar">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-      </div>
-      <!-- In CSS: .sidebar.sidebar-collapsed .sidebar-label { display: none !important; } -->
+* **🎨 UNDERSTAND REQUIREMENT → PRESERVE `_design/` GUIDE → HARMONIZE → IMPROVE (3-WAY RULE):**
+  - **Design Language Harmony ≠ Identical DOM/Page Clones:** All Rapider applications share one design language (semantic theme tokens, calm hairline surfaces, typography, spacing, and Pass 21 Collapsible Suite Left Sidebar), **NOT** the exact same inner DOM!
+  - **Rule A — When `_design/` HTML Exists (Section 3.5 of `.page-task-context.md`):**
+    - Take the `_design/` HTML/CSS as your **primary layout, composition, and visual guide**!
+    - Preserve its page archetype and bespoke visual hierarchy (e.g., `.overview-top` + `.overview-grid` split cockpits, `.form-grid` + `.sticky` guided evaluation/offer/intake studios, `.profilehero` + `.detail-grid` 360° profiles, `.quickgrid` card grids, `.help-hero` portals, `.inbox` split triage, `.paper` offer/statement sheets, `.funnel-row` / `.meter` / `.chart` visualizers, `.toggle-row` + `.savebar` settings).
+    - Harmonize the design language by remapping raw prototype colors (`--purple`, `--green`, `--amber`, `--dark`, `#fff`) to `rapider-design-system.css` semantic tokens (`var(--primary-color)`, `var(--hero-surface-bg)`, `var(--component-inner-background-color)`, `.tag-success`, etc.), enforcing `#ffffff !important` on `.btn.primary`/`.btn.danger`, keeping the Pass 21 Collapsible Suite Left Sidebar, and wiring live `window.rapiderApi` SWR calls.
+    - **NEVER blindly rebuild** a page whose existing HTML already honors its `_design/` layout and SOW purpose — improve it incrementally in place.
+    - **Differentiate similar wireframes:** When two `_design/` list pages share a clean `.data-panel` skeleton (e.g., `requisitions`, `candidates`, `interviews`), keep the calm visual cadence AND upgrade each page around its SOW requirement (distinct summary strip or inline scheduling/workflow panel, distinct domain columns, progress/consent/schedule badges).
+  - **Rule B — When a Page Was Previously Flattened or Has No Exact `_design/` Match (`sibling_guide_only` / `none`):**
+    - If an existing page flattened a bespoke `_design/` route (e.g. turning `overview` or `scorecard` into a generic `4 KPI + Tabs + Table` clone), **restore and elevate** it around the `_design/` guide and SOW.
+    - For greenfield or extension routes without a 1:1 `_design/` file, use sibling `_design/` pages' token/spacing grammar as your visual guide and choose the best SaaS archetype (`Executive Cockpit`, `Stage Flow & Kanban Workbench`, `Differentiated Operational Ledger`, `360° Entity Profile`, `Split-Pane Guided Composer`, `Curated Card Grid / Portal`, `Analytics Studio`, or `Policy & Governance Control Center`).
+  - **NEVER Render Raw or Sliced Foreign-Key UUIDs (`00000000-...` or `id.slice(0, 8)`) in Visible UI:** Always fetch related entities via `window.rapiderApi.findSWR`, resolve lookup maps (`candidateById`, `reqById`, `interviewById`), and display human-readable names and domain codes (`REQ-2026-101`, `Jordan Ellis`).
+  - **Align KPI & Filter Calculations with Actual `sample-data.json` Values:** Inspect the exact status/enum values in `sample-data.json` and `app.manifest.json` so KPI cards and tabs reflect live counts accurately.
+
+* **❌ BANNED VISUAL & THEMING ANTI-PATTERNS:**
+  - **NO Color-Named Variables, Tailwind Hue Utilities, or Raw Hexes in Page HTML/CSS/JS:** Never hardcode color-named CSS variables (`--purple`, `--green`, `--amber`, `--red`), legacy color modifiers (`.tag.green`, `.tag.amber`, `.metric-card.dark`), Tailwind hue utilities (`bg-purple-600`, `bg-blue-600`, `text-indigo-600`), or raw `#hex` colors (`#6854df`, `#1890ff`).
+  - **NO `.primary` Button Background on Standalone KPI Numerals:** Use `.metric-value.primary` (`color: var(--link-color)`) for text-colored KPI figures, never `.primary` button styling on KPI numbers.
+  - **NO Overlapping Search Icons:** Keep search icons in a flex `.ds-search-box` beside the `<input>` or use `padding-left: 36px` so icons never collide with placeholder text.
+  - **NO 5-Column Cramped KPI Strips or Truncated Labels:** When using summary KPI cards, use 3–4 cards max (`.metrics-grid-3`, `.metrics-grid-4`, or `.overview-top`) with clean non-truncated headings.
+  - **NO Loud `rounded-full` Status Pills or Heavy Drop-Shadows:** Use flat `1px solid var(--primary-border-color)` hairline borders (`box-shadow: none`) and `5px`-radius semantic `.tag` chips (`.tag-primary`, `.tag-secondary`, `.tag-tertiary`, `.tag-success`, `.tag-warning`, `.tag-danger`, `.tag-info`, `.tag-neutral`).
+
+### Outer Shell Contract (`<aside class="sidebar">` + `<main class="ds-main">`)
+Every page MUST use the canonical Pass 21 outer shell below while composing `<main class="ds-main">` according to its `_design/` guide and SOW archetype:
+```html
+<body class="bg-body-background text-primary-text">
+  <div class="ds-shell layout @container">
+    <aside class="sidebar" id="suiteSidebar" aria-label="Application navigation">
+      <!-- Automatically synchronized by sync-collapsible-sidebar.js -->
     </aside>
-
-    <!-- Main Viewport -->
-    <div class="flex-1 flex flex-col h-screen overflow-hidden">
-      <!-- Fixed Header: EXACTLY h-16 (64px) -->
-      <header class="h-16 shrink-0 border-b border-border-color bg-background/95 backdrop-blur flex items-center justify-between px-6 z-30">
-        <!-- Title, project scope, and actions -->
-      </header>
-
-      <!-- Scrollable Main Viewport: NEVER min-h-screen! -->
-      <main class="flex-1 overflow-y-auto p-6 md:p-8 @container">
-        <div class="max-w-7xl mx-auto w-full space-y-6">
-          <!-- Page content -->
+    <div class="shade" data-action="close-menu"></div>
+    <main class="ds-main" id="main-content">
+      <header class="page-head">
+        <div>
+          <button type="button" class="btn icon-only quiet mobile-menu" data-action="menu" aria-label="Open navigation"><i class="fas fa-bars"></i></button>
+          <span class="eyebrow">SUITE / DOMAIN</span>
+          <h1 class="page-title">Editorial page title</h1>
+          <p class="subtitle">Calm, requirement-accurate subtitle.</p>
         </div>
-      </main>
-    </div>
+        <div class="head-actions">
+          <button type="button" id="btnAskRapider" class="btn"><i class="fas fa-wand-magic-sparkles"></i><span>Ask Rapider</span></button>
+          <!-- Primary CTA only when the page creates/starts an action -->
+        </div>
+      </header>
+      <!-- Compose inner sections from _design/ guide & SOW archetype:
+           * Executive Cockpit: .overview-top (.hero + 2 .metric) + .insight-strip + .overview-grid
+           * Guided Form / Rubric / Offer: .form-grid (grouped .panel form sections + .sticky guidance rail)
+           * 360° Record Profile: .profilehero + in-page button[data-tab] + .detail-grid
+           * Card Grid / Portal: .help-hero / .quickgrid .quickcard
+           * List / Register (only when page is a directory/register): .panel > .ds-toolbar + #activeFilterTagsBar + .table-wrap > table.ds-table -->
+    </main>
   </div>
-  ```
-* **STRICT BAN ON `min-h-screen` ON INNER VIEWPORTS:** Inner viewports inside the shell must never use `min-h-screen` or unmanaged nested scrolling, which causes double vertical scrollbars.
-* **Non-wrapping Status Badges:** Status pills and badges must include `whitespace-nowrap shrink-0 inline-flex items-center`.
+</body>
+```
+* **Non-wrapping Semantic Status Tags:** Always use `.tag` (`border-radius: 5px; white-space: nowrap; flex-shrink: 0;`) with semantic role modifiers (`.tag-primary`, `.tag-secondary`, `.tag-tertiary`, `.tag-success`, `.tag-warning`, `.tag-danger`, `.tag-info`, `.tag-neutral`).
 
 ### High-Contrast Button Invariant
-* Primary buttons (`bg-primary`) and danger buttons (`bg-danger`, `bg-red-600`) MUST ALWAYS enforce white text:
-  - Add `!text-white text-white` classes.
+* Primary buttons (`bg-primary`, `.btn.primary`) and danger buttons (`bg-danger`, `.btn.danger`, `bg-red-600`) MUST ALWAYS enforce white text:
+  - Add `!text-white text-white` classes (or `.btn.primary` / `.btn.danger` semantic classes).
   - Add explicit inline style: `style="color: #ffffff !important;"`.
 * **BANNED:** Never use `text-white` on light or neutral backgrounds like `bg-button-bg` or `bg-alt-background`. Secondary buttons must use `text-secondary-button-text`.
 * **BANNED:** "Install Sample Data" or "Seed Demo Records" buttons are **STRICTLY FORBIDDEN** in the header or toolbar. They may ONLY be rendered inside an empty-state container when `records.length === 0`.
@@ -212,8 +220,8 @@ When generating list/table pages with search and filters:
 ## 9. Pre-Designed HTML Wireframe Conversion, Record ID Routing & Detail Page Integrity (Mandatory)
 
 When converting pre-designed `_design/*.html` wireframes into working pages (`pages/[route]/[route].html`):
-1. **Strict Record ID Routing (`?id=<uuid>`, NEVER `?person=<name>` or `?name=<title>`)**:
-   - Every link from any list, table, card, org chart, or activity item to a record detail/edit/action page (`#/profile`, `#/edit-employee`, `#/change-employee`, etc.) **MUST** pass the record's unique database `id`: `#/profile?id=${record.id}`.
+1. **Strict Record ID Path Routing (`#/<route>/<uuid>`, NEVER `?id=` and NEVER `?person=<name>` or `?name=<title>`)**:
+   - `rapider-ui` maps detail/edit/profile routes via path parameters (`/app/:appId/:pageKey/:entityId` and `/app-builder/:appId/preview/:pageKey/:entityId`). Every link from any list, table, card, org chart, or activity item to a record detail/edit/action page (`#/profile`, `#/edit-employee`, `#/change-employee`, etc.) **MUST** pass the record's unique database `id` as a path segment: `#/profile/${encodeURIComponent(record.id)}` or `window.rapiderApi.navigate(['profile', record.id])` (trailing secondary params like `?tab=history` go after the ID: `#/profile/${encodeURIComponent(record.id)}?tab=history`). NEVER construct `?id=` entity URLs.
    - Never route by display name (`?person=Marcus+1+Vance`).
 2. **100% Dynamic Field Hydration on Detail Pages (Zero Leftover Wireframe Persona Data)**:
    - On detail/profile pages, updating only the hero title while leaving hardcoded wireframe fields (e.g., `amelia.brooks@example.com`, `EMP-0108`, `Maya Chen`, `Product & Design`, `People around Amelia`, `Help me prepare Amelia's upcoming review...`, or hardcoded `Recent history` items) is a critical bug.
@@ -228,3 +236,11 @@ When converting pre-designed `_design/*.html` wireframes into working pages (`pa
    - Every creation, edit, or change-request form (including `<form data-save-form>`) **MUST** bind its `submit` handler to `window.rapiderApi` mutation methods (`create`, `updateById`, `deleteById`, `startWorkflow`, or `triggerWorkflow`) and invalidate SWR cache upon completion — never save only to `localStorage` preview state.
 6. **Multi-Script Helper Scope Integrity (`window.esc` / `window.toast`)**:
    - When a page has multiple `<script>` blocks, helper functions like `esc()` and `toast()` called in subsequent script tags **MUST** be exposed on `window` (`window.esc = esc; window.toast = toast;`) or defined locally inside each script scope to prevent runtime `ReferenceError` crashes during SWR data rendering.
+
+## 10. 🚫 STRICT BAN on Bulk/Scripted HTML Page Generation (One-Page-at-a-Time Domain Fidelity)
+
+1. **Zero Template Loops or Generator Scripts**:
+   - You **MUST NEVER** write a script (Node.js, Python, Bash, etc.) that loops over `webPages` or multiple apps to stamp out `pages/[route]/[route].html` from a shared HTML skeleton.
+   - Every single page MUST be crafted **one page at a time** in its own dedicated context after reading the app's SOW (`rapider-sow.md`), feature specs, and exact `app.manifest.json` `dataModels`.
+2. **Exact Entity & Field Alignment**:
+   - Always bind `window.rapiderApi` to the exact `dataModels` specified in `webPage.developmentDetails` and render real domain fields from `manifest.dataModels[i].fields` (never generic `IDENTIFIER | METADATA / CODE | STATUS` columns, never verbatim `developmentDetails` text in `<p>` subtitles, and never fake filler metrics like `COMPLIANCE RATE: 99.4%` or `AVG LATENCY: 42 ms / Sub-200ms target SLA`).

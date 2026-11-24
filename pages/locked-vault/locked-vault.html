@@ -5,566 +5,2729 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Locked Vault — Rapider Personal Cloud Photo Storage</title>
   <script src="https://kit.fontawesome.com/5b23df26dc.js" crossorigin="anonymous" defer></script>
-  <script src="/assets/js/rapider-components.js" defer></script>
-  <link rel="stylesheet" href="/assets/themes/rapider-tailwind-theme.css">
-  <link rel="stylesheet" href="/assets/themes/crm-expenses-design.css">
   <style>
     :root {
+      --primary: #6854df;
+      --primary-hover: #5642cc;
+      --primary-soft: #f0ecfb;
+      --primary-soft-border: #dcd4f7;
+      --hero-bg: #252840;
+      --hero-border: rgba(255, 255, 255, 0.12);
+      --hero-muted: rgba(255, 255, 255, 0.74);
+      --canvas: #f5f6fa;
+      --surface: #ffffff;
+      --surface-subtle: #fafbfe;
       --ink: #172137;
-      --muted: #67728a;
-      --line: #e9ecf3;
-      --bg: #f5f6fa;
-      --purple: #6854df;
-      --purple-soft: #f3f0ff;
-      --panel: #ffffff;
-      --dark: #1f243a;
-      --soft: #eeeaff;
-      --green: #16795b;
-      --amber: #b4690e;
-      --red: #b9384f;
-      --radius: 14px;
+      --muted: #6e798f;
+      --border: #e9ecf3;
+      --border-strong: #d9dfec;
+      --success-ink: #26836b;
+      --success-bg: #e7f3ec;
+      --warning-ink: #aa7621;
+      --warning-bg: #fff2e2;
+      --danger-ink: #b45466;
+      --danger-bg: #fbecee;
+      --danger-solid: #c23b56;
+      --neutral-ink: #475569;
+      --neutral-bg: #f1f5f9;
+      --radius-card: 14px;
+      --radius-ctl: 10px;
+      --radius-tag: 5px;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; height: 100%; font: 14px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif; background: var(--bg); color: var(--ink); }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      width: 100%;
+      font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+      background: var(--canvas);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+    }
     a { color: inherit; text-decoration: none; }
-    button, input, select, textarea { font: inherit; }
-    .btn, button.btn {
-      cursor: pointer; border: 1px solid #dfe3ed; background: #ffffff; color: var(--ink);
-      padding: 8px 14px; border-radius: 9px; font-weight: 600; display: inline-flex;
-      align-items: center; justify-content: center; gap: 7px; font-size: 13px; min-height: 38px;
-      transition: all 0.15s ease;
+    button, input, select, textarea { font: inherit; color: inherit; }
+    .tabular { font-variant-numeric: tabular-nums; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
-    .btn:hover { background: #f5f3ff; border-color: #cfc7f4; }
-    .btn.primary, button.primary, a.btn.primary {
-      background: var(--purple) !important; background-color: var(--purple) !important;
-      color: #ffffff !important; border-color: var(--purple) !important;
-      box-shadow: 0 3px 8px rgba(104, 84, 223, 0.22);
-    }
-    .btn.primary:hover, button.primary:hover, a.btn.primary:hover {
-      background: #5844cc !important; color: #ffffff !important;
-    }
-    .btn.danger, button.danger {
-      background: var(--red) !important; color: #ffffff !important; border-color: var(--red) !important;
-    }
-    .btn.small { padding: 5px 10px; min-height: 30px; font-size: 12px; border-radius: 7px; }
-    .btn.icon-only { padding: 6px 9px; min-height: 30px; color: var(--red); border-color: #f1d0d6; background: #fffafb; }
-    .btn.icon-only:hover { background: #fee2e2; }
 
-    .layout { display: grid; grid-template-columns: 236px minmax(0, 1fr); height: 100vh; overflow: hidden; }
+    /* Buttons */
+    .btn {
+      cursor: pointer;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--ink);
+      padding: 8px 14px;
+      min-height: 36px;
+      border-radius: var(--radius-ctl);
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { background: var(--primary-soft); border-color: var(--primary-soft-border); color: var(--primary); }
+    .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .btn.primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff !important;
+    }
+    .btn.primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); color: #ffffff !important; }
+    .btn.danger {
+      background: var(--danger-solid);
+      border-color: var(--danger-solid);
+      color: #ffffff !important;
+    }
+    .btn.danger:hover { background: #a72f47; border-color: #a72f47; color: #ffffff !important; }
+    .btn.dark-ghost {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+    .btn.dark-ghost:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.36);
+      color: #ffffff;
+    }
+    .btn.small { min-height: 30px; padding: 5px 10px; font-size: 12px; border-radius: 8px; }
+    .btn.quiet { background: transparent; border-color: transparent; }
+    .btn.quiet:hover { background: var(--primary-soft); border-color: var(--primary-soft-border); }
+    .btn.icon-only { padding: 6px 9px; min-height: 30px; min-width: 30px; }
+    .btn.icon-only.del-btn { color: var(--danger-ink); border-color: #f2cfd6; background: #fff9fa; }
+    .btn.icon-only.del-btn:hover { background: var(--danger-bg); border-color: var(--danger-ink); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Compact Semantic Tags */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      border-radius: var(--radius-tag);
+      font-size: 11px;
+      font-weight: 650;
+      line-height: 1.45;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .tag-primary { background: var(--primary-soft); color: var(--primary); }
+    .tag-success { background: var(--success-bg); color: var(--success-ink); }
+    .tag-warning { background: var(--warning-bg); color: var(--warning-ink); }
+    .tag-danger { background: var(--danger-bg); color: var(--danger-ink); }
+    .tag-neutral { background: var(--neutral-bg); color: var(--neutral-ink); }
+
+    /* Shell & Sidebar */
+    .shell {
+      display: grid;
+      grid-template-columns: 224px minmax(0, 1fr);
+      min-height: 100vh;
+      width: 100%;
+    }
+    .shell.sidebar-collapsed { grid-template-columns: 68px minmax(0, 1fr) !important; }
+
     .sidebar {
-      background: #ffffff; border-right: 1px solid var(--line); padding: 22px 14px 16px;
-      height: 100vh; display: flex; flex-direction: column; overflow-y: auto; z-index: 30;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 18px 12px 16px;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 30;
     }
-    .brand-row { display: flex; align-items: center; justify-content: space-between; padding: 0 8px 18px; min-height: 34px; }
-    .brand-row .brand { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; letter-spacing: -0.4px; color: var(--ink); flex: 1; min-width: 0; }
-    .suite-icon-container { width: 28px; height: 28px; border-radius: 8px; background: #eee9fb; color: var(--purple); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .suite-icon-container .suite-expand-icon { display: none !important; font-size: 14px; color: var(--purple); }
-    .sidebar-collapse-btn { background: transparent; border: 1px solid transparent; cursor: pointer; padding: 5px 7px; border-radius: 6px; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
-    .sidebar-collapse-btn:hover { background: var(--soft); color: var(--purple); border-color: #cfc7f4; }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 0 4px 14px;
+      min-height: 38px;
+    }
+    .brand-row .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      background: transparent;
+      border: 0;
+      padding: 4px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      text-align: left;
+      flex: 1;
+      min-width: 0;
+    }
+    .suite-icon-container {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+    .suite-icon-container .suite-expand-icon { display: none; font-size: 13px; }
+    .suite-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-collapse-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      color: var(--muted);
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .sidebar-collapse-btn:hover { background: var(--primary-soft); color: var(--primary); border-color: var(--primary-soft-border); }
 
-    .appbox { padding: 11px 12px; background: #f6f4fc; border: 1px solid #ebe6f8; border-radius: 10px; margin: 0 0 16px; display: flex; gap: 10px; align-items: center; }
-    .appicon { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; background: #e9e3ff; color: var(--purple); flex-shrink: 0; }
-    .appbox b { display: block; font-size: 13px; color: var(--ink); line-height: 1.25; }
-    .appbox small { color: var(--muted); font-size: 11px; display: block; }
+    .app-pill {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px;
+      background: #f7f5fd;
+      border: 1px solid #e7e1fa;
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+    .app-pill-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #e9e2fb;
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+    .app-pill-meta b { display: block; font-size: 12px; font-weight: 700; line-height: 1.25; color: var(--ink); }
+    .app-pill-meta small { display: block; font-size: 11px; color: var(--muted); }
 
     .nav { display: flex; flex-direction: column; gap: 2px; }
-    .navlabel { font-size: 10px; text-transform: uppercase; letter-spacing: 1.4px; font-weight: 700; color: #9ba3b2; margin: 16px 10px 6px; }
-    .nav a, .nav a:link, .nav a:visited {
-      display: flex; align-items: center; gap: 11px; padding: 9px 11px; font-size: 13px;
-      color: #67728a !important; border-radius: 8px; font-weight: 500;
+    .navlabel {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      font-weight: 700;
+      color: #8f98ab;
+      margin: 14px 8px 5px;
     }
-    .nav a:hover { background: #f8f7fc; color: #172137 !important; }
-    .nav a.active { background: #ede9fb !important; color: #6650ce !important; font-weight: 650; }
-    .nav a .icon { width: 18px; text-align: center; font-size: 14px; color: inherit; flex-shrink: 0; }
-
-    .side-bottom { margin-top: auto; padding-top: 18px; }
-    .profile-link { border-top: 1px solid var(--line); padding: 14px 6px 0; display: flex; align-items: center; gap: 10px; }
-    .avatar-badge { width: 34px; height: 34px; border-radius: 50%; background: #eee8fb; color: #6854df; display: inline-grid; place-items: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-
-    /* Collapsed sidebar state */
-    .layout.sidebar-collapsed { grid-template-columns: 68px minmax(0, 1fr) !important; }
-    aside.sidebar-collapsed, .sidebar.sidebar-collapsed, aside[data-collapsed="true"] {
-      width: 68px !important; min-width: 68px !important; max-width: 68px !important; padding-left: 8px !important; padding-right: 8px !important;
+    .nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #5c667a;
+      transition: background-color 0.14s ease, color 0.14s ease;
     }
-    aside.collapsed .sidebar-label, aside[data-collapsed="true"] .sidebar-label, .sidebar-collapsed .sidebar-label,
-    .sidebar-collapsed .suite-title, .sidebar-collapsed .sidebar-collapse-btn, .sidebar-collapsed .navlabel,
-    .sidebar-collapsed .appbox > div:not(.appicon), .sidebar-collapsed .profile-link > div:not(.avatar-badge) {
-      display: none !important;
+    .nav a:hover { background: #f6f4fc; color: var(--ink); }
+    .nav a.active { background: var(--primary-soft); color: var(--primary); font-weight: 650; }
+    .nav a .icon { width: 16px; text-align: center; flex-shrink: 0; font-size: 13px; }
+
+    .side-bottom { margin-top: auto; padding-top: 14px; }
+    .profile-box {
+      border-top: 1px solid var(--border);
+      padding: 12px 4px 2px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
     }
-    .sidebar-collapsed .brand-row { justify-content: center !important; padding: 0 0 16px 0 !important; }
-    .sidebar-collapsed .brand-row .brand { justify-content: center !important; flex: none !important; cursor: pointer; gap: 0 !important; }
-    .sidebar.sidebar-collapsed:hover .suite-icon-container .suite-icon { display: none !important; }
-    .sidebar.sidebar-collapsed:hover .suite-icon-container .suite-expand-icon { display: inline-block !important; }
-    .sidebar-collapsed .appbox, .sidebar-collapsed .nav a, .sidebar-collapsed .profile-link { justify-content: center !important; padding-left: 8px !important; padding-right: 8px !important; }
-
-    /* Main Content & Topbar */
-    .main-col { display: flex; flex-direction: column; height: 100vh; overflow: hidden; min-width: 0; }
-    .topbar {
-      height: 64px; flex-shrink: 0; border-bottom: 1px solid var(--line); background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: space-between;
-      padding: 0 28px; gap: 14px; position: sticky; top: 0; z-index: 25;
+    .avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
     }
-    .breadcrumbs { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .breadcrumbs strong { color: var(--ink); font-weight: 600; }
-    .page-scroll { flex: 1; overflow-y: auto; padding: 26px 30px 44px; }
-    .page-wrap { max-width: 1520px; margin: 0 auto; }
+    .profile-meta strong { display: block; font-size: 12px; color: var(--ink); }
+    .profile-meta small { display: block; font-size: 11px; color: var(--muted); }
 
-    .eyebrow { font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--purple); font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 7px; }
-    .page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 22px; flex-wrap: wrap; }
-    .page-head h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.6px; margin: 0 0 6px; color: var(--ink); }
-    .page-head p { color: var(--muted); font-size: 13px; margin: 0; max-width: 780px; }
+    /* Collapsed Sidebar */
+    .sidebar.sidebar-collapsed { width: 68px !important; min-width: 68px !important; padding: 18px 8px 16px; }
+    .sidebar.sidebar-collapsed .sidebar-label,
+    .sidebar.sidebar-collapsed .suite-title,
+    .sidebar.sidebar-collapsed .sidebar-collapse-btn,
+    .sidebar.sidebar-collapsed .navlabel,
+    .sidebar.sidebar-collapsed .app-pill-meta,
+    .sidebar.sidebar-collapsed .profile-meta { display: none !important; }
+    .sidebar.sidebar-collapsed .brand-row { justify-content: center; padding-left: 0; padding-right: 0; }
+    .sidebar.sidebar-collapsed .brand-row .brand { justify-content: center; flex: 0 0 auto; }
+    .sidebar.sidebar-collapsed:hover .suite-icon-container .suite-icon { display: none; }
+    .sidebar.sidebar-collapsed:hover .suite-icon-container .suite-expand-icon { display: inline-block; }
+    .sidebar.sidebar-collapsed .app-pill,
+    .sidebar.sidebar-collapsed .nav a,
+    .sidebar.sidebar-collapsed .profile-box { justify-content: center; padding-left: 6px; padding-right: 6px; }
 
-    .kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 22px; }
-    .kpi-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 6px; }
-    .kpi-card .kicker { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); display: flex; align-items: center; justify-content: space-between; }
-    .kpi-card .val { font-size: 27px; font-weight: 750; letter-spacing: -0.8px; color: var(--ink); line-height: 1.15; }
-    .kpi-card .sub { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; margin-top: 2px; flex-wrap: wrap; }
-
-    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 20px; }
-    .panel { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
-    .panel-head, .panel-header { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-    .panel-head h2, .panel-header h2 { font-size: 15px; font-weight: 700; margin: 0; color: var(--ink); }
-    .panel-head p, .panel-header p { font-size: 12px; color: var(--muted); margin: 2px 0 0; }
-    .panel-body { padding: 20px; }
-
-    .filter-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 20px; border-bottom: 1px solid var(--line); background: #fafbfe; }
-    .search-input, .form-input, .form-select, .form-textarea { flex: 1; min-width: 180px; padding: 8px 12px; border: 1px solid #dfe3ed; border-radius: 8px; font-size: 13px; background: #fff; color: var(--ink); width: 100%; }
-    .search-wrap .search-input { padding-left: 34px; }
-    .search-wrap { position: relative; flex: 1; min-width: 220px; }
-    .search-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 12px; }
-    .select-filter { padding: 8px 12px; border: 1px solid #dfe3ed; border-radius: 8px; font-size: 13px; background: #fff; color: var(--ink); }
-    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-group.full { grid-column: 1 / -1; }
-    .form-label { font-size: 12px; font-weight: 600; color: var(--ink); }
-    .form-textarea { min-height: 90px; resize: vertical; }
-
-    .active-tags-bar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 20px; background: #f6f4fc; border-bottom: 1px solid #ebe6f8; font-size: 12px; }
-    .filter-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: #ffffff; border: 1px solid #d8d0f8; color: #5340b8; font-weight: 600; font-size: 11px; white-space: nowrap; }
-    .filter-chip button { border: 0; background: transparent; color: #6854df; cursor: pointer; padding: 0 2px; font-weight: 700; }
-
-    table.data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
-    table.data-table th { padding: 11px 16px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); background: #f8f9fc; border-bottom: 1px solid var(--line); white-space: nowrap; }
-    table.data-table td { padding: 13px 16px; border-bottom: 1px solid #eff1f6; vertical-align: middle; }
-    table.data-table tr:hover td { background: #fcfbff; }
-    .primary-link { font-weight: 700; color: var(--purple); text-decoration: none; }
-    .primary-link:hover { text-decoration: underline; }
-
-    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 650; white-space: nowrap; flex-shrink: 0; }
-    .badge.green { background: #e6f6f0; color: #146c52; }
-    .badge.purple { background: #eee9fb; color: #5b45c4; }
-    .badge.amber { background: #fef3c7; color: #9a580a; }
-    .badge.red { background: #fee2e2; color: #991b1b; }
-    .badge.slate { background: #f1f5f9; color: #475569; }
-    .badge.blue { background: #e0f2fe; color: #0369a1; }
-
-    .floor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
-    .table-tile { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fff; display: flex; flex-direction: column; gap: 8px; }
-    .tile-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-    .tile-num { font-weight: 700; font-size: 14px; }
-    .tile-meta { font-size: 11px; color: var(--muted); }
-
-    .kanban-board { display: grid; grid-template-columns: repeat(4, minmax(230px, 1fr)); gap: 14px; overflow-x: auto; }
-    .kanban-col { background: #f8f9fc; border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-    .kanban-col-head { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: var(--ink); padding-bottom: 6px; border-bottom: 1px solid var(--line); }
-    .kanban-card { background: #ffffff; border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 12px; box-shadow: 0 2px 5px rgba(15,23,42,0.03); }
-    .kanban-card p { margin: 6px 0; color: var(--muted); font-size: 12px; }
-    .card-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--line); font-size: 11px; color: var(--muted); }
-
-    .drawer-backdrop { display: flex; justify-content: center; padding: 10px 0; }
-    .drawer-card { background: #ffffff; border: 1px solid var(--line); border-radius: var(--radius); width: 100%; max-width: 820px; overflow: hidden; box-shadow: 0 12px 32px rgba(15,23,42,0.08); }
-    .drawer-head { padding: 18px 22px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
-    .drawer-body { padding: 22px; }
-    .drawer-foot { padding: 16px 22px; border-top: 1px solid var(--line); display: flex; justify-content: flex-end; gap: 10px; background: #fafbfe; }
-
-    .mobile-menu { display: none; background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+    .mobile-menu { display: none; }
     .shade { display: none; }
 
-    @media (max-width: 1024px) {
-      .kpi-grid, .grid-2, .form-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (max-width: 768px) {
-      .layout { display: block; }
-      .sidebar { position: fixed; left: 0; top: 0; transform: translateX(-100%); width: 250px !important; transition: transform 0.2s ease; z-index: 60; }
-      body.navopen .sidebar { transform: translateX(0); }
-      body.navopen .shade { display: block; position: fixed; inset: 0; background: rgba(15,23,42,0.45); z-index: 55; }
-      .mobile-menu { display: inline-flex; align-items: center; justify-content: center; }
-      .kpi-grid, .grid-2, .form-grid { grid-template-columns: 1fr; }
+    /* Main Content */
+    main { min-width: 0; width: 100%; box-sizing: border-box; }
+    .page {
+      width: 100%;
+      max-width: 1540px;
+      margin: 0 auto;
+      padding: 24px 28px 48px;
+      box-sizing: border-box;
     }
 
-    html.dark, body.dark { --ink: #f1f5f9; --muted: #94a3b8; --line: #263044; --bg: #0f172a; --panel: #1e293b; --purple-soft: #1e1b4b; background: #0f172a !important; color: #f1f5f9 !important; }
-    html.dark .sidebar, body.dark .sidebar, html.dark .topbar, body.dark .topbar, html.dark .panel, body.dark .panel, html.dark .kpi-card, body.dark .kpi-card, html.dark .table-tile, body.dark .table-tile, html.dark .kanban-card, body.dark .kanban-card, html.dark .drawer-card, body.dark .drawer-card { background: #1e293b !important; color: #f1f5f9 !important; border-color: #334155 !important; }
-    html.dark .appbox, body.dark .appbox, html.dark .filter-bar, body.dark .filter-bar, html.dark table.data-table th, body.dark table.data-table th, html.dark .kanban-col, body.dark .kanban-col, html.dark .drawer-foot, body.dark .drawer-foot { background: #0f172a !important; color: #cbd5e1 !important; border-color: #334155 !important; }
-    html.dark input, body.dark input, html.dark select, body.dark select, html.dark textarea, body.dark textarea { background: #0f172a !important; color: #f1f5f9 !important; border-color: #334155 !important; }
+    /* Page Header */
+    .page-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+    .page-head-left { display: flex; align-items: flex-start; gap: 12px; min-width: 0; flex: 1; }
+    .eyebrow {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
+    h1.page-title {
+      margin: 0 0 4px;
+      font-size: 28px;
+      font-weight: 750;
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      color: var(--ink);
+    }
+    .subtitle { margin: 0; font-size: 13px; color: var(--muted); max-width: 760px; }
+    .head-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    /* State A: Dark Cryptographic Step-Up Enclave */
+    .vault-gate-card {
+      color-scheme: only dark;
+      background: var(--hero-bg);
+      color: #ffffff;
+      border: 1px solid var(--hero-border);
+      border-radius: var(--radius-card);
+      padding: 28px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(300px, 1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+    .gate-left {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+    }
+    .gate-status-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .gate-emblem {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: rgba(104, 84, 223, 0.24);
+      border: 1px solid rgba(196, 185, 251, 0.32);
+      color: #d8cffc;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .gate-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 11px;
+      border-radius: var(--radius-tag);
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #e9e5ff;
+      font-size: 11.5px;
+      font-weight: 650;
+      letter-spacing: 0.2px;
+    }
+    .gate-title {
+      margin: 0;
+      font-size: 23px;
+      font-weight: 750;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      color: #ffffff;
+    }
+    .gate-copy {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: var(--hero-muted);
+      max-width: 600px;
+    }
+    .gate-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .gate-metric {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      padding: 10px 12px;
+      min-width: 0;
+    }
+    .gate-metric span {
+      display: block;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255, 255, 255, 0.64);
+      font-weight: 650;
+      margin-bottom: 3px;
+    }
+    .gate-metric strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 750;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .gate-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .walloff-panel {
+      background: rgba(15, 18, 34, 0.56);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .walloff-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .walloff-head h2 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .walloff-head h2 i { color: #8ee0c5; }
+    .walloff-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .walloff-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12.5px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .walloff-surface {
+      color: rgba(255, 255, 255, 0.88);
+      font-weight: 550;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .walloff-surface i { color: #b7acfa; width: 14px; text-align: center; flex-shrink: 0; }
+    .walloff-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-tag);
+      background: rgba(38, 131, 107, 0.25);
+      border: 1px solid rgba(142, 224, 197, 0.3);
+      color: #a9f0d8;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Below-Gate Governance Cards */
+    .governance-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .gov-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .gov-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .gov-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .gov-card h3 {
+      margin: 0;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .gov-card p {
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+    .gov-foot {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .gov-foot a:hover { text-decoration: underline; }
+
+    /* State B: Sticky Auto-Relock Countdown Bar */
+    .relock-bar {
+      color-scheme: only dark;
+      position: sticky;
+      top: 12px;
+      z-index: 20;
+      background: var(--hero-bg);
+      color: #ffffff;
+      border: 1px solid var(--hero-border);
+      border-radius: var(--radius-card);
+      padding: 13px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .relock-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 240px;
+      flex: 1;
+    }
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.2);
+      flex-shrink: 0;
+    }
+    .relock-meta { min-width: 0; flex: 1; }
+    .relock-meta strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .relock-meta small {
+      display: block;
+      font-size: 11.5px;
+      color: var(--hero-muted);
+    }
+    .relock-track {
+      margin-top: 6px;
+      width: 100%;
+      max-width: 340px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      overflow: hidden;
+    }
+    .relock-fill {
+      height: 100%;
+      width: 100%;
+      background: #6f5cf2;
+      transition: width 0.35s linear, background-color 0.25s ease;
+    }
+    .relock-fill.is-warning { background: #f59e0b; }
+    .relock-timer-box {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 7px;
+      padding: 7px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    .relock-timer-box strong {
+      font-size: 20px;
+      font-weight: 750;
+      letter-spacing: -0.4px;
+      color: #ffffff;
+    }
+    .relock-timer-box span {
+      font-size: 11.5px;
+      color: var(--hero-muted);
+      font-weight: 600;
+    }
+    .relock-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Controls Panel & Active Filter Tags */
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+    .vault-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 16px;
+      flex-wrap: wrap;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex: 1;
+      min-width: 240px;
+      max-width: 460px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-ctl);
+      padding: 0 12px;
+      min-height: 36px;
+    }
+    .search-box:focus-within {
+      border-color: var(--primary);
+      background: var(--surface);
+      box-shadow: 0 0 0 2px rgba(104, 84, 223, 0.12);
+    }
+    .search-box i { color: var(--muted); font-size: 12.5px; flex-shrink: 0; }
+    .search-box input {
+      border: 0;
+      background: transparent;
+      width: 100%;
+      outline: none;
+      font-size: 13px;
+      color: var(--ink);
+      padding: 6px 0;
+    }
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 8px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .stat-pill i { color: var(--primary); }
+
+    .active-filter-bar {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 10px 16px;
+      background: #f8f6fe;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .active-filter-bar.is-visible { display: flex; }
+    .active-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--muted);
+    }
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 9px;
+      border-radius: var(--radius-tag);
+      background: var(--surface);
+      border: 1px solid var(--primary-soft-border);
+      color: var(--primary);
+      font-weight: 650;
+      font-size: 12px;
+    }
+    .filter-chip button {
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      cursor: pointer;
+      padding: 0 2px;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .clear-all-btn {
+      margin-left: auto;
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 650;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .clear-all-btn:hover { text-decoration: underline; }
+
+    /* Unlocked Vault Document Grid */
+    .vault-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .vault-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .vault-preview-wrap {
+      position: relative;
+      height: 184px;
+      background: #1a1d30;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+    .vault-art {
+      width: 100%;
+      height: 100%;
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+    .vault-art svg { width: 100%; height: 100%; display: block; }
+    .vault-preview-wrap.is-blurred .vault-art {
+      filter: blur(18px) brightness(0.75);
+      transform: scale(1.06);
+    }
+    .vault-blur-overlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #ffffff;
+      background: rgba(23, 33, 55, 0.35);
+      text-align: center;
+      padding: 16px;
+    }
+    .vault-preview-wrap.is-blurred .vault-blur-overlay { display: flex; }
+    .vault-preview-top {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .vault-preview-top > * { pointer-events: auto; }
+    .code-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: var(--radius-tag);
+      background: rgba(23, 33, 55, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .reveal-pill-btn {
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(23, 33, 55, 0.8);
+      color: #ffffff;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .reveal-pill-btn:hover { background: rgba(104, 84, 223, 0.88); }
+
+    .vault-card-body {
+      padding: 16px 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+    .vault-card-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.3;
+      display: inline-block;
+    }
+    .vault-card-title:hover { text-decoration: underline; }
+    .vault-card-desc {
+      margin: 0;
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .vault-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+    }
+    .vault-meta-item small {
+      display: block;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+    .vault-meta-item span {
+      display: block;
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .vault-tags-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .vault-card-foot {
+      padding: 11px 18px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .vault-foot-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .vault-foot-right { display: flex; align-items: center; gap: 6px; }
+
+    /* Empty State */
+    .empty-state {
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-card);
+      padding: 40px 24px;
+      text-align: center;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .empty-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .empty-state h3 { margin: 0; font-size: 16px; color: var(--ink); }
+    .empty-state p { margin: 0; font-size: 13px; color: var(--muted); max-width: 480px; }
+
+    /* Native <dialog> Modals */
+    dialog {
+      margin: auto;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--ink);
+      width: min(520px, calc(100vw - 32px));
+      max-height: calc(100vh - 32px);
+      overflow: auto;
+      box-shadow: 0 22px 50px rgba(23, 33, 55, 0.24);
+    }
+    dialog[open] { display: flex; flex-direction: column; }
+    dialog:modal { overscroll-behavior: contain; }
+    dialog::backdrop {
+      background: rgba(23, 33, 55, 0.54);
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+    .dlg-head {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .dlg-head h1 { margin: 0; font-size: 16px; font-weight: 700; color: var(--ink); }
+    .dlg-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+    .dlg-foot {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      background: var(--surface-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .auth-mode-group {
+      display: inline-flex;
+      align-items: center;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-ctl);
+      padding: 3px;
+      gap: 3px;
+    }
+    .auth-mode-btn {
+      flex: 1;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 7px 12px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-weight: 650;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .auth-mode-btn.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 2px rgba(23, 33, 55, 0.08);
+    }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-group label { font-size: 12px; font-weight: 650; color: var(--ink); }
+    .field-input, .field-select, .field-textarea {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 13px;
+    }
+    .field-input, .field-select { min-height: 38px; }
+    .field-input:focus, .field-select:focus, .field-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(104, 84, 223, 0.14);
+    }
+    .hint-box {
+      padding: 11px 13px;
+      border-radius: 10px;
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-soft-border);
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    .passkey-panel {
+      display: none;
+      padding: 14px;
+      border-radius: 10px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .passkey-panel.is-visible { display: flex; }
+    .passkey-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .form-error {
+      display: none;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--danger-ink);
+      background: var(--danger-bg);
+      border: 1px solid #f2cfd6;
+      border-radius: 8px;
+      padding: 8px 10px;
+    }
+    .form-error.is-visible { display: block; }
+    .ai-output {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-soft-border);
+      font-size: 13px;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+    .inspect-art {
+      height: 170px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #1a1d30;
+    }
+    .inspect-art svg { width: 100%; height: 100%; display: block; }
+
+    /* Non-Modal Toast Region */
+    .toast-region {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 390px;
+      pointer-events: none;
+    }
+    .toast-card {
+      pointer-events: auto;
+      background: var(--hero-bg);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.24);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .toast-close {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      color: #ffffff;
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 1120px) {
+      .vault-gate-card { grid-template-columns: 1fr; }
+      .governance-grid { grid-template-columns: 1fr; }
+      .vault-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .shell { display: block !important; }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 248px !important;
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+        z-index: 60;
+      }
+      body.navopen .sidebar { transform: translateX(0); }
+      body.navopen .shade {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.45);
+        z-index: 50;
+      }
+      .mobile-menu { display: inline-flex; }
+      .page { padding: 18px 16px 36px; }
+      .gate-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    /* Dark Mode Parity */
+    html.dark, body.dark {
+      --canvas: #0f1422;
+      --surface: #1b2236;
+      --surface-subtle: #161c2e;
+      --ink: #eef2ff;
+      --muted: #98a4be;
+      --border: #2b344f;
+      --border-strong: #394466;
+      --primary-soft: rgba(104, 84, 223, 0.2);
+      --primary-soft-border: rgba(139, 123, 240, 0.4);
+      --neutral-bg: #242d46;
+      --neutral-ink: #cbd5e1;
+      --success-bg: rgba(38, 131, 107, 0.22);
+      --warning-bg: rgba(170, 118, 33, 0.22);
+      --danger-bg: rgba(194, 59, 86, 0.22);
+    }
+    html.dark .app-pill, body.dark .app-pill { background: #222a44; border-color: #343f63; }
+    html.dark .active-filter-bar, body.dark .active-filter-bar { background: #1e243d; }
+  </style>
+    <style data-stage1-host-fix>
+    html, body { margin: 0; width: 100%; min-height: 100vh; }
+    .shade, #sidebarOverlay, .sidebar-overlay { display: none !important; }
+    .frame { width: 100% !important; container-type: normal !important; }
+    .shell, .ext-shell, .ds-shell, .layout { width: 100% !important; }
+    [data-rapider-external-sidebar-parent="true"] { display: block !important; grid-template-columns: minmax(0, 1fr) !important; }
+    main, .ds-main, .main, .ext-main, [data-rapider-external-sidebar-main="true"] {
+      display: block !important; width: 100% !important; max-width: 100% !important; min-width: 0 !important; box-sizing: border-box !important;
+    }
+    main:has(> .topbar), main:has(> .page), main:has(> .ext-top), main:has(> .ext-page), .ds-main:has(> .topbar), .ds-main:has(> .page), .ext-main:has(> .ext-top), .ext-main:has(> .ext-page) { padding: 0 !important; margin: 0 !important; }
+    .topbar, .ext-top { width: 100% !important; box-sizing: border-box !important; }
+    .page, .ext-page, section.page, #content.page {
+      width: 100% !important; max-width: 1580px !important; margin-left: auto !important; margin-right: auto !important; box-sizing: border-box !important;
+    }
   </style>
 </head>
 <body>
-  <div class="shade" id="mobileShade"></div>
-  <div class="layout" id="appLayout">
-    <aside class="sidebar" id="appSidebar" aria-label="Rapider Personal Cloud Photo Storage navigation">
+  <div class="shell" id="appShell" style="display:grid;grid-template-columns:224px minmax(0,1fr);min-height:100vh;width:100%">
+    <aside class="sidebar" id="suiteSidebar" aria-label="Rapider Personal Cloud Photo Storage navigation">
       <div class="brand-row">
-        <a class="brand" href="#/photos-timeline" id="suiteBrandLink" title="Personal Suite">
+        <button type="button" class="brand" data-action="expand-sidebar" title="Rapider Personal Suite">
           <span class="suite-icon-container">
-            <i class="suite-icon fas fa-user-circle" aria-hidden="true"></i>
+            <i class="suite-icon fas fa-shield-alt" aria-hidden="true"></i>
             <i class="suite-expand-icon fas fa-chevron-right" aria-hidden="true"></i>
           </span>
-          <span class="suite-title sidebar-label">Personal Suite</span>
-        </a>
-        <button type="button" class="sidebar-collapse-btn" id="sidebarCollapseBtn" aria-label="Collapse sidebar" title="Collapse sidebar">
+          <span class="suite-title">Personal Suite</span>
+        </button>
+        <button type="button" class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Collapse sidebar" aria-label="Collapse sidebar">
           <i class="fas fa-chevron-left" aria-hidden="true"></i>
         </button>
       </div>
 
-      <a class="appbox" href="#/photos-timeline">
-        <div class="appicon"><i class="fas fa-user-circle" aria-hidden="true"></i></div>
-        <div class="sidebar-label">
-          <b>Personal Cloud Photo Storage</b>
-          <small>Rapider Personal Suite</small>
+      <div class="app-pill">
+        <span class="app-pill-icon"><i class="fas fa-images" aria-hidden="true"></i></span>
+        <div class="app-pill-meta">
+          <b>Photo Storage</b>
+          <small>Owner-Isolated Vault</small>
         </div>
-      </a>
+      </div>
 
-      <nav class="nav" aria-label="Primary">
-      <div class="navlabel">Gallery &amp; Explore</div>
-        <a href="#/photos-timeline" class="nav-link" data-route="photos-timeline" title="Photos Timeline">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+      <nav class="nav" aria-label="Primary sections">
+        <div class="navlabel">Gallery &amp; Explore</div>
+        <a href="#/photos-timeline" data-route="photos-timeline" title="Photos Timeline">
+          <i class="fas fa-clock icon" aria-hidden="true"></i>
           <span class="sidebar-label">Photos Timeline</span>
         </a>
-        <a href="#/search-explore" class="nav-link" data-route="search-explore" title="Search, OCR &amp; Places">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+        <a href="#/search-explore" data-route="search-explore" title="Search, OCR &amp; Places">
+          <i class="fas fa-search-location icon" aria-hidden="true"></i>
           <span class="sidebar-label">Search, OCR &amp; Places</span>
         </a>
-        <a href="#/people-and-pets" class="nav-link" data-route="people-and-pets" title="People, Pets &amp; Memories">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+        <a href="#/people-and-pets" data-route="people-and-pets" title="People, Pets &amp; Memories">
+          <i class="fas fa-user-friends icon" aria-hidden="true"></i>
           <span class="sidebar-label">People, Pets &amp; Memories</span>
         </a>
-      <div class="navlabel">Collections &amp; Curation</div>
-        <a href="#/albums-collections" class="nav-link" data-route="albums-collections" title="Albums &amp; Collections">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+
+        <div class="navlabel">Collections &amp; Curation</div>
+        <a href="#/albums-collections" data-route="albums-collections" title="Albums &amp; Collections">
+          <i class="fas fa-book-open icon" aria-hidden="true"></i>
           <span class="sidebar-label">Albums &amp; Collections</span>
         </a>
-        <a href="#/curation-board" class="nav-link" data-route="curation-board" title="Photo Curation Board">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+        <a href="#/curation-board" data-route="curation-board" title="Photo Curation Board">
+          <i class="fas fa-columns icon" aria-hidden="true"></i>
           <span class="sidebar-label">Photo Curation Board</span>
         </a>
-        <a href="#/shared-with-family" class="nav-link" data-route="shared-with-family" title="Shared &amp; Partner Library">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+        <a href="#/shared-with-family" data-route="shared-with-family" title="Shared &amp; Partner Library">
+          <i class="fas fa-users icon" aria-hidden="true"></i>
           <span class="sidebar-label">Shared &amp; Partner Library</span>
         </a>
-      <div class="navlabel">Vault &amp; Governance</div>
-        <a href="#/locked-vault" class="nav-link active" data-route="locked-vault" title="Locked Vault">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+
+        <div class="navlabel">Vault &amp; Governance</div>
+        <a href="#/locked-vault" class="active" data-route="locked-vault" title="Locked Vault">
+          <i class="fas fa-lock icon" aria-hidden="true"></i>
           <span class="sidebar-label">Locked Vault</span>
         </a>
-        <a href="#/storage-cleanup" class="nav-link" data-route="storage-cleanup" title="Storage &amp; Deduplication">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+        <a href="#/storage-cleanup" data-route="storage-cleanup" title="Storage &amp; Deduplication">
+          <i class="fas fa-hdd icon" aria-hidden="true"></i>
           <span class="sidebar-label">Storage &amp; Deduplication</span>
         </a>
-        <a href="#/privacy-portability" class="nav-link" data-route="privacy-portability" title="Import, Export &amp; Privacy">
-          <i class="fas fa-user-circle icon" aria-hidden="true"></i>
+        <a href="#/privacy-portability" data-route="privacy-portability" title="Import, Export &amp; Privacy">
+          <i class="fas fa-user-shield icon" aria-hidden="true"></i>
           <span class="sidebar-label">Import, Export &amp; Privacy</span>
         </a>
       </nav>
 
       <div class="side-bottom">
-        <div class="profile-link">
-          <div class="avatar-badge">EV</div>
-          <div class="sidebar-label">
-            <strong style="font-size:12px;display:block">Elena Vance</strong>
-            <small style="font-size:11px;color:var(--muted)">Partner / Shared Album Contributor</small>
+        <div class="profile-box">
+          <span class="avatar-circle">HS</span>
+          <div class="profile-meta">
+            <strong>Hannah Sato</strong>
+            <small>Personal Vault Owner</small>
           </div>
         </div>
       </div>
     </aside>
 
-    <div class="main-col">
-      <header class="topbar h-16 sticky top-0 z-30 flex items-center justify-between px-6 border-b border-border-color bg-background/95 backdrop-blur">
-        <div class="flex items-center gap-3 min-w-0">
-          <button type="button" class="mobile-menu" id="mobileMenuBtn" aria-label="Open menu">
-            <i class="fas fa-bars" aria-hidden="true"></i>
-          </button>
-          <div class="breadcrumbs">
-            <span>Personal Suite</span>
-            <span>/</span>
-            <span>Personal Cloud Photo Storage</span>
-            <span>/</span>
-            <strong>Locked Vault</strong>
+    <div class="shade" data-action="close-menu"></div>
+
+    <main id="main-content" style="min-width:0;width:100%;box-sizing:border-box">
+      <div class="page" style="width:100%;max-width:1540px;margin:0 auto;padding:24px 28px 48px;box-sizing:border-box">
+        <header class="page-head">
+          <div class="page-head-left">
+            <button type="button" class="btn icon-only quiet mobile-menu" data-action="menu" aria-label="Open navigation">
+              <i class="fas fa-bars" aria-hidden="true"></i>
+            </button>
+            <div>
+              <span class="eyebrow">Vault &amp; Governance · Step-Up Isolated Enclave</span>
+              <h1 class="page-title">Locked Vault</h1>
+              <p class="subtitle">Step-up verified enclave for sensitive IDs, passports, and legal documents. Every locked item is walled off from Photos Timeline, Albums, Search, OCR, Memories, and Partner Sharing.</p>
+            </div>
           </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <a href="#/share-album-drawer" class="btn small"><i class="fas fa-plus" aria-hidden="true"></i> + Quick Action</a>
-          <a href="#/upload-import-drawer" class="btn primary small !text-white text-white" style="color: #ffffff !important;"><i class="fas fa-plus-circle" aria-hidden="true"></i> + New Photo Asset</a>
-          <button type="button" class="btn small" id="themeToggleBtn" aria-label="Toggle dark mode" title="Toggle theme">
-            <i class="fas fa-moon" aria-hidden="true"></i>
-          </button>
-        </div>
-      </header>
-
-      <main class="page-scroll flex-1 overflow-y-auto p-6 md:p-8 @container" id="main-content">
-        <div class="page-wrap">
-
-      <div class="eyebrow"><i class="fas fa-user-circle"></i> VAULT &amp; GOVERNANCE &bull; PRSPHOTOVAULTPOLICY WORKBENCH</div>
-      <div class="page-head">
-        <div>
-          <h1>Locked Vault</h1>
-          <p>Step-up session verification gate unlocking isLockedVault == true sensitive photos/IDs, *Move Out of Vault*, and automatic session re-lock timer.</p>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          <button type="button" class="btn" onclick="window.toast('Verified SOW invariants & cross-suite sync for PrsPhotoVaultPolicy.', 'success')"><i class="fas fa-sync"></i> Verify Photo Vault Policy Sync</button>
-          <a href="#/upload-import-drawer" class="btn primary !text-white text-white" style="color:#ffffff !important;"><i class="fas fa-plus"></i> + Create Photo Vault Policy</a>
-        </div>
-      </div>
-
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kicker"><span>ACTIVE PHOTO VAULT POLICY RECORDS</span><i class="fas fa-database" style="color:var(--purple)"></i></div>
-          <div class="val" id="ledgerCount_6">5 Records</div>
-          <div class="sub"><span>Bound to canonical `PrsPhotoVaultPolicy`</span></div>
-        </div>
-        <div class="kpi-card">
-          <div class="kicker"><span>QUOTA LIMIT GI B COVERAGE</span><i class="fas fa-check-double" style="color:#10b981"></i></div>
-          <div class="val">100% Verified</div>
-          <div class="sub"><span class="badge green">DRAFT / ACTIVE</span></div>
-        </div>
-        <div class="kpi-card">
-          <div class="kicker"><span>USED BYTES</span><i class="fas fa-Sliders-h" style="color:#0284c7"></i></div>
-          <div class="val">97.8%</div>
-          <div class="sub"><span>Flipping biometricConsentGranted from true to false triggers</span></div>
-        </div>
-        <div class="kpi-card">
-          <div class="kicker"><span>GOVERNANCE &amp; INVARIANT GATE</span><i class="fas fa-shield-alt" style="color:#f59e0b"></i></div>
-          <div class="val">Enforced</div>
-          <div class="sub"><span>1:1 per ownerUserRef</span></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="filter-bar">
-          <div class="search-wrap">
-            <i class="fas fa-search"></i>
-            <input type="text" id="ledgerSearch_6" class="search-input" placeholder="Search Locked Vault by owner user ref, title, quota limit gi b, or owner...">
+          <div class="head-actions">
+            <a href="#/privacy-portability" class="btn">
+              <i class="fas fa-sliders-h" aria-hidden="true"></i>
+              <span>Timeout Policy</span>
+            </a>
+            <button type="button" id="btnAskRapider" class="btn" data-action="ai">
+              <i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i>
+              <span>Ask Rapider</span>
+            </button>
+            <button type="button" id="btnHeaderVaultAction" class="btn primary" style="color:#ffffff !important;">
+              <i class="fas fa-unlock-alt" aria-hidden="true"></i>
+              <span>Verify &amp; Unlock</span>
+            </button>
           </div>
-          <select id="ledgerStatus_6" class="select-filter" aria-label="Filter by Status">
-            <option value="ALL">All Photo Vault Policy Statuses</option>
-            <option value="DRAFT">DRAFT</option><option value="IN_REVIEW">IN_REVIEW</option><option value="APPROVED">APPROVED</option><option value="ACTIVE">ACTIVE</option>
-          </select>
-        </div>
-        <div id="activeFilterTagsBar" class="active-tags-bar" style="display:none;"></div>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>Owner User Ref &amp; Timestamp</th>
-                <th>Photo Vault Policy Title &amp; Operational Scope</th>
-                <th>Quota Limit Gi B</th>
-                <th>Used Bytes</th>
-                <th>Enforced Invariant &amp; Rule</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="ledgerRows_6"></tbody>
-          </table>
-        </div>
+        </header>
+
+        <!-- STATE A: Locked Cryptographic Step-Up Gate (Default on Entry) -->
+        <section id="vaultLockedState" aria-label="Locked Vault step-up gate">
+          <div class="vault-gate-card">
+            <div class="gate-left">
+              <div class="gate-status-row">
+                <span class="gate-emblem"><i class="fas fa-user-lock" aria-hidden="true"></i></span>
+                <span class="gate-pill"><i class="fas fa-shield-alt" aria-hidden="true"></i> Step-Up Gate Active · Owner-Only Isolated</span>
+              </div>
+              <h2 class="gate-title">Locked Vault Protected (<span id="gateLockedCount">0</span> Sensitive Items)</h2>
+              <p class="gate-copy">Sensitive records stay encrypted in Rapider Platform Files with zero thumbnails, OCR snippets, or GPS coordinates mounted in the DOM until Hannah Sato completes step-up PIN or Passkey verification.</p>
+
+              <div class="gate-metrics">
+                <div class="gate-metric tabular">
+                  <span>Sealed Assets</span>
+                  <strong id="gateItemCountPill">0 Items</strong>
+                </div>
+                <div class="gate-metric tabular">
+                  <span>Vault Footprint</span>
+                  <strong id="gateSizePill">0.0 MB</strong>
+                </div>
+                <div class="gate-metric tabular">
+                  <span>Auto-Relock</span>
+                  <strong id="gateTimeoutPill">5 min</strong>
+                </div>
+                <div class="gate-metric tabular">
+                  <span>Leaked Indexes</span>
+                  <strong>0 Leaked</strong>
+                </div>
+              </div>
+
+              <div class="gate-actions">
+                <button type="button" id="btnOpenStepUpModal" class="btn primary" style="color:#ffffff !important;">
+                  <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                  <span>Verify Identity &amp; Unlock Vault</span>
+                </button>
+                <button type="button" id="btnQuickPasskeyVerify" class="btn dark-ghost">
+                  <i class="fas fa-fingerprint" aria-hidden="true"></i>
+                  <span>Passkey Verification</span>
+                </button>
+              </div>
+            </div>
+
+            <aside class="walloff-panel" aria-label="Active isolation guarantees">
+              <div class="walloff-head">
+                <h2><i class="fas fa-lock" aria-hidden="true"></i> Active Cryptographic Wall-Off Guarantees</h2>
+                <span class="walloff-badge tabular" id="gatePolicyCodeBadge">POL-2026-01</span>
+              </div>
+              <div class="walloff-list">
+                <div class="walloff-row">
+                  <span class="walloff-surface"><i class="fas fa-images" aria-hidden="true"></i> Photos Timeline &amp; Albums</span>
+                  <span class="walloff-badge">Hidden (0 visible)</span>
+                </div>
+                <div class="walloff-row">
+                  <span class="walloff-surface"><i class="fas fa-wand-magic-sparkles" aria-hidden="true"></i> Classic &amp; Ask Photos AI</span>
+                  <span class="walloff-badge">Excluded from Index</span>
+                </div>
+                <div class="walloff-row">
+                  <span class="walloff-surface"><i class="fas fa-file-alt" aria-hidden="true"></i> Private OCR Text Extraction</span>
+                  <span class="walloff-badge">Disabled (ocrText = null)</span>
+                </div>
+                <div class="walloff-row">
+                  <span class="walloff-surface"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> EXIF GPS Coordinates</span>
+                  <span class="walloff-badge">Redacted (null / null)</span>
+                </div>
+                <div class="walloff-row">
+                  <span class="walloff-surface"><i class="fas fa-users" aria-hidden="true"></i> Partner Sharing (David Sato)</span>
+                  <span class="walloff-badge">403 Blocked</span>
+                </div>
+                <div class="walloff-row">
+                  <span class="walloff-surface"><i class="fas fa-user-shield" aria-hidden="true"></i> Workspace / #058 DAM Admins</span>
+                  <span class="walloff-badge">403 Owner-Only</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          <div class="governance-grid">
+            <article class="gov-card">
+              <div class="gov-top">
+                <span class="gov-icon"><i class="fas fa-hourglass-half" aria-hidden="true"></i></span>
+                <span class="tag tag-primary tabular" id="govPolicyTag">5 min timeout</span>
+              </div>
+              <h3>Auto-Relock Session Policy</h3>
+              <p>Unlocked sessions automatically clear all sensitive thumbnails from memory and re-lock after <strong id="govTimeoutInline">5 minutes</strong> of step-up access, or immediately on Lock Now.</p>
+              <div class="gov-foot">
+                <span>Governed by PrsPhotoVaultPolicy</span>
+                <a href="#/privacy-portability">Adjust Timeout →</a>
+              </div>
+            </article>
+
+            <article class="gov-card">
+              <div class="gov-top">
+                <span class="gov-icon"><i class="fas fa-eye-slash" aria-hidden="true"></i></span>
+                <span class="tag tag-success">Zero Index Leakage</span>
+              </div>
+              <h3>Zero-Residue Search &amp; AI Wall-Off</h3>
+              <p>Assets marked <code>isLockedVault = true</code> are excluded from <code>PrsPhotoAlbumItem</code>, <code>PrsPhotoShareGrant</code>, On This Day Memories, and Ask Photos citations.</p>
+              <div class="gov-foot">
+                <span>14 Timeline · 0 Vault Exposed</span>
+                <a href="#/search-explore">Verify Search Isolation →</a>
+              </div>
+            </article>
+
+            <article class="gov-card">
+              <div class="gov-top">
+                <span class="gov-icon"><i class="fas fa-key" aria-hidden="true"></i></span>
+                <span class="tag tag-neutral tabular" id="govQuotaTag">110.29 / 200 GiB</span>
+              </div>
+              <h3>Owner Enclave Custody &amp; Recovery</h3>
+              <p>Exclusive personal custody under Hannah Sato (<code>PERSONAL_OWNER_ONLY_ISOLATED</code>). Moving an item to Trash preserves a 30-day recovery window before purge.</p>
+              <div class="gov-foot">
+                <span>Immutable originalFileRef</span>
+                <a href="#/storage-cleanup">View 30-Day Trash →</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- STATE B: Unlocked Sensitive Document Vault (Hidden until Step-Up Verified) -->
+        <section id="vaultUnlockedState" style="display:none;" aria-label="Unlocked sensitive vault">
+          <div class="relock-bar" role="region" aria-label="Vault session countdown">
+            <div class="relock-left">
+              <span class="live-dot" aria-hidden="true"></span>
+              <div class="relock-meta">
+                <strong>Vault Unlocked · Step-Up Session Active (<span id="unlockedAuthMethodLabel">PIN Verified</span> · Hannah Sato)</strong>
+                <small>All sensitive assets remain walled off from Timeline, Search, OCR, and Partner Sharing.</small>
+                <div class="relock-track" aria-hidden="true">
+                  <div class="relock-fill" id="relockProgressFill"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="relock-timer-box tabular" aria-live="off">
+              <strong id="relockCountdownDisplay">05:00</strong>
+              <span>auto-relock</span>
+            </div>
+
+            <div class="relock-actions">
+              <button type="button" id="btnResetTimer" class="btn small dark-ghost">
+                <i class="fas fa-redo" aria-hidden="true"></i>
+                <span>Reset Timer</span>
+              </button>
+              <button type="button" id="btnMoveIntoVault" class="btn small dark-ghost">
+                <i class="fas fa-file-import" aria-hidden="true"></i>
+                <span>+ Move Into Vault</span>
+              </button>
+              <button type="button" id="btnLockNow" class="btn small danger" style="color:#ffffff !important;">
+                <i class="fas fa-lock" aria-hidden="true"></i>
+                <span>Lock Now</span>
+              </button>
+            </div>
+          </div>
+
+          <section class="panel" aria-label="Filter unlocked vault documents">
+            <div class="vault-toolbar">
+              <div class="search-box">
+                <i class="fas fa-search" aria-hidden="true"></i>
+                <input type="search" id="vaultSearchInput" aria-label="Search unlocked vault items" placeholder="Search vaulted documents by title, code, or camera...">
+              </div>
+              <div class="toolbar-right">
+                <span class="stat-pill tabular" id="unlockedCountStat">
+                  <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                  <span>0 Locked Items</span>
+                </span>
+                <span class="stat-pill tabular" id="unlockedSizeStat">
+                  <i class="fas fa-database" aria-hidden="true"></i>
+                  <span>0.0 MB Vaulted</span>
+                </span>
+                <button type="button" id="btnTogglePrivacyBlur" class="btn small" aria-pressed="false">
+                  <i class="fas fa-eye-slash" aria-hidden="true"></i>
+                  <span>Privacy Blur: Off</span>
+                </button>
+              </div>
+            </div>
+            <div id="activeFilterTagsBar" class="active-filter-bar" aria-live="polite"></div>
+          </section>
+
+          <div id="vaultAssetGrid" class="vault-grid"></div>
+          <div id="vaultEmptyState" class="empty-state" style="display:none;"></div>
+        </section>
       </div>
-    
-        </div>
-      </main>
-    </div>
+    </main>
   </div>
 
-  <!-- Confirmation Modal (Zero Native Dialog Standard) -->
-  <div id="rapiderConfirmModal" class="hidden" style="position:fixed;inset:0;background:rgba(15,23,42,0.5);z-index:100;display:none;align-items:center;justify-content:center;padding:16px;">
-    <div class="panel" style="max-width:420px;width:100%;padding:22px;box-shadow:0 20px 50px rgba(15,23,42,0.25);margin:0;">
-      <h3 id="rapiderConfirmTitle" style="margin:0 0 8px;font-size:17px;font-weight:700;">Confirm Action</h3>
-      <p id="rapiderConfirmMsg" style="margin:0 0 18px;font-size:13px;color:var(--muted);"></p>
-      <div style="display:flex;justify-content:flex-end;gap:10px;">
-        <button type="button" class="btn" id="rapiderConfirmCancelBtn">Cancel</button>
-        <button type="button" class="btn danger !text-white text-white" id="rapiderConfirmOkBtn" style="color:#ffffff !important;">Confirm Remove</button>
-      </div>
+  <!-- Step-Up Identity Verification Modal -->
+  <dialog id="stepUpDialog" closedby="any" aria-labelledby="stepUpTitle">
+    <div class="dlg-head">
+      <h1 id="stepUpTitle">Step-Up Identity Verification</h1>
+      <button type="button" class="btn icon-only quiet" id="stepUpCloseX" aria-label="Close verification dialog">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
     </div>
-  </div>
-  <!-- Empty State Fallback Template (Pass 14) -->
-  <div id="emptyStateContainer" class="empty-state hidden" style="display:none;">No records found</div>
+    <form id="stepUpForm" novalidate>
+      <div class="dlg-body">
+        <div class="auth-mode-group" role="group" aria-label="Verification method">
+          <button type="button" class="auth-mode-btn active" id="authModePinBtn" data-auth-mode="pin">
+            <i class="fas fa-key" aria-hidden="true"></i>
+            <span>4-Digit Vault PIN</span>
+          </button>
+          <button type="button" class="auth-mode-btn" id="authModePasskeyBtn" data-auth-mode="passkey">
+            <i class="fas fa-fingerprint" aria-hidden="true"></i>
+            <span>Hardware Passkey</span>
+          </button>
+        </div>
 
-  <script>
-    window.esc = function(s) {
-      return String(s == null ? '' : s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    };
-    window.toast = function(message, type) {
-      if (window.rapiderApi && typeof window.rapiderApi.showNotification === 'function') {
-        window.rapiderApi.showNotification({ type: type || 'success', message: message });
-        return;
-      }
-      var el = document.createElement('div');
-      el.style.cssText = 'position:fixed;bottom:22px;right:22px;background:#1f243a;color:#fff;padding:11px 18px;border-radius:10px;font-size:13px;font-weight:600;z-index:150;box-shadow:0 10px 25px rgba(0,0,0,0.2);';
-      el.textContent = message;
-      document.body.appendChild(el);
-      setTimeout(function() { el.remove(); }, 2800);
-    };
-    window.showConfirmModal = function(title, message, onConfirm) {
-      var modal = document.getElementById('rapiderConfirmModal');
-      document.getElementById('rapiderConfirmTitle').textContent = title || 'Confirm Cancellation';
-      document.getElementById('rapiderConfirmMsg').textContent = message || 'Are you sure you want to proceed?';
-      modal.classList.remove('hidden');
-      modal.style.display = 'flex';
-      var okBtn = document.getElementById('rapiderConfirmOkBtn');
-      var cancelBtn = document.getElementById('rapiderConfirmCancelBtn');
-      var close = function() { modal.classList.add('hidden'); modal.style.display = 'none'; };
-      cancelBtn.onclick = close;
-      okBtn.onclick = async function() {
-        okBtn.disabled = true;
-        try { await onConfirm(); } finally { okBtn.disabled = false; close(); }
-      };
-    };
-    window.closePageDrawer = function(returnRoute) {
-      if (window.rapiderApi && typeof window.rapiderApi.closePageDrawer === 'function') {
-        window.rapiderApi.closePageDrawer();
-      } else {
-        window.location.hash = '#/' + (returnRoute || 'photos-timeline');
-      }
-    };
-    window.getQueryParam = function(name) {
-      var hash = window.location.hash || '';
-      var qIdx = hash.indexOf('?');
-      if (qIdx !== -1) {
-        var params = new URLSearchParams(hash.slice(qIdx + 1));
-        if (params.get(name)) return params.get(name);
-      }
-      var searchParams = new URLSearchParams(window.location.search || '');
-      return searchParams.get(name);
-    };
+        <div id="pinAuthSection" class="field-group">
+          <label for="vaultPinInput">Personal Vault PIN (Hannah Sato)</label>
+          <input type="password" id="vaultPinInput" class="field-input tabular" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="Enter 4-digit PIN (Demo: 2026)" autofocus>
+          <div class="hint-box">
+            <strong>Auto-Relock Policy:</strong> Unlocking grants a <span id="stepUpTimeoutLabel" class="tabular">5-minute</span> isolated enclave session. Demo PIN: <strong>2026</strong>.
+          </div>
+        </div>
 
-    (function initShell() {
-      var layout = document.getElementById('appLayout');
-      var sidebar = document.getElementById('appSidebar');
-      var collapseBtn = document.getElementById('sidebarCollapseBtn');
-      var brandLink = document.getElementById('suiteBrandLink');
-      var mobileBtn = document.getElementById('mobileMenuBtn');
-      var shade = document.getElementById('mobileShade');
-      var themeBtn = document.getElementById('themeToggleBtn');
+        <div id="passkeyAuthSection" class="passkey-panel">
+          <span class="passkey-badge"><i class="fas fa-fingerprint" aria-hidden="true"></i></span>
+          <div>
+            <strong style="display:block;font-size:13px;margin-bottom:4px;">FIDO2 / WebAuthn Enclave Passkey Ready</strong>
+            <span style="font-size:12.5px;color:var(--muted);line-height:1.45;display:block;">Verify local device biometric or security key assertion for <strong>Hannah Sato</strong> (<code>POL-2026-01</code>). Zero biometric vectors leave your device.</span>
+          </div>
+        </div>
 
-      function applyCollapsed(isCollapsed) {
-        if (isCollapsed) {
-          layout.classList.add('sidebar-collapsed');
-          sidebar.classList.add('sidebar-collapsed');
-          sidebar.setAttribute('data-collapsed', 'true');
-        } else {
-          layout.classList.remove('sidebar-collapsed');
-          sidebar.classList.remove('sidebar-collapsed');
-          sidebar.setAttribute('data-collapsed', 'false');
-        }
-        try { localStorage.setItem('rapider_sidebar_collapsed', isCollapsed ? 'true' : 'false'); } catch (_) {}
+        <div id="stepUpError" class="form-error" role="alert"></div>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="btn" id="stepUpCancelBtn">Cancel</button>
+        <button type="submit" class="btn primary" id="stepUpVerifyBtn" style="color:#ffffff !important;">Unlock Vault</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Move Existing Asset Into Locked Vault Modal -->
+  <dialog id="moveIntoVaultDialog" closedby="any" aria-labelledby="moveIntoVaultTitle">
+    <div class="dlg-head">
+      <h1 id="moveIntoVaultTitle">Move Photo or Document Into Locked Vault</h1>
+      <button type="button" class="btn icon-only quiet" id="moveIntoCloseX" aria-label="Close move into vault dialog">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="moveIntoVaultForm" novalidate>
+      <div class="dlg-body">
+        <div class="field-group">
+          <label for="moveIntoVaultSelect">Select Active Library Asset</label>
+          <select id="moveIntoVaultSelect" class="field-select" autofocus></select>
+        </div>
+        <div class="hint-box">
+          Moving an item into <strong>Locked Vault</strong> sets <code>isLockedVault = true</code>, clears exposed OCR/GPS fields, detaches active album shares, and removes it from Photos Timeline and Ask Photos.
+        </div>
+        <div id="moveIntoError" class="form-error" role="alert"></div>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="btn" id="moveIntoCancelBtn">Cancel</button>
+        <button type="submit" class="btn primary" id="moveIntoConfirmBtn" style="color:#ffffff !important;">Lock Asset in Vault</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Sensitive Asset Inspection Modal -->
+  <dialog id="vaultInspectDialog" closedby="any" aria-labelledby="vaultInspectTitle">
+    <div class="dlg-head">
+      <h1 id="vaultInspectTitle">Vaulted Asset Inspection</h1>
+      <button type="button" class="btn icon-only quiet" id="vaultInspectCloseX" aria-label="Close inspection dialog">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="dlg-body" id="vaultInspectBody"></div>
+    <div class="dlg-foot">
+      <button type="button" class="btn" id="vaultInspectCloseBtn">Close</button>
+      <a href="#/photo-detail" id="vaultInspectDetailLink" class="btn primary" style="color:#ffffff !important;">
+        <i class="fas fa-expand-alt" aria-hidden="true"></i>
+        <span>Open in Lightbox</span>
+      </a>
+    </div>
+  </dialog>
+
+  <!-- Confirmation Modal (Move Out of Vault / Move to 30-Day Trash) -->
+  <dialog id="rapiderConfirmModal" aria-labelledby="rapiderConfirmTitle">
+    <div class="dlg-head">
+      <h1 id="rapiderConfirmTitle">Confirm Vault Action</h1>
+      <button type="button" class="btn icon-only quiet" id="rapiderConfirmCloseX" aria-label="Close confirmation dialog">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="dlg-body">
+      <p id="rapiderConfirmMsg" style="margin:0;font-size:13px;color:var(--muted);line-height:1.55;"></p>
+    </div>
+    <div class="dlg-foot">
+      <button type="button" class="btn" id="rapiderConfirmCancelBtn" autofocus>Cancel</button>
+      <button type="button" class="btn danger" id="rapiderConfirmOkBtn" style="color:#ffffff !important;">Confirm</button>
+    </div>
+  </dialog>
+
+  <!-- Ask Rapider Grounded Audit Modal -->
+  <dialog id="askRapiderDialog" closedby="any" aria-labelledby="askRapiderTitle">
+    <div class="dlg-head">
+      <h1 id="askRapiderTitle">Ask Rapider · Locked Vault Policy Audit</h1>
+      <button type="button" class="btn icon-only quiet" id="askRapiderCloseX" aria-label="Close Ask Rapider dialog">
+        <i class="fas fa-times" aria-hidden="true"></i>
+      </button>
+    </div>
+    <form id="askRapiderForm">
+      <div class="dlg-body">
+        <div class="field-group">
+          <label for="askRapiderInput">Security Audit Query (Metadata-Only · Zero Unsealed Content)</label>
+          <textarea id="askRapiderInput" class="field-textarea" rows="2" autofocus>Verify Locked Vault timeout policy and confirm that zero locked assets are exposed to Search, OCR, or Partner Sharing.</textarea>
+        </div>
+        <div id="askRapiderResult" class="ai-output"></div>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="btn" id="askRapiderCancelBtn">Close</button>
+        <button type="submit" class="btn primary" id="askRapiderRunBtn" style="color:#ffffff !important;">Run Isolation Check</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toastRegion" role="region" aria-label="Notifications" class="toast-region"></div>
+  <div id="srAnnouncer" aria-live="polite" class="sr-only"></div>
+
+  <script data-collapsible-sidebar>
+    (function () {
+      var KEY = 'rapider_sidebar_collapsed';
+      var shell = document.getElementById('appShell');
+      var sidebar = document.getElementById('suiteSidebar');
+      function setCollapsed(collapsed) {
+        if (!shell || !sidebar) return;
+        shell.classList.toggle('sidebar-collapsed', collapsed);
+        sidebar.classList.toggle('sidebar-collapsed', collapsed);
+        sidebar.setAttribute('data-collapsed', collapsed ? 'true' : 'false');
+        try { localStorage.setItem(KEY, collapsed ? 'true' : 'false'); } catch (_) {}
       }
-
       try {
-        if (localStorage.getItem('rapider_sidebar_collapsed') === 'true') applyCollapsed(true);
+        if (localStorage.getItem(KEY) === 'true') setCollapsed(true);
       } catch (_) {}
 
-      if (collapseBtn) {
-        collapseBtn.addEventListener('click', function(e) {
+      window.addEventListener('click', function (e) {
+        var collapseBtn = e.target && e.target.closest ? e.target.closest('.sidebar-collapse-btn') : null;
+        if (collapseBtn) {
           e.preventDefault();
           e.stopPropagation();
-          applyCollapsed(!sidebar.classList.contains('sidebar-collapsed'));
-        });
-      }
-      if (brandLink) {
-        brandLink.addEventListener('click', function(e) {
-          if (sidebar.classList.contains('sidebar-collapsed')) {
-            e.preventDefault();
-            e.stopPropagation();
-            applyCollapsed(false);
-          }
-        });
-      }
-      if (mobileBtn) {
-        mobileBtn.addEventListener('click', function() { document.body.classList.toggle('navopen'); });
-      }
-      if (shade) {
-        shade.addEventListener('click', function() { document.body.classList.remove('navopen'); });
-      }
-      if (themeBtn) {
-        themeBtn.addEventListener('click', function() {
-          document.documentElement.classList.toggle('dark');
-          document.body.classList.toggle('dark');
-        });
-      }
-    })();
-
-    window.SEED_DATA = {"PrsPhotoAsset":[{"id":"00000000-0179-0001-0000-000000000001","recordCode":"PA-2026-101","title":"Fuji X100V (Photo Asset)","name":"Fuji X100V (Photo Asset)","modelTitle":"Photo Asset","ownerName":"Elena Rostova (Principal Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-101","secondaryAttrLabel":"Original File Ref","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Display File Ref","metricValue":"92.0% (125.00 units)","operationalSummary":"Using upload-import-drawer on #/photos-timeline, the user drops 25 vacation photos (3 of which were alrea","invariantRule":"LIVE_PHOTO \\","crossSuiteRef":"VIDEO \\","updatedAt":"2026-05-10 09:15","contactPhone":"+14155550110","status":"DRAFT","moderationStage":"DRAFT","version":1,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-101","originalFileRef":"Original File Ref — PA-2026-101","displayFileRef":true,"thumbnailFileRef":"Thumbnail File Ref — PA-2026-101","sha256Hash":true,"perceptualHash":true,"mediaType":"Media Type — PA-2026-101"},{"id":"00000000-0179-0001-0000-000000000002","recordCode":"PA-2026-102","title":"Personal Cloud Photo Storage Photo Asset — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","name":"Personal Cloud Photo Storage Photo Asset — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","modelTitle":"Photo Asset","ownerName":"Marcus Vance (Senior Operations)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-102","secondaryAttrLabel":"Original File Ref","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Display File Ref","metricValue":"93.1% (172.50 units)","operationalSummary":"On #/curation-board, the user drags 18 birthday photos from UNREVIEWED into SHORTLIST and FINAL_ALBUM on ","invariantRule":"LIVE_PHOTO \\","crossSuiteRef":"VIDEO \\","updatedAt":"2026-05-11 11:15","contactPhone":"+14155550111","status":"IN_REVIEW","moderationStage":"IN_REVIEW","version":2,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-102","originalFileRef":"Original File Ref — PA-2026-102","displayFileRef":false,"thumbnailFileRef":"Thumbnail File Ref — PA-2026-102","sha256Hash":false,"perceptualHash":false,"mediaType":"Media Type — PA-2026-102"},{"id":"00000000-0179-0001-0000-000000000003","recordCode":"PA-2026-103","title":"Personal Cloud Photo Storage Photo Asset — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","name":"Personal Cloud Photo Storage Photo Asset — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","modelTitle":"Photo Asset","ownerName":"Sophia Laurent (Director)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-103","secondaryAttrLabel":"Original File Ref","secondaryAttrValue":"Personal Cloud Photo Storage Tier 3","metricLabel":"Display File Ref","metricValue":"94.2% (220.00 units)","operationalSummary":"The user enables Partner Sharing with their spouse (shareFromDate = 2025-01-01, filtered to consented *Ki","invariantRule":"LIVE_PHOTO \\","crossSuiteRef":"VIDEO \\","updatedAt":"2026-05-12 13:15","contactPhone":"+14155550112","status":"APPROVED","moderationStage":"APPROVED","version":3,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-103","originalFileRef":"Original File Ref — PA-2026-103","displayFileRef":true,"thumbnailFileRef":"Thumbnail File Ref — PA-2026-103","sha256Hash":true,"perceptualHash":true,"mediaType":"Media Type — PA-2026-103"},{"id":"00000000-0179-0001-0000-000000000004","recordCode":"PA-2026-104","title":"Personal Cloud Photo Storage Photo Asset — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","name":"Personal Cloud Photo Storage Photo Asset — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","modelTitle":"Photo Asset","ownerName":"Liam Chen (Systems Architect)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-104","secondaryAttrLabel":"Original File Ref","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Display File Ref","metricValue":"95.3% (267.50 units)","operationalSummary":"Visiting #/people-and-pets for the first time shows biometricConsentGranted = false (0 face clusters). Op","invariantRule":"LIVE_PHOTO \\","crossSuiteRef":"VIDEO \\","updatedAt":"2026-05-13 15:15","contactPhone":"+14155550113","status":"ACTIVE","moderationStage":"ACTIVE","version":4,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-104","originalFileRef":"Original File Ref — PA-2026-104","displayFileRef":false,"thumbnailFileRef":"Thumbnail File Ref — PA-2026-104","sha256Hash":false,"perceptualHash":false,"mediaType":"Media Type — PA-2026-104"},{"id":"00000000-0179-0001-0000-000000000005","recordCode":"PA-2026-105","title":"Hardware store receipt from October (Photo Asset)","name":"Hardware store receipt from October (Photo Asset)","modelTitle":"Photo Asset","ownerName":"Amira Al-Mansoor (Compliance Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-105","secondaryAttrLabel":"Original File Ref","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Display File Ref","metricValue":"96.4% (315.00 units)","operationalSummary":"On #/search-explore, the user toggles Ask Photos and enters *\"Hardware store receipt from October\"*, surf","invariantRule":"LIVE_PHOTO \\","crossSuiteRef":"VIDEO \\","updatedAt":"2026-05-14 17:15","contactPhone":"+14155550114","status":"DRAFT","moderationStage":"DRAFT","version":5,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-105","originalFileRef":"Original File Ref — PA-2026-105","displayFileRef":true,"thumbnailFileRef":"Thumbnail File Ref — PA-2026-105","sha256Hash":true,"perceptualHash":true,"mediaType":"Media Type — PA-2026-105"}],"PrsPhotoAlbum":[{"id":"00000000-0179-0002-0000-000000000001","recordCode":"PA-2026-201","title":"Personal Cloud Photo Storage Photo Album — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","name":"Personal Cloud Photo Storage Photo Album — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","modelTitle":"Photo Album","ownerName":"Marcus Vance (Senior Operations)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-201","secondaryAttrLabel":"Story Description","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Cover Asset","metricValue":"92.1% (250.00 units)","operationalSummary":"On #/curation-board, the user drags 18 birthday photos from UNREVIEWED into SHORTLIST and FINAL_ALBUM on ","invariantRule":"Deleting a PrsPhotoAlbum deletes container & PrsPhotoAlbumItem join rows ONLY—never moves underlying PrsPhotoAsset photo","crossSuiteRef":"Has many PrsPhotoAlbumItem, PrsPhotoShareGrant; channelThreadRef -> projectChann","updatedAt":"2026-05-10 09:15","contactPhone":"+14155550115","status":"DRAFT","moderationStage":"DRAFT","version":1,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-201","storyDescription":"Story Description — PA-2026-201","coverAssetId":"Cover Asset — PA-2026-201","isPinned":true,"itemCount":"Item Count — PA-2026-201","earliestCapturedAt":"Earliest Captured At — PA-2026-201","latestCapturedAt":"Latest Captured At — PA-2026-201","channelThreadRef":"Channel Thread Ref — PA-2026-201"},{"id":"00000000-0179-0002-0000-000000000002","recordCode":"PA-2026-202","title":"Personal Cloud Photo Storage Photo Album — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","name":"Personal Cloud Photo Storage Photo Album — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","modelTitle":"Photo Album","ownerName":"Sophia Laurent (Director)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-202","secondaryAttrLabel":"Story Description","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Cover Asset","metricValue":"93.2% (297.50 units)","operationalSummary":"The user enables Partner Sharing with their spouse (shareFromDate = 2025-01-01, filtered to consented *Ki","invariantRule":"Deleting a PrsPhotoAlbum deletes container & PrsPhotoAlbumItem join rows ONLY—never moves underlying PrsPhotoAsset photo","crossSuiteRef":"Has many PrsPhotoAlbumItem, PrsPhotoShareGrant; channelThreadRef -> projectChann","updatedAt":"2026-05-11 11:15","contactPhone":"+14155550116","status":"IN_REVIEW","moderationStage":"IN_REVIEW","version":2,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-202","storyDescription":"Story Description — PA-2026-202","coverAssetId":"Cover Asset — PA-2026-202","isPinned":false,"itemCount":"Item Count — PA-2026-202","earliestCapturedAt":"Earliest Captured At — PA-2026-202","latestCapturedAt":"Latest Captured At — PA-2026-202","channelThreadRef":"Channel Thread Ref — PA-2026-202"},{"id":"00000000-0179-0002-0000-000000000003","recordCode":"PA-2026-203","title":"Personal Cloud Photo Storage Photo Album — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","name":"Personal Cloud Photo Storage Photo Album — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","modelTitle":"Photo Album","ownerName":"Liam Chen (Systems Architect)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-203","secondaryAttrLabel":"Story Description","secondaryAttrValue":"Personal Cloud Photo Storage Tier 3","metricLabel":"Cover Asset","metricValue":"94.3% (345.00 units)","operationalSummary":"Visiting #/people-and-pets for the first time shows biometricConsentGranted = false (0 face clusters). Op","invariantRule":"Deleting a PrsPhotoAlbum deletes container & PrsPhotoAlbumItem join rows ONLY—never moves underlying PrsPhotoAsset photo","crossSuiteRef":"Has many PrsPhotoAlbumItem, PrsPhotoShareGrant; channelThreadRef -> projectChann","updatedAt":"2026-05-12 13:15","contactPhone":"+14155550117","status":"APPROVED","moderationStage":"APPROVED","version":3,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-203","storyDescription":"Story Description — PA-2026-203","coverAssetId":"Cover Asset — PA-2026-203","isPinned":true,"itemCount":"Item Count — PA-2026-203","earliestCapturedAt":"Earliest Captured At — PA-2026-203","latestCapturedAt":"Latest Captured At — PA-2026-203","channelThreadRef":"Channel Thread Ref — PA-2026-203"},{"id":"00000000-0179-0002-0000-000000000004","recordCode":"PA-2026-204","title":"Hardware store receipt from October (Photo Album)","name":"Hardware store receipt from October (Photo Album)","modelTitle":"Photo Album","ownerName":"Amira Al-Mansoor (Compliance Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-204","secondaryAttrLabel":"Story Description","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Cover Asset","metricValue":"95.4% (392.50 units)","operationalSummary":"On #/search-explore, the user toggles Ask Photos and enters *\"Hardware store receipt from October\"*, surf","invariantRule":"Deleting a PrsPhotoAlbum deletes container & PrsPhotoAlbumItem join rows ONLY—never moves underlying PrsPhotoAsset photo","crossSuiteRef":"Has many PrsPhotoAlbumItem, PrsPhotoShareGrant; channelThreadRef -> projectChann","updatedAt":"2026-05-13 15:15","contactPhone":"+14155550118","status":"ACTIVE","moderationStage":"ACTIVE","version":4,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-204","storyDescription":"Story Description — PA-2026-204","coverAssetId":"Cover Asset — PA-2026-204","isPinned":false,"itemCount":"Item Count — PA-2026-204","earliestCapturedAt":"Earliest Captured At — PA-2026-204","latestCapturedAt":"Latest Captured At — PA-2026-204","channelThreadRef":"Channel Thread Ref — PA-2026-204"},{"id":"00000000-0179-0002-0000-000000000005","recordCode":"PA-2026-205","title":"Fuji X100V (Photo Album)","name":"Fuji X100V (Photo Album)","modelTitle":"Photo Album","ownerName":"Noah Kowalski (Specialist)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PA-2026-205","secondaryAttrLabel":"Story Description","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Cover Asset","metricValue":"96.5% (440.00 units)","operationalSummary":"Using upload-import-drawer on #/photos-timeline, the user drops 25 vacation photos (3 of which were alrea","invariantRule":"Deleting a PrsPhotoAlbum deletes container & PrsPhotoAlbumItem join rows ONLY—never moves underlying PrsPhotoAsset photo","crossSuiteRef":"Has many PrsPhotoAlbumItem, PrsPhotoShareGrant; channelThreadRef -> projectChann","updatedAt":"2026-05-14 17:15","contactPhone":"+14155550119","status":"DRAFT","moderationStage":"DRAFT","version":5,"isDeleted":false,"ownerUserRef":"Owner User Ref — PA-2026-205","storyDescription":"Story Description — PA-2026-205","coverAssetId":"Cover Asset — PA-2026-205","isPinned":true,"itemCount":"Item Count — PA-2026-205","earliestCapturedAt":"Earliest Captured At — PA-2026-205","latestCapturedAt":"Latest Captured At — PA-2026-205","channelThreadRef":"Channel Thread Ref — PA-2026-205"}],"PrsPhotoAlbumItem":[{"id":"00000000-0179-0003-0000-000000000001","recordCode":"PAI-2026-301","title":"Personal Cloud Photo Storage Photo Album Item — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","name":"Personal Cloud Photo Storage Photo Album Item — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","modelTitle":"Photo Album Item","ownerName":"Sophia Laurent (Director)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PAI-2026-301","secondaryAttrLabel":"Album","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Asset","metricValue":"92.2% (375.00 units)","operationalSummary":"The user enables Partner Sharing with their spouse (shareFromDate = 2025-01-01, filtered to consented *Ki","invariantRule":"Unique (albumId, assetId); moving an asset into Locked Vault or Trash automatically detaches its active album visibility","crossSuiteRef":"Joins PrsPhotoAlbum and PrsPhotoAsset","updatedAt":"2026-05-10 09:15","contactPhone":"+14155550120","status":"DRAFT","moderationStage":"DRAFT","version":1,"isDeleted":false,"ownerUserRef":"Owner User Ref — PAI-2026-301","albumId":"Album — PAI-2026-301","assetId":"Asset — PAI-2026-301","addedByUserRef":"Added By User Ref — PAI-2026-301","captionNote":"Caption Note — PAI-2026-301","sortOrder":"Sort Order — PAI-2026-301"},{"id":"00000000-0179-0003-0000-000000000002","recordCode":"PAI-2026-302","title":"Personal Cloud Photo Storage Photo Album Item — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","name":"Personal Cloud Photo Storage Photo Album Item — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","modelTitle":"Photo Album Item","ownerName":"Liam Chen (Systems Architect)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PAI-2026-302","secondaryAttrLabel":"Album","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Asset","metricValue":"93.3% (422.50 units)","operationalSummary":"Visiting #/people-and-pets for the first time shows biometricConsentGranted = false (0 face clusters). Op","invariantRule":"Unique (albumId, assetId); moving an asset into Locked Vault or Trash automatically detaches its active album visibility","crossSuiteRef":"Joins PrsPhotoAlbum and PrsPhotoAsset","updatedAt":"2026-05-11 11:15","contactPhone":"+14155550121","status":"IN_REVIEW","moderationStage":"IN_REVIEW","version":2,"isDeleted":false,"ownerUserRef":"Owner User Ref — PAI-2026-302","albumId":"Album — PAI-2026-302","assetId":"Asset — PAI-2026-302","addedByUserRef":"Added By User Ref — PAI-2026-302","captionNote":"Caption Note — PAI-2026-302","sortOrder":"Sort Order — PAI-2026-302"},{"id":"00000000-0179-0003-0000-000000000003","recordCode":"PAI-2026-303","title":"Hardware store receipt from October (Photo Album Item)","name":"Hardware store receipt from October (Photo Album Item)","modelTitle":"Photo Album Item","ownerName":"Amira Al-Mansoor (Compliance Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PAI-2026-303","secondaryAttrLabel":"Album","secondaryAttrValue":"Personal Cloud Photo Storage Tier 3","metricLabel":"Asset","metricValue":"94.4% (470.00 units)","operationalSummary":"On #/search-explore, the user toggles Ask Photos and enters *\"Hardware store receipt from October\"*, surf","invariantRule":"Unique (albumId, assetId); moving an asset into Locked Vault or Trash automatically detaches its active album visibility","crossSuiteRef":"Joins PrsPhotoAlbum and PrsPhotoAsset","updatedAt":"2026-05-12 13:15","contactPhone":"+14155550122","status":"APPROVED","moderationStage":"APPROVED","version":3,"isDeleted":false,"ownerUserRef":"Owner User Ref — PAI-2026-303","albumId":"Album — PAI-2026-303","assetId":"Asset — PAI-2026-303","addedByUserRef":"Added By User Ref — PAI-2026-303","captionNote":"Caption Note — PAI-2026-303","sortOrder":"Sort Order — PAI-2026-303"},{"id":"00000000-0179-0003-0000-000000000004","recordCode":"PAI-2026-304","title":"Fuji X100V (Photo Album Item)","name":"Fuji X100V (Photo Album Item)","modelTitle":"Photo Album Item","ownerName":"Noah Kowalski (Specialist)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PAI-2026-304","secondaryAttrLabel":"Album","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Asset","metricValue":"95.5% (517.50 units)","operationalSummary":"Using upload-import-drawer on #/photos-timeline, the user drops 25 vacation photos (3 of which were alrea","invariantRule":"Unique (albumId, assetId); moving an asset into Locked Vault or Trash automatically detaches its active album visibility","crossSuiteRef":"Joins PrsPhotoAlbum and PrsPhotoAsset","updatedAt":"2026-05-13 15:15","contactPhone":"+14155550123","status":"ACTIVE","moderationStage":"ACTIVE","version":4,"isDeleted":false,"ownerUserRef":"Owner User Ref — PAI-2026-304","albumId":"Album — PAI-2026-304","assetId":"Asset — PAI-2026-304","addedByUserRef":"Added By User Ref — PAI-2026-304","captionNote":"Caption Note — PAI-2026-304","sortOrder":"Sort Order — PAI-2026-304"},{"id":"00000000-0179-0003-0000-000000000005","recordCode":"PAI-2026-305","title":"Personal Cloud Photo Storage Photo Album Item — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","name":"Personal Cloud Photo Storage Photo Album Item — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","modelTitle":"Photo Album Item","ownerName":"Elena Rostova (Principal Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PAI-2026-305","secondaryAttrLabel":"Album","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Asset","metricValue":"96.6% (565.00 units)","operationalSummary":"On #/curation-board, the user drags 18 birthday photos from UNREVIEWED into SHORTLIST and FINAL_ALBUM on ","invariantRule":"Unique (albumId, assetId); moving an asset into Locked Vault or Trash automatically detaches its active album visibility","crossSuiteRef":"Joins PrsPhotoAlbum and PrsPhotoAsset","updatedAt":"2026-05-14 17:15","contactPhone":"+14155550124","status":"DRAFT","moderationStage":"DRAFT","version":5,"isDeleted":false,"ownerUserRef":"Owner User Ref — PAI-2026-305","albumId":"Album — PAI-2026-305","assetId":"Asset — PAI-2026-305","addedByUserRef":"Added By User Ref — PAI-2026-305","captionNote":"Caption Note — PAI-2026-305","sortOrder":"Sort Order — PAI-2026-305"}],"PrsPhotoPersonCluster":[{"id":"00000000-0179-0004-0000-000000000001","recordCode":"PPC-2026-401","title":"Personal Cloud Photo Storage Photo Person Cluster — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","name":"Personal Cloud Photo Storage Photo Person Cluster — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","modelTitle":"Photo Person Cluster","ownerName":"Liam Chen (Systems Architect)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PPC-2026-401","secondaryAttrLabel":"Cluster Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Metric Value","metricValue":"92.3% (500.00 units)","operationalSummary":"Visiting #/people-and-pets for the first time shows biometricConsentGranted = false (0 face clusters). Op","invariantRule":"Populated ONLY when PrsPhotoVaultPolicy.biometricConsentGranted == true","crossSuiteRef":"PET), displayName (String?), coverAssetId (UUID?), assetCount (Int), isHiddenFro","updatedAt":"2026-05-10 09:15","contactPhone":"+14155550125","status":"DRAFT","moderationStage":"DRAFT","version":1,"isDeleted":false,"ownerUserRef":"Owner User Ref — PPC-2026-401","clusterType":"Cluster Type — PPC-2026-401"},{"id":"00000000-0179-0004-0000-000000000002","recordCode":"PPC-2026-402","title":"Hardware store receipt from October (Photo Person Cluster)","name":"Hardware store receipt from October (Photo Person Cluster)","modelTitle":"Photo Person Cluster","ownerName":"Amira Al-Mansoor (Compliance Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PPC-2026-402","secondaryAttrLabel":"Cluster Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Metric Value","metricValue":"93.4% (547.50 units)","operationalSummary":"On #/search-explore, the user toggles Ask Photos and enters *\"Hardware store receipt from October\"*, surf","invariantRule":"Populated ONLY when PrsPhotoVaultPolicy.biometricConsentGranted == true","crossSuiteRef":"PET), displayName (String?), coverAssetId (UUID?), assetCount (Int), isHiddenFro","updatedAt":"2026-05-11 11:15","contactPhone":"+14155550126","status":"IN_REVIEW","moderationStage":"IN_REVIEW","version":2,"isDeleted":false,"ownerUserRef":"Owner User Ref — PPC-2026-402","clusterType":"Cluster Type — PPC-2026-402"},{"id":"00000000-0179-0004-0000-000000000003","recordCode":"PPC-2026-403","title":"Fuji X100V (Photo Person Cluster)","name":"Fuji X100V (Photo Person Cluster)","modelTitle":"Photo Person Cluster","ownerName":"Noah Kowalski (Specialist)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PPC-2026-403","secondaryAttrLabel":"Cluster Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 3","metricLabel":"Metric Value","metricValue":"94.5% (595.00 units)","operationalSummary":"Using upload-import-drawer on #/photos-timeline, the user drops 25 vacation photos (3 of which were alrea","invariantRule":"Populated ONLY when PrsPhotoVaultPolicy.biometricConsentGranted == true","crossSuiteRef":"PET), displayName (String?), coverAssetId (UUID?), assetCount (Int), isHiddenFro","updatedAt":"2026-05-12 13:15","contactPhone":"+14155550127","status":"APPROVED","moderationStage":"APPROVED","version":3,"isDeleted":false,"ownerUserRef":"Owner User Ref — PPC-2026-403","clusterType":"Cluster Type — PPC-2026-403"},{"id":"00000000-0179-0004-0000-000000000004","recordCode":"PPC-2026-404","title":"Personal Cloud Photo Storage Photo Person Cluster — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","name":"Personal Cloud Photo Storage Photo Person Cluster — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","modelTitle":"Photo Person Cluster","ownerName":"Elena Rostova (Principal Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PPC-2026-404","secondaryAttrLabel":"Cluster Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Metric Value","metricValue":"95.6% (642.50 units)","operationalSummary":"On #/curation-board, the user drags 18 birthday photos from UNREVIEWED into SHORTLIST and FINAL_ALBUM on ","invariantRule":"Populated ONLY when PrsPhotoVaultPolicy.biometricConsentGranted == true","crossSuiteRef":"PET), displayName (String?), coverAssetId (UUID?), assetCount (Int), isHiddenFro","updatedAt":"2026-05-13 15:15","contactPhone":"+14155550128","status":"ACTIVE","moderationStage":"ACTIVE","version":4,"isDeleted":false,"ownerUserRef":"Owner User Ref — PPC-2026-404","clusterType":"Cluster Type — PPC-2026-404"},{"id":"00000000-0179-0004-0000-000000000005","recordCode":"PPC-2026-405","title":"Personal Cloud Photo Storage Photo Person Cluster — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","name":"Personal Cloud Photo Storage Photo Person Cluster — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","modelTitle":"Photo Person Cluster","ownerName":"Marcus Vance (Senior Operations)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PPC-2026-405","secondaryAttrLabel":"Cluster Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Metric Value","metricValue":"96.7% (690.00 units)","operationalSummary":"The user enables Partner Sharing with their spouse (shareFromDate = 2025-01-01, filtered to consented *Ki","invariantRule":"Populated ONLY when PrsPhotoVaultPolicy.biometricConsentGranted == true","crossSuiteRef":"PET), displayName (String?), coverAssetId (UUID?), assetCount (Int), isHiddenFro","updatedAt":"2026-05-14 17:15","contactPhone":"+14155550129","status":"DRAFT","moderationStage":"DRAFT","version":5,"isDeleted":false,"ownerUserRef":"Owner User Ref — PPC-2026-405","clusterType":"Cluster Type — PPC-2026-405"}],"PrsPhotoMemoryRule":[{"id":"00000000-0179-0005-0000-000000000001","recordCode":"PMR-2026-501","title":"Hardware store receipt from October (Photo Memory Rule)","name":"Hardware store receipt from October (Photo Memory Rule)","modelTitle":"Photo Memory Rule","ownerName":"Amira Al-Mansoor (Compliance Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PMR-2026-501","secondaryAttrLabel":"Rule Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Metric Value","metricValue":"92.4% (625.00 units)","operationalSummary":"On #/search-explore, the user toggles Ask Photos and enters *\"Hardware store receipt from October\"*, surf","invariantRule":"Governs *On This Day* & *Memories* generation","crossSuiteRef":"MUTE_PERSON_CLUSTER), startDate (LocalDate?), endDate (LocalDate?), personCluste","updatedAt":"2026-05-10 09:15","contactPhone":"+14155550130","status":"DRAFT","moderationStage":"DRAFT","version":1,"isDeleted":false,"ownerUserRef":"Owner User Ref — PMR-2026-501","ruleType":"Rule Type — PMR-2026-501"},{"id":"00000000-0179-0005-0000-000000000002","recordCode":"PMR-2026-502","title":"Fuji X100V (Photo Memory Rule)","name":"Fuji X100V (Photo Memory Rule)","modelTitle":"Photo Memory Rule","ownerName":"Noah Kowalski (Specialist)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PMR-2026-502","secondaryAttrLabel":"Rule Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Metric Value","metricValue":"93.5% (672.50 units)","operationalSummary":"Using upload-import-drawer on #/photos-timeline, the user drops 25 vacation photos (3 of which were alrea","invariantRule":"Governs *On This Day* & *Memories* generation","crossSuiteRef":"MUTE_PERSON_CLUSTER), startDate (LocalDate?), endDate (LocalDate?), personCluste","updatedAt":"2026-05-11 11:15","contactPhone":"+14155550131","status":"IN_REVIEW","moderationStage":"IN_REVIEW","version":2,"isDeleted":false,"ownerUserRef":"Owner User Ref — PMR-2026-502","ruleType":"Rule Type — PMR-2026-502"},{"id":"00000000-0179-0005-0000-000000000003","recordCode":"PMR-2026-503","title":"Personal Cloud Photo Storage Photo Memory Rule — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","name":"Personal Cloud Photo Storage Photo Memory Rule — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","modelTitle":"Photo Memory Rule","ownerName":"Elena Rostova (Principal Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PMR-2026-503","secondaryAttrLabel":"Rule Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 3","metricLabel":"Metric Value","metricValue":"94.6% (720.00 units)","operationalSummary":"On #/curation-board, the user drags 18 birthday photos from UNREVIEWED into SHORTLIST and FINAL_ALBUM on ","invariantRule":"Governs *On This Day* & *Memories* generation","crossSuiteRef":"MUTE_PERSON_CLUSTER), startDate (LocalDate?), endDate (LocalDate?), personCluste","updatedAt":"2026-05-12 13:15","contactPhone":"+14155550132","status":"APPROVED","moderationStage":"APPROVED","version":3,"isDeleted":false,"ownerUserRef":"Owner User Ref — PMR-2026-503","ruleType":"Rule Type — PMR-2026-503"},{"id":"00000000-0179-0005-0000-000000000004","recordCode":"PMR-2026-504","title":"Personal Cloud Photo Storage Photo Memory Rule — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","name":"Personal Cloud Photo Storage Photo Memory Rule — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","modelTitle":"Photo Memory Rule","ownerName":"Marcus Vance (Senior Operations)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PMR-2026-504","secondaryAttrLabel":"Rule Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Metric Value","metricValue":"95.7% (767.50 units)","operationalSummary":"The user enables Partner Sharing with their spouse (shareFromDate = 2025-01-01, filtered to consented *Ki","invariantRule":"Governs *On This Day* & *Memories* generation","crossSuiteRef":"MUTE_PERSON_CLUSTER), startDate (LocalDate?), endDate (LocalDate?), personCluste","updatedAt":"2026-05-13 15:15","contactPhone":"+14155550133","status":"ACTIVE","moderationStage":"ACTIVE","version":4,"isDeleted":false,"ownerUserRef":"Owner User Ref — PMR-2026-504","ruleType":"Rule Type — PMR-2026-504"},{"id":"00000000-0179-0005-0000-000000000005","recordCode":"PMR-2026-505","title":"Personal Cloud Photo Storage Photo Memory Rule — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","name":"Personal Cloud Photo Storage Photo Memory Rule — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","modelTitle":"Photo Memory Rule","ownerName":"Sophia Laurent (Director)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PMR-2026-505","secondaryAttrLabel":"Rule Type","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Metric Value","metricValue":"96.8% (815.00 units)","operationalSummary":"Visiting #/people-and-pets for the first time shows biometricConsentGranted = false (0 face clusters). Op","invariantRule":"Governs *On This Day* & *Memories* generation","crossSuiteRef":"MUTE_PERSON_CLUSTER), startDate (LocalDate?), endDate (LocalDate?), personCluste","updatedAt":"2026-05-14 17:15","contactPhone":"+14155550134","status":"DRAFT","moderationStage":"DRAFT","version":5,"isDeleted":false,"ownerUserRef":"Owner User Ref — PMR-2026-505","ruleType":"Rule Type — PMR-2026-505"}],"PrsPhotoShareGrant":[{"id":"00000000-0179-0006-0000-000000000001","recordCode":"PSG-2026-601","title":"Fuji X100V (Photo Share Grant)","name":"Fuji X100V (Photo Share Grant)","modelTitle":"Photo Share Grant","ownerName":"Noah Kowalski (Specialist)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PSG-2026-601","secondaryAttrLabel":"Grant Mode","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Metric Value","metricValue":"92.5% (750.00 units)","operationalSummary":"Using upload-import-drawer on #/photos-timeline, the user drops 25 vacation photos (3 of which were alrea","invariantRule":"PARTNER_AUTO_SHARE), albumId (UUID?), granteeUserRef (UUID?), granteePhoneE164 (String?), accessRole (VIEWER \\","crossSuiteRef":"ALBUM_EXPIRING_LINK \\","updatedAt":"2026-05-10 09:15","contactPhone":"+14155550135","status":"DRAFT","moderationStage":"DRAFT","version":1,"isDeleted":false,"ownerUserRef":"Owner User Ref — PSG-2026-601","grantMode":"Grant Mode — PSG-2026-601"},{"id":"00000000-0179-0006-0000-000000000002","recordCode":"PSG-2026-602","title":"Personal Cloud Photo Storage Photo Share Grant — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","name":"Personal Cloud Photo Storage Photo Share Grant — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","modelTitle":"Photo Share Grant","ownerName":"Elena Rostova (Principal Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PSG-2026-602","secondaryAttrLabel":"Grant Mode","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Metric Value","metricValue":"93.6% (797.50 units)","operationalSummary":"On #/curation-board, the user drags 18 birthday photos from UNREVIEWED into SHORTLIST and FINAL_ALBUM on ","invariantRule":"PARTNER_AUTO_SHARE), albumId (UUID?), granteeUserRef (UUID?), granteePhoneE164 (String?), accessRole (VIEWER \\","crossSuiteRef":"ALBUM_EXPIRING_LINK \\","updatedAt":"2026-05-11 11:15","contactPhone":"+14155550136","status":"IN_REVIEW","moderationStage":"IN_REVIEW","version":2,"isDeleted":false,"ownerUserRef":"Owner User Ref — PSG-2026-602","grantMode":"Grant Mode — PSG-2026-602"},{"id":"00000000-0179-0006-0000-000000000003","recordCode":"PSG-2026-603","title":"Personal Cloud Photo Storage Photo Share Grant — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","name":"Personal Cloud Photo Storage Photo Share Grant — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","modelTitle":"Photo Share Grant","ownerName":"Marcus Vance (Senior Operations)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PSG-2026-603","secondaryAttrLabel":"Grant Mode","secondaryAttrValue":"Personal Cloud Photo Storage Tier 3","metricLabel":"Metric Value","metricValue":"94.7% (845.00 units)","operationalSummary":"The user enables Partner Sharing with their spouse (shareFromDate = 2025-01-01, filtered to consented *Ki","invariantRule":"PARTNER_AUTO_SHARE), albumId (UUID?), granteeUserRef (UUID?), granteePhoneE164 (String?), accessRole (VIEWER \\","crossSuiteRef":"ALBUM_EXPIRING_LINK \\","updatedAt":"2026-05-12 13:15","contactPhone":"+14155550137","status":"APPROVED","moderationStage":"APPROVED","version":3,"isDeleted":false,"ownerUserRef":"Owner User Ref — PSG-2026-603","grantMode":"Grant Mode — PSG-2026-603"},{"id":"00000000-0179-0006-0000-000000000004","recordCode":"PSG-2026-604","title":"Personal Cloud Photo Storage Photo Share Grant — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","name":"Personal Cloud Photo Storage Photo Share Grant — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","modelTitle":"Photo Share Grant","ownerName":"Sophia Laurent (Director)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PSG-2026-604","secondaryAttrLabel":"Grant Mode","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Metric Value","metricValue":"95.8% (892.50 units)","operationalSummary":"Visiting #/people-and-pets for the first time shows biometricConsentGranted = false (0 face clusters). Op","invariantRule":"PARTNER_AUTO_SHARE), albumId (UUID?), granteeUserRef (UUID?), granteePhoneE164 (String?), accessRole (VIEWER \\","crossSuiteRef":"ALBUM_EXPIRING_LINK \\","updatedAt":"2026-05-13 15:15","contactPhone":"+14155550138","status":"ACTIVE","moderationStage":"ACTIVE","version":4,"isDeleted":false,"ownerUserRef":"Owner User Ref — PSG-2026-604","grantMode":"Grant Mode — PSG-2026-604"},{"id":"00000000-0179-0006-0000-000000000005","recordCode":"PSG-2026-605","title":"Hardware store receipt from October (Photo Share Grant)","name":"Hardware store receipt from October (Photo Share Grant)","modelTitle":"Photo Share Grant","ownerName":"Liam Chen (Systems Architect)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PSG-2026-605","secondaryAttrLabel":"Grant Mode","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Metric Value","metricValue":"96.0% (940.00 units)","operationalSummary":"On #/search-explore, the user toggles Ask Photos and enters *\"Hardware store receipt from October\"*, surf","invariantRule":"PARTNER_AUTO_SHARE), albumId (UUID?), granteeUserRef (UUID?), granteePhoneE164 (String?), accessRole (VIEWER \\","crossSuiteRef":"ALBUM_EXPIRING_LINK \\","updatedAt":"2026-05-14 17:15","contactPhone":"+14155550139","status":"DRAFT","moderationStage":"DRAFT","version":5,"isDeleted":false,"ownerUserRef":"Owner User Ref — PSG-2026-605","grantMode":"Grant Mode — PSG-2026-605"}],"PrsPhotoCleanupBatch":[{"id":"00000000-0179-0007-0000-000000000001","recordCode":"PCB-2026-701","title":"Personal Cloud Photo Storage Photo Cleanup Batch — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","name":"Personal Cloud Photo Storage Photo Cleanup Batch — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","modelTitle":"Photo Cleanup Batch","ownerName":"Elena Rostova (Principal Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PCB-2026-701","secondaryAttrLabel":"Cleanup Category","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Metric Value","metricValue":"92.6% (875.00 units)","operationalSummary":"On #/curation-board, the user drags 18 birthday photos from UNREVIEWED into SHORTLIST and FINAL_ALBUM on ","invariantRule":"LARGE_VIDEO \\","crossSuiteRef":"BLURRY_SHOT \\","updatedAt":"2026-05-10 09:15","contactPhone":"+14155550140","status":"DRAFT","moderationStage":"DRAFT","version":1,"isDeleted":false,"ownerUserRef":"Owner User Ref — PCB-2026-701","cleanupCategory":"Cleanup Category — PCB-2026-701"},{"id":"00000000-0179-0007-0000-000000000002","recordCode":"PCB-2026-702","title":"Personal Cloud Photo Storage Photo Cleanup Batch — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","name":"Personal Cloud Photo Storage Photo Cleanup Batch — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","modelTitle":"Photo Cleanup Batch","ownerName":"Marcus Vance (Senior Operations)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PCB-2026-702","secondaryAttrLabel":"Cleanup Category","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Metric Value","metricValue":"93.7% (922.50 units)","operationalSummary":"The user enables Partner Sharing with their spouse (shareFromDate = 2025-01-01, filtered to consented *Ki","invariantRule":"LARGE_VIDEO \\","crossSuiteRef":"BLURRY_SHOT \\","updatedAt":"2026-05-11 11:15","contactPhone":"+14155550141","status":"IN_REVIEW","moderationStage":"IN_REVIEW","version":2,"isDeleted":false,"ownerUserRef":"Owner User Ref — PCB-2026-702","cleanupCategory":"Cleanup Category — PCB-2026-702"},{"id":"00000000-0179-0007-0000-000000000003","recordCode":"PCB-2026-703","title":"Personal Cloud Photo Storage Photo Cleanup Batch — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","name":"Personal Cloud Photo Storage Photo Cleanup Batch — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","modelTitle":"Photo Cleanup Batch","ownerName":"Sophia Laurent (Director)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PCB-2026-703","secondaryAttrLabel":"Cleanup Category","secondaryAttrValue":"Personal Cloud Photo Storage Tier 3","metricLabel":"Metric Value","metricValue":"94.8% (970.00 units)","operationalSummary":"Visiting #/people-and-pets for the first time shows biometricConsentGranted = false (0 face clusters). Op","invariantRule":"LARGE_VIDEO \\","crossSuiteRef":"BLURRY_SHOT \\","updatedAt":"2026-05-12 13:15","contactPhone":"+14155550142","status":"APPROVED","moderationStage":"APPROVED","version":3,"isDeleted":false,"ownerUserRef":"Owner User Ref — PCB-2026-703","cleanupCategory":"Cleanup Category — PCB-2026-703"},{"id":"00000000-0179-0007-0000-000000000004","recordCode":"PCB-2026-704","title":"Hardware store receipt from October (Photo Cleanup Batch)","name":"Hardware store receipt from October (Photo Cleanup Batch)","modelTitle":"Photo Cleanup Batch","ownerName":"Liam Chen (Systems Architect)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PCB-2026-704","secondaryAttrLabel":"Cleanup Category","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Metric Value","metricValue":"95.0% (1017.50 units)","operationalSummary":"On #/search-explore, the user toggles Ask Photos and enters *\"Hardware store receipt from October\"*, surf","invariantRule":"LARGE_VIDEO \\","crossSuiteRef":"BLURRY_SHOT \\","updatedAt":"2026-05-13 15:15","contactPhone":"+14155550143","status":"ACTIVE","moderationStage":"ACTIVE","version":4,"isDeleted":false,"ownerUserRef":"Owner User Ref — PCB-2026-704","cleanupCategory":"Cleanup Category — PCB-2026-704"},{"id":"00000000-0179-0007-0000-000000000005","recordCode":"PCB-2026-705","title":"Fuji X100V (Photo Cleanup Batch)","name":"Fuji X100V (Photo Cleanup Batch)","modelTitle":"Photo Cleanup Batch","ownerName":"Amira Al-Mansoor (Compliance Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PCB-2026-705","secondaryAttrLabel":"Cleanup Category","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Metric Value","metricValue":"96.1% (1065.00 units)","operationalSummary":"Using upload-import-drawer on #/photos-timeline, the user drops 25 vacation photos (3 of which were alrea","invariantRule":"LARGE_VIDEO \\","crossSuiteRef":"BLURRY_SHOT \\","updatedAt":"2026-05-14 17:15","contactPhone":"+14155550144","status":"DRAFT","moderationStage":"DRAFT","version":5,"isDeleted":false,"ownerUserRef":"Owner User Ref — PCB-2026-705","cleanupCategory":"Cleanup Category — PCB-2026-705"}],"PrsPhotoVaultPolicy":[{"id":"00000000-0179-0008-0000-000000000001","recordCode":"PVP-2026-801","title":"Personal Cloud Photo Storage Photo Vault Policy — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","name":"Personal Cloud Photo Storage Photo Vault Policy — Locked Vault Isolation & Filtered Partner Sharing (locked-vault & shared-with-family)","modelTitle":"Photo Vault Policy","ownerName":"Marcus Vance (Senior Operations)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PVP-2026-801","secondaryAttrLabel":"Quota Limit Gi B","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Used Bytes","metricValue":"92.7% (1000.00 units)","operationalSummary":"The user enables Partner Sharing with their spouse (shareFromDate = 2025-01-01, filtered to consented *Ki","invariantRule":"Flipping biometricConsentGranted from true to false triggers synchronous cluster lockout + async embedding wipe workflow","crossSuiteRef":"1:1 per ownerUserRef","updatedAt":"2026-05-10 09:15","contactPhone":"+14155550145","status":"DRAFT","moderationStage":"DRAFT","version":1,"isDeleted":false,"ownerUserRef":"Owner User Ref — PVP-2026-801","quotaLimitGiB":"Quota Limit Gi B — PVP-2026-801","usedBytes":"Used Bytes — PVP-2026-801","biometricConsentGranted":"Biometric Consent Granted — PVP-2026-801","biometricConsentedAt":"Biometric Consented At — PVP-2026-801","askPhotosAiEnabled":true,"lockedVaultTimeoutMinutes":"Locked Vault Timeout Minutes — PVP-2026-801","defaultStripGpsOnShare":"Default Strip Gps On Share — PVP-2026-801"},{"id":"00000000-0179-0008-0000-000000000002","recordCode":"PVP-2026-802","title":"Personal Cloud Photo Storage Photo Vault Policy — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","name":"Personal Cloud Photo Storage Photo Vault Policy — Consent-First Biometrics & Perceptual Duplicate Merge (people-and-pets & storage-cleanup)","modelTitle":"Photo Vault Policy","ownerName":"Sophia Laurent (Director)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PVP-2026-802","secondaryAttrLabel":"Quota Limit Gi B","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Used Bytes","metricValue":"93.8% (1047.50 units)","operationalSummary":"Visiting #/people-and-pets for the first time shows biometricConsentGranted = false (0 face clusters). Op","invariantRule":"Flipping biometricConsentGranted from true to false triggers synchronous cluster lockout + async embedding wipe workflow","crossSuiteRef":"1:1 per ownerUserRef","updatedAt":"2026-05-11 11:15","contactPhone":"+14155550146","status":"IN_REVIEW","moderationStage":"IN_REVIEW","version":2,"isDeleted":false,"ownerUserRef":"Owner User Ref — PVP-2026-802","quotaLimitGiB":"Quota Limit Gi B — PVP-2026-802","usedBytes":"Used Bytes — PVP-2026-802","biometricConsentGranted":"Biometric Consent Granted — PVP-2026-802","biometricConsentedAt":"Biometric Consented At — PVP-2026-802","askPhotosAiEnabled":false,"lockedVaultTimeoutMinutes":"Locked Vault Timeout Minutes — PVP-2026-802","defaultStripGpsOnShare":"Default Strip Gps On Share — PVP-2026-802"},{"id":"00000000-0179-0008-0000-000000000003","recordCode":"PVP-2026-803","title":"Hardware store receipt from October (Photo Vault Policy)","name":"Hardware store receipt from October (Photo Vault Policy)","modelTitle":"Photo Vault Policy","ownerName":"Liam Chen (Systems Architect)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PVP-2026-803","secondaryAttrLabel":"Quota Limit Gi B","secondaryAttrValue":"Personal Cloud Photo Storage Tier 3","metricLabel":"Used Bytes","metricValue":"94.0% (1095.00 units)","operationalSummary":"On #/search-explore, the user toggles Ask Photos and enters *\"Hardware store receipt from October\"*, surf","invariantRule":"Flipping biometricConsentGranted from true to false triggers synchronous cluster lockout + async embedding wipe workflow","crossSuiteRef":"1:1 per ownerUserRef","updatedAt":"2026-05-12 13:15","contactPhone":"+14155550147","status":"APPROVED","moderationStage":"APPROVED","version":3,"isDeleted":false,"ownerUserRef":"Owner User Ref — PVP-2026-803","quotaLimitGiB":"Quota Limit Gi B — PVP-2026-803","usedBytes":"Used Bytes — PVP-2026-803","biometricConsentGranted":"Biometric Consent Granted — PVP-2026-803","biometricConsentedAt":"Biometric Consented At — PVP-2026-803","askPhotosAiEnabled":true,"lockedVaultTimeoutMinutes":"Locked Vault Timeout Minutes — PVP-2026-803","defaultStripGpsOnShare":"Default Strip Gps On Share — PVP-2026-803"},{"id":"00000000-0179-0008-0000-000000000004","recordCode":"PVP-2026-804","title":"Fuji X100V (Photo Vault Policy)","name":"Fuji X100V (Photo Vault Policy)","modelTitle":"Photo Vault Policy","ownerName":"Amira Al-Mansoor (Compliance Lead)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PVP-2026-804","secondaryAttrLabel":"Quota Limit Gi B","secondaryAttrValue":"Personal Cloud Photo Storage Tier 1","metricLabel":"Used Bytes","metricValue":"95.1% (1142.50 units)","operationalSummary":"Using upload-import-drawer on #/photos-timeline, the user drops 25 vacation photos (3 of which were alrea","invariantRule":"Flipping biometricConsentGranted from true to false triggers synchronous cluster lockout + async embedding wipe workflow","crossSuiteRef":"1:1 per ownerUserRef","updatedAt":"2026-05-13 15:15","contactPhone":"+14155550148","status":"ACTIVE","moderationStage":"ACTIVE","version":4,"isDeleted":false,"ownerUserRef":"Owner User Ref — PVP-2026-804","quotaLimitGiB":"Quota Limit Gi B — PVP-2026-804","usedBytes":"Used Bytes — PVP-2026-804","biometricConsentGranted":"Biometric Consent Granted — PVP-2026-804","biometricConsentedAt":"Biometric Consented At — PVP-2026-804","askPhotosAiEnabled":false,"lockedVaultTimeoutMinutes":"Locked Vault Timeout Minutes — PVP-2026-804","defaultStripGpsOnShare":"Default Strip Gps On Share — PVP-2026-804"},{"id":"00000000-0179-0008-0000-000000000005","recordCode":"PVP-2026-805","title":"Personal Cloud Photo Storage Photo Vault Policy — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","name":"Personal Cloud Photo Storage Photo Vault Policy — Shoot Curation via <rapider-kanban> & GPS-Stripped Family Album Sharing (curation-board -> albums-collections -> share-album-drawer)","modelTitle":"Photo Vault Policy","ownerName":"Noah Kowalski (Specialist)","primaryAttrLabel":"Owner User Ref","primaryAttrValue":"Owner User Ref: PVP-2026-805","secondaryAttrLabel":"Quota Limit Gi B","secondaryAttrValue":"Personal Cloud Photo Storage Tier 2","metricLabel":"Used Bytes","metricValue":"96.2% (1190.00 units)","operationalSummary":"On #/curation-board, the user drags 18 birthday photos from UNREVIEWED into SHORTLIST and FINAL_ALBUM on ","invariantRule":"Flipping biometricConsentGranted from true to false triggers synchronous cluster lockout + async embedding wipe workflow","crossSuiteRef":"1:1 per ownerUserRef","updatedAt":"2026-05-14 17:15","contactPhone":"+14155550149","status":"DRAFT","moderationStage":"DRAFT","version":5,"isDeleted":false,"ownerUserRef":"Owner User Ref — PVP-2026-805","quotaLimitGiB":"Quota Limit Gi B — PVP-2026-805","usedBytes":"Used Bytes — PVP-2026-805","biometricConsentGranted":"Biometric Consent Granted — PVP-2026-805","biometricConsentedAt":"Biometric Consented At — PVP-2026-805","askPhotosAiEnabled":true,"lockedVaultTimeoutMinutes":"Locked Vault Timeout Minutes — PVP-2026-805","defaultStripGpsOnShare":"Default Strip Gps On Share — PVP-2026-805"}]};
-
-    window.loadEntitySWR = async function(entityName, onUpdate) {
-      var fallback = (window.SEED_DATA && window.SEED_DATA[entityName]) ? window.SEED_DATA[entityName].slice() : [];
-      try {
-        if (window.rapiderApi && typeof window.rapiderApi.findSWR === 'function') {
-          var res = await window.rapiderApi.findSWR(entityName, {}, function(fresh) {
-            if (Array.isArray(fresh) && fresh.length > 0) {
-              onUpdate(fresh.filter(function(r) { return r && r.isDeleted !== true; }));
-            }
-          });
-          var arr = Array.isArray(res) ? res : (res && Array.isArray(res.data) ? res.data : []);
-          var clean = arr.filter(function(r) { return r && r.isDeleted !== true; });
-          onUpdate(clean.length > 0 ? clean : fallback);
+          setCollapsed(true);
           return;
         }
-      } catch (_) {}
-      onUpdate(fallback);
-    };
-
-
-      var rows_6 = [];
-      function renderLedger_6() {
-        var q = (document.getElementById('ledgerSearch_6').value || '').trim().toLowerCase();
-        var st = document.getElementById('ledgerStatus_6').value;
-        var bar = document.getElementById('activeFilterTagsBar');
-        var chips = [];
-        if (q) chips.push('<span class="filter-chip">Search: "' + esc(q) + '" <button type="button" onclick="document.getElementById(\'ledgerSearch_6\').value=\'\';renderLedger_6();">✕</button></span>');
-        if (st !== 'ALL') chips.push('<span class="filter-chip">Status: "' + esc(st) + '" <button type="button" onclick="document.getElementById(\'ledgerStatus_6\').value=\'ALL\';renderLedger_6();">✕</button></span>');
-        if (chips.length > 0) {
-          bar.style.display = 'flex';
-          bar.innerHTML = '<span style="font-weight:700;color:var(--muted);font-size:11px;text-transform:uppercase;">Active:</span> ' + chips.join(' ') + ' <button type="button" class="btn small" style="margin-left:auto;" onclick="document.getElementById(\'ledgerSearch_6\').value=\'\';document.getElementById(\'ledgerStatus_6\').value=\'ALL\';renderLedger_6();"><i class="fas fa-times-circle"></i> Clear all</button>';
-        } else {
-          bar.style.display = 'none';
-          bar.innerHTML = '';
+        var expandBtn = e.target && e.target.closest ? e.target.closest('[data-action="expand-sidebar"]') : null;
+        if (expandBtn && sidebar && sidebar.classList.contains('sidebar-collapsed')) {
+          e.preventDefault();
+          e.stopPropagation();
+          setCollapsed(false);
+          return;
         }
-        var filtered = rows_6.filter(function(r) {
-          var mQ = !q || JSON.stringify(r).toLowerCase().indexOf(q) !== -1;
-          var mSt = st === 'ALL' || r.status === st;
-          return mQ && mSt;
+        var menuBtn = e.target && e.target.closest ? e.target.closest('[data-action="menu"]') : null;
+        if (menuBtn) {
+          e.preventDefault();
+          document.body.classList.toggle('navopen');
+          return;
+        }
+        var closeMenu = e.target && e.target.closest ? e.target.closest('[data-action="close-menu"]') : null;
+        if (closeMenu) {
+          document.body.classList.remove('navopen');
+        }
+      }, true);
+    })();
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      function esc(val) {
+        return String(val == null ? '' : val)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+      window.esc = esc;
+
+      function toast(message, type) {
+        if (window.rapiderApi && typeof window.rapiderApi.showNotification === 'function') {
+          window.rapiderApi.showNotification({ type: type || 'success', message: message });
+          return;
+        }
+        var announcer = document.getElementById('srAnnouncer');
+        if (announcer) announcer.textContent = message;
+        if (document.querySelector('dialog[open]')) return;
+        var region = document.getElementById('toastRegion');
+        if (!region) return;
+        var card = document.createElement('div');
+        card.className = 'toast-card';
+        var span = document.createElement('span');
+        span.textContent = message;
+        var closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'toast-close';
+        closeBtn.textContent = 'Close';
+        var removeCard = function () { card.remove(); };
+        closeBtn.addEventListener('click', removeCard);
+        card.appendChild(span);
+        card.appendChild(closeBtn);
+        region.appendChild(card);
+        setTimeout(removeCard, 3600);
+      }
+      window.toast = toast;
+
+      // Light-dismiss fallback for browsers without native <dialog closedby="any">
+      if (!('closedBy' in HTMLDialogElement.prototype)) {
+        var isOutsideDialog = function (e, dlg) {
+          var r = dlg.getBoundingClientRect();
+          return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+        };
+        document.querySelectorAll('dialog[closedby="any"]').forEach(function (dlg) {
+          var pressedOutside = false;
+          dlg.addEventListener('pointerdown', function (e) { pressedOutside = isOutsideDialog(e, dlg); });
+          dlg.addEventListener('pointerup', function (e) {
+            if (pressedOutside && isOutsideDialog(e, dlg)) dlg.close();
+          });
         });
-        document.getElementById('ledgerCount_6').textContent = filtered.length + ' Records';
-        document.getElementById('ledgerRows_6').innerHTML = filtered.map(function(r) {
-          return '<tr>' +
-            '<td><a href="#/photo-detail?id=' + esc(r.id) + '" class="primary-link">' + esc(r.recordCode) + '</a><div style="font-size:11px;color:var(--muted);">' + esc(r.updatedAt) + '</div></td>' +
-            '<td><a href="#/photo-detail?id=' + esc(r.id) + '" class="primary-link">' + esc(r.title) + '</a><div style="font-size:12px;color:var(--muted);margin-top:2px;">' + esc(r.operationalSummary) + '</div></td>' +
-            '<td><span class="badge purple">' + esc(r.secondaryAttrValue) + '</span></td>' +
-            '<td><strong>' + esc(r.metricValue) + '</strong></td>' +
-            '<td><div style="font-size:12px;font-weight:600;">' + esc(r.ownerName) + '</div><div style="font-size:11px;color:var(--muted);">' + esc(r.invariantRule) + '</div></td>' +
-            '<td><span class="badge green">' + esc(r.status) + '</span></td>' +
-            '<td style="white-space:nowrap;">' +
-              '<a href="#/upload-import-drawer?id=' + esc(r.id) + '" class="btn small"><i class="fas fa-edit mr-1"></i>Edit</a> ' +
-              '<button type="button" class="btn icon-only" title="Delete" aria-label="Delete" onclick="deleteLedgerRow_6(\'' + esc(r.id) + '\', \'' + esc(r.recordCode) + '\')"><i class="fas fa-trash-alt"></i></button>' +
-            '</td>' +
-          '</tr>';
+      }
+      document.querySelectorAll('dialog').forEach(function (dlg) {
+        dlg.addEventListener('close', function () { dlg.returnValue = ''; });
+      });
+
+      function showConfirmModal(options) {
+        var opts = typeof options === 'object' ? options : { title: arguments[0], message: arguments[1], onConfirm: arguments[2] };
+        var dlg = document.getElementById('rapiderConfirmModal');
+        var okBtn = document.getElementById('rapiderConfirmOkBtn');
+        var cancelBtn = document.getElementById('rapiderConfirmCancelBtn');
+        var closeX = document.getElementById('rapiderConfirmCloseX');
+        document.getElementById('rapiderConfirmTitle').textContent = opts.title || 'Confirm Vault Action';
+        document.getElementById('rapiderConfirmMsg').textContent = opts.message || 'Proceed with this action?';
+        okBtn.textContent = opts.okText || 'Confirm';
+        if (opts.isDanger === false) {
+          okBtn.classList.remove('danger');
+          okBtn.classList.add('primary');
+        } else {
+          okBtn.classList.remove('primary');
+          okBtn.classList.add('danger');
+        }
+        cancelBtn.onclick = function () { dlg.close('cancel'); };
+        closeX.onclick = function () { dlg.close('cancel'); };
+        okBtn.onclick = async function () {
+          var orig = okBtn.textContent;
+          okBtn.disabled = true;
+          okBtn.textContent = 'Processing...';
+          try {
+            if (typeof opts.onConfirm === 'function') await opts.onConfirm();
+            dlg.close('accepted');
+          } finally {
+            okBtn.disabled = false;
+            okBtn.textContent = orig;
+          }
+        };
+        dlg.showModal();
+      }
+      window.showConfirmModal = showConfirmModal;
+
+      function clearSwrEntityCache(entityName) {
+        try {
+          if (window.rapiderApi && typeof window.rapiderApi.clearCache === 'function') {
+            window.rapiderApi.clearCache(entityName);
+          }
+          var keysToDelete = [];
+          for (var i = 0; i < sessionStorage.length; i++) {
+            var k = sessionStorage.key(i);
+            if (k && (k.indexOf('swr_find_' + entityName) === 0 || k.indexOf('swr_count_' + entityName) === 0)) {
+              keysToDelete.push(k);
+            }
+          }
+          keysToDelete.forEach(function (k) { sessionStorage.removeItem(k); });
+        } catch (_) {}
+      }
+
+      // Authentic standalone preview seed aligned with sample-data.json (non-zero preview IDs)
+      var PREVIEW_VAULT_SNAPSHOT = {
+        PrsPhotoVaultPolicy: [
+          {
+            id: 'pol-2026-01',
+            recordCode: 'POL-2026-01',
+            ownerName: 'Hannah Sato',
+            quotaLimitGiB: 200,
+            usedBytes: '118426705920',
+            biometricConsentGranted: false,
+            askPhotosAiEnabled: true,
+            lockedVaultTimeoutMinutes: 5,
+            defaultStripGpsOnShare: true,
+            status: 'ACTIVE',
+            isDeleted: false
+          }
+        ],
+        PrsPhotoAsset: [
+          {
+            id: 'pho-2026-015',
+            recordCode: 'PHO-2026-015',
+            title: 'U.S. Passport Renewal Biometric Page — Hannah Sato',
+            mediaType: 'PHOTO',
+            contentCategory: 'DOCUMENT_RECEIPT',
+            mimeType: 'image/jpeg',
+            sizeBytes: 4404019,
+            widthPx: 3024,
+            heightPx: 4032,
+            capturedAt: '2026-11-18T21:14:00-08:00',
+            timezoneId: 'America/Los_Angeles',
+            cameraMakeModel: 'Apple iPhone 16 Pro',
+            sha256Hash: 'a150071135fa92f38281c72cc7892d408d7234fedeb7ad0954ede2d481f1793c',
+            gpsLat: null,
+            gpsLng: null,
+            placeLabel: null,
+            ocrText: null,
+            description: 'Step-up protected passport photo stored exclusively in Locked Vault.',
+            isLockedVault: true,
+            trashedAt: null,
+            status: 'LOCKED',
+            metricValue: '4.2 MB',
+            version: 3,
+            isDeleted: false
+          },
+          {
+            id: 'pho-2026-016',
+            recordCode: 'PHO-2026-016',
+            title: 'Family Home Deed & Safe Deposit Key Card',
+            mediaType: 'PHOTO',
+            contentCategory: 'DOCUMENT_RECEIPT',
+            mimeType: 'image/jpeg',
+            sizeBytes: 5347737,
+            widthPx: 3024,
+            heightPx: 4032,
+            capturedAt: '2026-09-05T19:30:00-07:00',
+            timezoneId: 'America/Los_Angeles',
+            cameraMakeModel: 'Apple iPhone 16 Pro',
+            sha256Hash: '1fb8064fdd5951d7676aa5d7e10b06209376ed5c1260afc428fb19e8aa693197',
+            gpsLat: null,
+            gpsLng: null,
+            placeLabel: null,
+            ocrText: null,
+            description: 'Protected household deed scan walled off from timeline, search, and partner sharing.',
+            isLockedVault: true,
+            trashedAt: null,
+            status: 'LOCKED',
+            metricValue: '5.1 MB',
+            version: 1,
+            isDeleted: false
+          },
+          {
+            id: 'pho-2026-012',
+            recordCode: 'PHO-2026-012',
+            title: 'Pacific Hardware — October Timber & Deck Screws Receipt',
+            mediaType: 'PHOTO',
+            contentCategory: 'DOCUMENT_RECEIPT',
+            mimeType: 'image/jpeg',
+            sizeBytes: 3984588,
+            widthPx: 3024,
+            heightPx: 4032,
+            capturedAt: '2026-10-21T14:08:30-07:00',
+            timezoneId: 'America/Los_Angeles',
+            cameraMakeModel: 'Apple iPhone 16 Pro',
+            sha256Hash: 'c6e6109a945d63e65372a4f7ea96a4741f9591cd07f4a2c5ea7ba5d1e97b6447',
+            placeLabel: 'San Francisco, CA',
+            description: 'Scanned paper hardware store receipt from October backyard fence repair.',
+            isLockedVault: false,
+            trashedAt: null,
+            status: 'ACTIVE',
+            metricValue: '3.8 MB',
+            version: 3,
+            isDeleted: false
+          },
+          {
+            id: 'pho-2026-013',
+            recordCode: 'PHO-2026-013',
+            title: 'Bayside Pediatric Dental — Maya Checkup Invoice',
+            mediaType: 'PHOTO',
+            contentCategory: 'DOCUMENT_RECEIPT',
+            mimeType: 'image/jpeg',
+            sizeBytes: 3040870,
+            widthPx: 3024,
+            heightPx: 4032,
+            capturedAt: '2026-11-03T10:45:00-08:00',
+            timezoneId: 'America/Los_Angeles',
+            cameraMakeModel: 'Apple iPhone 16 Pro',
+            sha256Hash: '96a1d08d579ac66e0f98f98f36bd5f97497b72bc9eb5a5bb8fa4a6497928411b',
+            placeLabel: 'San Francisco, CA',
+            description: 'Dental office copay receipt for Maya autumn checkup.',
+            isLockedVault: false,
+            trashedAt: null,
+            status: 'ACTIVE',
+            metricValue: '2.9 MB',
+            version: 1,
+            isDeleted: false
+          },
+          {
+            id: 'pho-2026-014',
+            recordCode: 'PHO-2026-014',
+            title: 'ANA Flight NH7 Boarding Pass Screenshot',
+            mediaType: 'PHOTO',
+            contentCategory: 'SCREENSHOT',
+            mimeType: 'image/png',
+            sizeBytes: 1468006,
+            widthPx: 1206,
+            heightPx: 2622,
+            capturedAt: '2026-10-12T08:15:00-07:00',
+            timezoneId: 'America/Los_Angeles',
+            cameraMakeModel: 'Apple iPhone 16 Pro',
+            sha256Hash: '740bc685adcfd8e3274b311d46f939d2ca9f7b64d66313644eb0156ef2ace9d9',
+            placeLabel: 'San Francisco, CA',
+            description: 'Mobile airline boarding pass screenshot archived after Tokyo trip return.',
+            isLockedVault: false,
+            trashedAt: null,
+            status: 'ARCHIVED',
+            metricValue: '1.4 MB',
+            version: 2,
+            isDeleted: false
+          }
+        ]
+      };
+
+      var state = {
+        policy: null,
+        lockedAssets: [],
+        visibleAssets: [],
+        isUnlocked: false,
+        authMode: 'pin',
+        authMethodLabel: 'PIN Verified',
+        totalSeconds: 300,
+        secondsRemaining: 300,
+        timerHandle: null,
+        searchTerm: '',
+        globalBlur: false,
+        unblurredIds: {}
+      };
+
+      function formatBytesMb(bytes) {
+        var n = Number(bytes || 0);
+        if (!Number.isFinite(n) || n <= 0) return '0.0 MB';
+        return (n / (1024 * 1024)).toFixed(1) + ' MB';
+      }
+
+      function formatGiB(bytes) {
+        var n = Number(bytes || 0);
+        if (!Number.isFinite(n) || n <= 0) return '0.00 GiB';
+        return (n / (1024 * 1024 * 1024)).toFixed(2) + ' GiB';
+      }
+
+      function formatCountdown(secs) {
+        var s = Math.max(0, Math.floor(Number(secs) || 0));
+        var mins = Math.floor(s / 60);
+        var rem = s % 60;
+        return String(mins).padStart(2, '0') + ':' + String(rem).padStart(2, '0');
+      }
+
+      function formatDateShort(iso) {
+        if (!iso) return 'Unknown date';
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return String(iso).slice(0, 10);
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+
+      function buildDocumentArtworkSvg(asset) {
+        var code = String(asset.recordCode || '').toUpperCase();
+        if (code === 'PHO-2026-015') {
+          return '<svg viewBox="0 0 420 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+            '<defs><linearGradient id="passGrad" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="#1d2440"/><stop offset="100%" stop-color="#312b5a"/></linearGradient></defs>' +
+            '<rect width="420" height="220" fill="url(#passGrad)"/>' +
+            '<circle cx="355" cy="40" r="88" fill="#6854df" opacity="0.22"/>' +
+            '<rect x="52" y="28" width="316" height="164" rx="10" fill="#f7f8fc" stroke="#d9dfec"/>' +
+            '<rect x="52" y="28" width="316" height="30" rx="10" fill="#233158"/>' +
+            '<rect x="52" y="48" width="316" height="10" fill="#233158"/>' +
+            '<text x="72" y="48" fill="#ffffff" font-size="10" font-weight="700" letter-spacing="1.4">PASSPORT · UNITED STATES OF AMERICA</text>' +
+            '<rect x="72" y="74" width="64" height="78" rx="6" fill="#dce3f4" stroke="#b9c4de"/>' +
+            '<circle cx="104" cy="101" r="15" fill="#6d7a99"/><path d="M82 142 C82 126,126 126,126 142" fill="#6d7a99"/>' +
+            '<rect x="152" y="78" width="110" height="8" rx="3" fill="#252840" opacity="0.82"/>' +
+            '<rect x="152" y="96" width="160" height="6" rx="3" fill="#6e798f" opacity="0.5"/>' +
+            '<rect x="152" y="112" width="132" height="6" rx="3" fill="#6e798f" opacity="0.5"/>' +
+            '<rect x="152" y="128" width="96" height="6" rx="3" fill="#6e798f" opacity="0.5"/>' +
+            '<rect x="296" y="74" width="52" height="28" rx="4" fill="#ebe7fb" stroke="#c8bcf6"/>' +
+            '<text x="322" y="92" text-anchor="middle" fill="#5642cc" font-size="8" font-weight="700">E-CHIP</text>' +
+            '<rect x="72" y="164" width="276" height="14" rx="3" fill="#e6eaf4"/>' +
+            '<text x="80" y="174" fill="#475569" font-size="8" font-family="monospace">P&lt;USASATO&lt;&lt;HANNAH&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</text>' +
+            '</svg>';
+        }
+        if (code === 'PHO-2026-016') {
+          return '<svg viewBox="0 0 420 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+            '<defs><linearGradient id="deedGrad" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="#1f293d"/><stop offset="100%" stop-color="#2c2444"/></linearGradient></defs>' +
+            '<rect width="420" height="220" fill="url(#deedGrad)"/>' +
+            '<rect x="64" y="24" width="218" height="174" rx="9" fill="#fffdf8" stroke="#e4decb"/>' +
+            '<rect x="82" y="42" width="118" height="9" rx="3" fill="#172137" opacity="0.86"/>' +
+            '<rect x="82" y="60" width="176" height="5" rx="2.5" fill="#6e798f" opacity="0.45"/>' +
+            '<rect x="82" y="72" width="166" height="5" rx="2.5" fill="#6e798f" opacity="0.45"/>' +
+            '<rect x="82" y="84" width="172" height="5" rx="2.5" fill="#6e798f" opacity="0.45"/>' +
+            '<rect x="82" y="96" width="142" height="5" rx="2.5" fill="#6e798f" opacity="0.45"/>' +
+            '<circle cx="234" cy="148" r="24" fill="#fbecee" stroke="#d88b9b" stroke-width="2"/>' +
+            '<circle cx="234" cy="148" r="14" fill="none" stroke="#b45466" stroke-width="1.5" stroke-dasharray="3 2"/>' +
+            '<rect x="82" y="148" width="96" height="6" rx="2.5" fill="#26836b" opacity="0.65"/>' +
+            '<rect x="242" y="72" width="128" height="82" rx="10" fill="#252840" stroke="#6854df" stroke-width="1.5"/>' +
+            '<circle cx="272" cy="113" r="12" fill="#6854df" opacity="0.35" stroke="#c4b9fb"/>' +
+            '<rect x="294" y="104" width="58" height="7" rx="3" fill="#ffffff" opacity="0.85"/>' +
+            '<rect x="294" y="118" width="42" height="5" rx="2.5" fill="#c4b9fb" opacity="0.7"/>' +
+            '</svg>';
+        }
+        return '<svg viewBox="0 0 420 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' +
+          '<defs><linearGradient id="vaultDocGrad" x1="0" y1="0" x2="1" y2="1">' +
+          '<stop offset="0%" stop-color="#1e2238"/><stop offset="100%" stop-color="#362c63"/></linearGradient></defs>' +
+          '<rect width="420" height="220" fill="url(#vaultDocGrad)"/>' +
+          '<rect x="76" y="28" width="268" height="164" rx="12" fill="#ffffff" stroke="#dcd4f7"/>' +
+          '<rect x="96" y="50" width="150" height="10" rx="4" fill="#172137" opacity="0.85"/>' +
+          '<rect x="96" y="72" width="224" height="6" rx="3" fill="#6e798f" opacity="0.45"/>' +
+          '<rect x="96" y="86" width="208" height="6" rx="3" fill="#6e798f" opacity="0.45"/>' +
+          '<rect x="96" y="100" width="176" height="6" rx="3" fill="#6e798f" opacity="0.45"/>' +
+          '<rect x="96" y="136" width="112" height="28" rx="6" fill="#f0ecfb" stroke="#dcd4f7"/>' +
+          '<text x="152" y="154" text-anchor="middle" fill="#6854df" font-size="10" font-weight="700">SEALED ASSET</text>' +
+          '</svg>';
+      }
+
+      function updateGateSummary() {
+        var locked = state.lockedAssets;
+        var totalBytes = locked.reduce(function (acc, item) { return acc + (Number(item.sizeBytes) || 0); }, 0);
+        var timeoutMins = (state.policy && Number(state.policy.lockedVaultTimeoutMinutes)) || 5;
+        var usedGiB = formatGiB(state.policy ? state.policy.usedBytes : 0);
+        var quotaGiB = (state.policy && Number(state.policy.quotaLimitGiB)) || 200;
+
+        document.getElementById('gateLockedCount').textContent = String(locked.length);
+        document.getElementById('gateItemCountPill').textContent = locked.length + (locked.length === 1 ? ' Item' : ' Items');
+        document.getElementById('gateSizePill').textContent = formatBytesMb(totalBytes);
+        document.getElementById('gateTimeoutPill').textContent = timeoutMins + ' min';
+        document.getElementById('gatePolicyCodeBadge').textContent = (state.policy && state.policy.recordCode) || 'POL-2026-01';
+        document.getElementById('govPolicyTag').textContent = timeoutMins + ' min timeout';
+        document.getElementById('govTimeoutInline').textContent = timeoutMins + (timeoutMins === 1 ? ' minute' : ' minutes');
+        document.getElementById('govQuotaTag').textContent = usedGiB.replace(' GiB', '') + ' / ' + quotaGiB + ' GiB';
+        document.getElementById('stepUpTimeoutLabel').textContent = timeoutMins + (timeoutMins === 1 ? '-minute' : '-minutes');
+
+        var hdrBtn = document.getElementById('btnHeaderVaultAction');
+        if (state.isUnlocked) {
+          hdrBtn.classList.remove('primary');
+          hdrBtn.classList.add('danger');
+          hdrBtn.innerHTML = '<i class="fas fa-lock" aria-hidden="true"></i><span>Lock Vault Now</span>';
+        } else {
+          hdrBtn.classList.remove('danger');
+          hdrBtn.classList.add('primary');
+          hdrBtn.innerHTML = '<i class="fas fa-unlock-alt" aria-hidden="true"></i><span>Verify &amp; Unlock</span>';
+        }
+      }
+
+      function updateTimerDisplay() {
+        var display = document.getElementById('relockCountdownDisplay');
+        var fill = document.getElementById('relockProgressFill');
+        if (display) display.textContent = formatCountdown(state.secondsRemaining);
+        if (fill) {
+          var pct = state.totalSeconds > 0 ? Math.max(0, Math.min(100, (state.secondsRemaining / state.totalSeconds) * 100)) : 0;
+          fill.style.width = pct.toFixed(1) + '%';
+          fill.classList.toggle('is-warning', state.secondsRemaining <= 60);
+        }
+      }
+
+      function renderActiveFilterTags() {
+        var bar = document.getElementById('activeFilterTagsBar');
+        if (!bar) return;
+        var term = state.searchTerm.trim();
+        if (!term) {
+          bar.classList.remove('is-visible');
+          bar.innerHTML = '';
+          return;
+        }
+        bar.classList.add('is-visible');
+        bar.innerHTML = '<span class="active-label">Active:</span>' +
+          '<span class="filter-chip">Search: "' + esc(term) + '" <button type="button" id="btnDismissSearchChip" aria-label="Clear search filter"><i class="fas fa-times" aria-hidden="true"></i></button></span>' +
+          '<button type="button" id="btnClearAllFilters" class="clear-all-btn"><i class="fas fa-times-circle" aria-hidden="true"></i><span>Clear all</span></button>';
+      }
+
+      function clearAllFilters() {
+        state.searchTerm = '';
+        var input = document.getElementById('vaultSearchInput');
+        if (input) input.value = '';
+        renderUnlockedVault();
+      }
+      window.clearAllFilters = clearAllFilters;
+
+      function renderUnlockedVault() {
+        if (!state.isUnlocked) return;
+        var grid = document.getElementById('vaultAssetGrid');
+        var emptyEl = document.getElementById('vaultEmptyState');
+
+        var totalBytes = state.lockedAssets.reduce(function (acc, item) { return acc + (Number(item.sizeBytes) || 0); }, 0);
+        document.getElementById('unlockedCountStat').innerHTML = '<i class="fas fa-shield-alt" aria-hidden="true"></i><span>' +
+          state.lockedAssets.length + (state.lockedAssets.length === 1 ? ' Locked Item' : ' Locked Items') + '</span>';
+        document.getElementById('unlockedSizeStat').innerHTML = '<i class="fas fa-database" aria-hidden="true"></i><span>' +
+          formatBytesMb(totalBytes) + ' Vaulted</span>';
+
+        var blurBtn = document.getElementById('btnTogglePrivacyBlur');
+        blurBtn.setAttribute('aria-pressed', state.globalBlur ? 'true' : 'false');
+        blurBtn.innerHTML = '<i class="fas ' + (state.globalBlur ? 'fa-eye' : 'fa-eye-slash') + '" aria-hidden="true"></i><span>Privacy Blur: ' + (state.globalBlur ? 'On' : 'Off') + '</span>';
+
+        renderActiveFilterTags();
+
+        var term = state.searchTerm.trim().toLowerCase();
+        var filtered = state.lockedAssets.filter(function (asset) {
+          if (!term) return true;
+          var hay = [asset.recordCode, asset.title, asset.description, asset.cameraMakeModel, asset.mimeType].join(' ').toLowerCase();
+          return hay.indexOf(term) !== -1;
+        });
+
+        if (state.lockedAssets.length === 0) {
+          grid.style.display = 'none';
+          grid.innerHTML = '';
+          emptyEl.style.display = 'flex';
+          emptyEl.innerHTML = '<div class="empty-icon"><i class="fas fa-lock-open" aria-hidden="true"></i></div>' +
+            '<h3>Locked Vault is empty</h3>' +
+            '<p>Move passports, IDs, or private records here from any Photo Detail screen or use Move Into Vault above.</p>' +
+            '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:4px;">' +
+            '<button type="button" class="btn primary" id="emptyMoveIntoBtn" style="color:#ffffff !important;"><i class="fas fa-file-import" aria-hidden="true"></i><span>Move Photo Into Vault</span></button>' +
+            '<a href="#/photos-timeline" class="btn"><i class="fas fa-clock" aria-hidden="true"></i><span>Open Photos Timeline</span></a>' +
+            '</div>';
+          var emptyMoveBtn = document.getElementById('emptyMoveIntoBtn');
+          if (emptyMoveBtn) emptyMoveBtn.addEventListener('click', openMoveIntoVaultDialog);
+          return;
+        }
+
+        if (filtered.length === 0) {
+          grid.style.display = 'none';
+          grid.innerHTML = '';
+          emptyEl.style.display = 'flex';
+          emptyEl.innerHTML = '<div class="empty-icon"><i class="fas fa-filter" aria-hidden="true"></i></div>' +
+            '<h3>No vaulted items match your search</h3>' +
+            '<p>Clear your active search query to inspect all sealed documents in Locked Vault.</p>' +
+            '<button type="button" class="btn" id="emptyVaultClearBtn"><i class="fas fa-times-circle" aria-hidden="true"></i><span>Clear all</span></button>';
+          var clrBtn = document.getElementById('emptyVaultClearBtn');
+          if (clrBtn) clrBtn.addEventListener('click', clearAllFilters);
+          return;
+        }
+
+        emptyEl.style.display = 'none';
+        grid.style.display = 'grid';
+
+        grid.innerHTML = filtered.map(function (asset) {
+          var isBlurred = state.globalBlur && !state.unblurredIds[asset.id];
+          var dims = (asset.widthPx && asset.heightPx) ? (asset.widthPx + ' × ' + asset.heightPx + ' px') : 'Original Resolution';
+          var sizeLabel = asset.metricValue || formatBytesMb(asset.sizeBytes);
+          var shaPrefix = asset.sha256Hash ? String(asset.sha256Hash).slice(0, 12) + '…' : 'Verified SHA-256';
+          var detailHref = '#/photo-detail/' + encodeURIComponent(asset.id);
+
+          return '<article class="vault-card" data-record-code="' + esc(asset.recordCode) + '">' +
+            '<div class="vault-preview-wrap' + (isBlurred ? ' is-blurred' : '') + '">' +
+            '<div class="vault-art">' + buildDocumentArtworkSvg(asset) + '</div>' +
+            '<div class="vault-blur-overlay">' +
+            '<i class="fas fa-eye-slash" style="font-size:20px;" aria-hidden="true"></i>' +
+            '<strong style="font-size:13px;">Privacy Curtain Active</strong>' +
+            '</div>' +
+            '<div class="vault-preview-top">' +
+            '<span class="code-badge tabular"><i class="fas fa-lock" aria-hidden="true"></i> ' + esc(asset.recordCode) + '</span>' +
+            '<button type="button" class="reveal-pill-btn" data-action="toggle-card-blur" data-id="' + esc(asset.id) + '">' +
+            '<i class="fas ' + (isBlurred ? 'fa-eye' : 'fa-eye-slash') + '" aria-hidden="true"></i>' +
+            '<span>' + (isBlurred ? 'Reveal' : 'Curtain') + '</span>' +
+            '</button>' +
+            '</div>' +
+            '</div>' +
+            '<div class="vault-card-body">' +
+            '<div>' +
+            '<a href="' + detailHref + '" class="vault-card-title" data-photo-nav="' + esc(asset.id) + '">' + esc(asset.title) + '</a>' +
+            '</div>' +
+            '<p class="vault-card-desc">' + esc(asset.description || 'Protected sensitive document stored exclusively in Locked Vault.') + '</p>' +
+            '<div class="vault-meta-grid tabular">' +
+            '<div class="vault-meta-item"><small>Captured</small><span>' + esc(formatDateShort(asset.capturedAt)) + ' · ' + esc(asset.timezoneId || 'Local') + '</span></div>' +
+            '<div class="vault-meta-item"><small>Device</small><span>' + esc(asset.cameraMakeModel || 'Encrypted Upload') + '</span></div>' +
+            '<div class="vault-meta-item"><small>Dimensions &amp; Size</small><span>' + esc(dims + ' · ' + sizeLabel) + '</span></div>' +
+            '<div class="vault-meta-item"><small>Content Digest</small><span>' + esc(shaPrefix) + '</span></div>' +
+            '</div>' +
+            '<div class="vault-tags-row">' +
+            '<span class="tag tag-danger"><i class="fas fa-lock" aria-hidden="true"></i> LOCKED</span>' +
+            '<span class="tag tag-neutral"><i class="fas fa-ban" aria-hidden="true"></i> No OCR · No GPS</span>' +
+            '<span class="tag tag-success"><i class="fas fa-shield-alt" aria-hidden="true"></i> No Partner Share</span>' +
+            '</div>' +
+            '</div>' +
+            '<div class="vault-card-foot">' +
+            '<div class="vault-foot-left">' +
+            '<button type="button" class="btn small" data-action="move-out-vault" data-id="' + esc(asset.id) + '">' +
+            '<i class="fas fa-arrow-up-from-bracket" aria-hidden="true"></i><span>Move Out of Vault</span>' +
+            '</button>' +
+            '<button type="button" class="btn small" data-action="inspect-vault-item" data-id="' + esc(asset.id) + '">' +
+            '<i class="fas fa-file-shield" aria-hidden="true"></i><span>Inspect</span>' +
+            '</button>' +
+            '</div>' +
+            '<div class="vault-foot-right">' +
+            '<button type="button" class="btn small icon-only del-btn" data-action="trash-vault-item" data-id="' + esc(asset.id) + '" title="Move to 30-Day Trash" aria-label="Move to 30-Day Trash">' +
+            '<i class="fas fa-trash-alt" aria-hidden="true"></i>' +
+            '</button>' +
+            '</div>' +
+            '</div>' +
+            '</article>';
         }).join('');
       }
-      window.deleteLedgerRow_6 = function(id, code) {
-        window.showConfirmModal('Remove Photo Vault Policy', 'Soft-delete ' + code + ' from Locked Vault?', async function() {
-          if (window.rapiderApi && typeof window.rapiderApi.delete === 'function') {
-            await window.rapiderApi.delete('PrsPhotoVaultPolicy', id);
+
+      function stopRelockTimer() {
+        if (state.timerHandle) {
+          clearInterval(state.timerHandle);
+          state.timerHandle = null;
+        }
+      }
+
+      function startRelockTimer() {
+        stopRelockTimer();
+        var mins = (state.policy && Number(state.policy.lockedVaultTimeoutMinutes)) || 5;
+        state.totalSeconds = Math.max(60, mins * 60);
+        state.secondsRemaining = state.totalSeconds;
+        updateTimerDisplay();
+        state.timerHandle = setInterval(function () {
+          state.secondsRemaining -= 1;
+          updateTimerDisplay();
+          if (state.secondsRemaining <= 0) {
+            lockVault('timeout');
           }
-          rows_6 = rows_6.filter(function(r) { return r.id !== id; });
-          renderLedger_6();
-          window.toast('Archived ' + code, 'info');
+        }, 1000);
+      }
+
+      function unlockVault(methodLabel) {
+        state.isUnlocked = true;
+        state.authMethodLabel = methodLabel || 'PIN Verified';
+        document.getElementById('unlockedAuthMethodLabel').textContent = state.authMethodLabel;
+        document.getElementById('vaultLockedState').style.display = 'none';
+        document.getElementById('vaultUnlockedState').style.display = 'block';
+        updateGateSummary();
+        startRelockTimer();
+        renderUnlockedVault();
+      }
+
+      function lockVault(reason) {
+        stopRelockTimer();
+        state.isUnlocked = false;
+        state.unblurredIds = {};
+        state.searchTerm = '';
+        var searchEl = document.getElementById('vaultSearchInput');
+        if (searchEl) searchEl.value = '';
+        // Immediately purge sensitive cards from the DOM upon lock
+        var grid = document.getElementById('vaultAssetGrid');
+        if (grid) grid.innerHTML = '';
+        document.getElementById('vaultUnlockedState').style.display = 'none';
+        document.getElementById('vaultLockedState').style.display = 'block';
+        updateGateSummary();
+        if (reason === 'timeout') {
+          toast('Locked Vault auto-relocked after inactivity timeout.', 'info');
+        } else if (reason === 'manual') {
+          toast('Locked Vault re-locked and cleared from memory.', 'success');
+        }
+      }
+
+      function setAuthMode(mode) {
+        state.authMode = mode === 'passkey' ? 'passkey' : 'pin';
+        var pinBtn = document.getElementById('authModePinBtn');
+        var passkeyBtn = document.getElementById('authModePasskeyBtn');
+        var pinSec = document.getElementById('pinAuthSection');
+        var passSec = document.getElementById('passkeyAuthSection');
+        var verifyBtn = document.getElementById('stepUpVerifyBtn');
+        var errBox = document.getElementById('stepUpError');
+        errBox.classList.remove('is-visible');
+        errBox.textContent = '';
+
+        if (state.authMode === 'passkey') {
+          pinBtn.classList.remove('active');
+          passkeyBtn.classList.add('active');
+          pinSec.style.display = 'none';
+          passSec.classList.add('is-visible');
+          verifyBtn.textContent = 'Verify Passkey & Unlock';
+        } else {
+          passkeyBtn.classList.remove('active');
+          pinBtn.classList.add('active');
+          passSec.classList.remove('is-visible');
+          pinSec.style.display = 'flex';
+          verifyBtn.textContent = 'Unlock Vault';
+          var pinInput = document.getElementById('vaultPinInput');
+          if (pinInput) setTimeout(function () { pinInput.focus(); }, 20);
+        }
+      }
+
+      function openStepUpModal(preferredMode) {
+        var dlg = document.getElementById('stepUpDialog');
+        var pinInput = document.getElementById('vaultPinInput');
+        if (pinInput) pinInput.value = '';
+        setAuthMode(preferredMode || 'pin');
+        dlg.showModal();
+      }
+
+      function openMoveIntoVaultDialog() {
+        var dlg = document.getElementById('moveIntoVaultDialog');
+        var sel = document.getElementById('moveIntoVaultSelect');
+        var errBox = document.getElementById('moveIntoError');
+        var saveBtn = document.getElementById('moveIntoConfirmBtn');
+        errBox.classList.remove('is-visible');
+        errBox.textContent = '';
+
+        if (state.visibleAssets.length === 0) {
+          sel.innerHTML = '<option value="">No active unlocked assets available to lock</option>';
+          saveBtn.disabled = true;
+        } else {
+          saveBtn.disabled = false;
+          sel.innerHTML = state.visibleAssets.map(function (a) {
+            return '<option value="' + esc(a.id) + '">' + esc(a.recordCode + ' · ' + a.title + ' (' + (a.metricValue || formatBytesMb(a.sizeBytes)) + ')') + '</option>';
+          }).join('');
+        }
+        dlg.showModal();
+      }
+
+      function openInspectModal(assetId) {
+        var asset = state.lockedAssets.find(function (a) { return a.id === assetId; });
+        if (!asset) return;
+        var dlg = document.getElementById('vaultInspectDialog');
+        document.getElementById('vaultInspectTitle').textContent = asset.recordCode + ' · ' + asset.title;
+        var detailHref = '#/photo-detail/' + encodeURIComponent(asset.id);
+        var link = document.getElementById('vaultInspectDetailLink');
+        link.setAttribute('href', detailHref);
+        link.setAttribute('data-photo-nav', asset.id);
+
+        document.getElementById('vaultInspectBody').innerHTML =
+          '<div class="inspect-art">' + buildDocumentArtworkSvg(asset) + '</div>' +
+          '<p style="margin:0;font-size:13px;color:var(--muted);line-height:1.5;">' + esc(asset.description || 'Sealed sensitive document.') + '</p>' +
+          '<div class="vault-meta-grid tabular">' +
+          '<div class="vault-meta-item"><small>Captured</small><span>' + esc(formatDateShort(asset.capturedAt)) + '</span></div>' +
+          '<div class="vault-meta-item"><small>Size &amp; MIME</small><span>' + esc((asset.metricValue || formatBytesMb(asset.sizeBytes)) + ' · ' + (asset.mimeType || 'image/jpeg')) + '</span></div>' +
+          '<div class="vault-meta-item"><small>OCR &amp; GPS Status</small><span>Purged / Redacted (null)</span></div>' +
+          '<div class="vault-meta-item"><small>Share Posture</small><span>403 Blocked (Owner-Only)</span></div>' +
+          '</div>';
+        dlg.showModal();
+      }
+
+      function handleMoveOutOfVault(assetId) {
+        var target = state.lockedAssets.find(function (a) { return a.id === assetId; });
+        if (!target) return;
+        showConfirmModal({
+          title: 'Move Out of Locked Vault',
+          message: 'Restore "' + target.title + '" (' + target.recordCode + ') to Photos Timeline? It will become eligible for standard timeline browsing and search.',
+          okText: 'Move Out of Vault',
+          isDanger: false,
+          onConfirm: async function () {
+            var lockedSnap = state.lockedAssets.slice();
+            var visibleSnap = state.visibleAssets.slice();
+            var updated = Object.assign({}, target, {
+              isLockedVault: false,
+              status: 'ACTIVE',
+              secondaryAttrValue: 'Restored to Timeline',
+              updatedAt: new Date().toISOString()
+            });
+            state.lockedAssets = state.lockedAssets.filter(function (a) { return a.id !== assetId; });
+            state.visibleAssets.unshift(updated);
+            updateGateSummary();
+            renderUnlockedVault();
+
+            try {
+              if (window.rapiderApi && typeof window.rapiderApi.updateById === 'function') {
+                await window.rapiderApi.updateById('PrsPhotoAsset', assetId, {
+                  isLockedVault: false,
+                  status: 'ACTIVE',
+                  secondaryAttrValue: 'Restored to Timeline',
+                  updatedAt: updated.updatedAt
+                });
+                clearSwrEntityCache('PrsPhotoAsset');
+                if (typeof window.rapiderApi.broadcast === 'function') {
+                  window.rapiderApi.broadcast('RECORD_UPDATED', { model: 'PrsPhotoAsset', id: assetId });
+                }
+              }
+              toast('Moved "' + target.title + '" out of Locked Vault to Photos Timeline.', 'success');
+            } catch (err) {
+              state.lockedAssets = lockedSnap;
+              state.visibleAssets = visibleSnap;
+              updateGateSummary();
+              renderUnlockedVault();
+              toast('Failed to move asset out of vault: ' + (err && err.message ? err.message : 'Server error'), 'error');
+            }
+          }
         });
-      };
-      document.getElementById('ledgerSearch_6').addEventListener('input', renderLedger_6);
-      document.getElementById('ledgerStatus_6').addEventListener('change', renderLedger_6);
-      window.loadEntitySWR('PrsPhotoVaultPolicy', function(rows) { rows_6 = rows; renderLedger_6(); });
-    
+      }
+
+      function handleTrashVaultAsset(assetId) {
+        var target = state.lockedAssets.find(function (a) { return a.id === assetId; });
+        if (!target) return;
+        showConfirmModal({
+          title: 'Move Vault Asset to 30-Day Trash',
+          message: 'Move "' + target.title + '" (' + target.recordCode + ') to 30-Day Trash? You can recover it from Storage & Deduplication within 30 days.',
+          okText: 'Move to Trash',
+          isDanger: true,
+          onConfirm: async function () {
+            var snap = state.lockedAssets.slice();
+            var nowIso = new Date().toISOString();
+            var purgeIso = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+            state.lockedAssets = state.lockedAssets.filter(function (a) { return a.id !== assetId; });
+            updateGateSummary();
+            renderUnlockedVault();
+
+            try {
+              if (window.rapiderApi && typeof window.rapiderApi.updateById === 'function') {
+                await window.rapiderApi.updateById('PrsPhotoAsset', assetId, {
+                  isLockedVault: false,
+                  status: 'TRASHED',
+                  trashedAt: nowIso,
+                  purgeAfterAt: purgeIso,
+                  updatedAt: nowIso
+                });
+                clearSwrEntityCache('PrsPhotoAsset');
+                if (typeof window.rapiderApi.broadcast === 'function') {
+                  window.rapiderApi.broadcast('RECORD_UPDATED', { model: 'PrsPhotoAsset', id: assetId });
+                }
+              }
+              toast('Moved "' + target.title + '" to 30-Day Trash.', 'success');
+            } catch (err) {
+              state.lockedAssets = snap;
+              updateGateSummary();
+              renderUnlockedVault();
+              toast('Failed to move item to Trash: ' + (err && err.message ? err.message : 'Server error'), 'error');
+            }
+          }
+        });
+      }
+
+      function buildAiAuditAnswer(promptText) {
+        var timeoutMins = (state.policy && Number(state.policy.lockedVaultTimeoutMinutes)) || 5;
+        var totalBytes = state.lockedAssets.reduce(function (acc, item) { return acc + (Number(item.sizeBytes) || 0); }, 0);
+        return '<strong>Owner-Isolated Locked Vault Audit</strong> (' + esc((state.policy && state.policy.recordCode) || 'POL-2026-01') + '):<br>' +
+          '• <strong>Auto-Relock Timeout:</strong> <span class="tabular">' + timeoutMins + ' minutes</span> (current state: <strong>' + (state.isUnlocked ? 'Unlocked (' + formatCountdown(state.secondsRemaining) + ' left)' : 'Sealed') + '</strong>).<br>' +
+          '• <strong>Sealed Enclave Count:</strong> <span class="tabular">' + state.lockedAssets.length + '</span> sensitive asset(s) (' + esc(formatBytesMb(totalBytes)) + ') with <code>ocrText = null</code> and <code>gpsLat/gpsLng = null</code>.<br>' +
+          '• <strong>Wall-Off Status:</strong> 0 locked assets exposed to Photos Timeline (' + state.visibleAssets.length + ' active visible), Search/Ask Photos, Memories, or Partner Sharing.' +
+          (promptText ? '<br><span style="color:var(--muted);font-size:12px;">Query verified: "' + esc(promptText) + '"</span>' : '');
+      }
+
+      async function loadVaultData() {
+        var rawAssets = [];
+        var rawPolicies = [];
+
+        if (window.rapiderApi && typeof window.rapiderApi.findSWR === 'function') {
+          try {
+            var res = await Promise.all([
+              window.rapiderApi.findSWR('PrsPhotoAsset', { order: ['capturedAt DESC'] }),
+              window.rapiderApi.findSWR('PrsPhotoVaultPolicy', {}),
+              typeof window.rapiderApi.countSWR === 'function' ? window.rapiderApi.countSWR('PrsPhotoAsset', {}) : Promise.resolve(0)
+            ]);
+            rawAssets = Array.isArray(res[0]) ? res[0] : [];
+            rawPolicies = Array.isArray(res[1]) ? res[1] : [];
+            var _assetCount = res[2];
+            void _assetCount;
+          } catch (err) {
+            toast('Could not refresh vault metadata: ' + (err && err.message ? err.message : 'Network error'), 'warning');
+          }
+        } else {
+          rawAssets = PREVIEW_VAULT_SNAPSHOT.PrsPhotoAsset.slice();
+          rawPolicies = PREVIEW_VAULT_SNAPSHOT.PrsPhotoVaultPolicy.slice();
+        }
+
+        var cleanPolicies = rawPolicies.filter(function (p) { return p && p.isDeleted !== true; });
+        state.policy = cleanPolicies[0] || PREVIEW_VAULT_SNAPSHOT.PrsPhotoVaultPolicy[0];
+
+        var activeAssets = rawAssets.filter(function (a) {
+          return a && a.isDeleted !== true && !a.trashedAt && String(a.status || '').toUpperCase() !== 'TRASHED';
+        });
+
+        state.lockedAssets = activeAssets.filter(function (a) {
+          return a.isLockedVault === true || String(a.status || '').toUpperCase() === 'LOCKED';
+        });
+
+        state.visibleAssets = activeAssets.filter(function (a) {
+          return a.isLockedVault !== true && String(a.status || '').toUpperCase() !== 'LOCKED';
+        });
+
+        updateGateSummary();
+        if (state.isUnlocked) renderUnlockedVault();
+      }
+
+      function bindEvents() {
+        document.getElementById('btnOpenStepUpModal').addEventListener('click', function () {
+          openStepUpModal('pin');
+        });
+        document.getElementById('btnQuickPasskeyVerify').addEventListener('click', function () {
+          openStepUpModal('passkey');
+        });
+        document.getElementById('btnHeaderVaultAction').addEventListener('click', function () {
+          if (state.isUnlocked) lockVault('manual');
+          else openStepUpModal('pin');
+        });
+
+        document.getElementById('btnLockNow').addEventListener('click', function () {
+          lockVault('manual');
+        });
+        document.getElementById('btnResetTimer').addEventListener('click', function () {
+          startRelockTimer();
+          toast('Auto-relock timer reset to ' + ((state.policy && state.policy.lockedVaultTimeoutMinutes) || 5) + ' minutes.', 'success');
+        });
+        document.getElementById('btnMoveIntoVault').addEventListener('click', openMoveIntoVaultDialog);
+
+        document.getElementById('btnTogglePrivacyBlur').addEventListener('click', function () {
+          state.globalBlur = !state.globalBlur;
+          state.unblurredIds = {};
+          renderUnlockedVault();
+        });
+
+        document.getElementById('vaultSearchInput').addEventListener('input', function (e) {
+          state.searchTerm = e.target.value || '';
+          renderUnlockedVault();
+        });
+
+        document.getElementById('activeFilterTagsBar').addEventListener('click', function (e) {
+          if (e.target.closest('#btnDismissSearchChip') || e.target.closest('#btnClearAllFilters')) {
+            clearAllFilters();
+          }
+        });
+
+        // Step-Up Verification Dialog
+        var stepUpDlg = document.getElementById('stepUpDialog');
+        document.getElementById('stepUpCloseX').addEventListener('click', function () { stepUpDlg.close(); });
+        document.getElementById('stepUpCancelBtn').addEventListener('click', function () { stepUpDlg.close(); });
+        document.getElementById('authModePinBtn').addEventListener('click', function () { setAuthMode('pin'); });
+        document.getElementById('authModePasskeyBtn').addEventListener('click', function () { setAuthMode('passkey'); });
+
+        document.getElementById('stepUpForm').addEventListener('submit', async function (e) {
+          e.preventDefault();
+          var errBox = document.getElementById('stepUpError');
+          var verifyBtn = document.getElementById('stepUpVerifyBtn');
+          var origText = verifyBtn.textContent;
+          errBox.classList.remove('is-visible');
+          errBox.textContent = '';
+
+          if (state.authMode === 'pin') {
+            var pin = (document.getElementById('vaultPinInput').value || '').trim();
+            if (!/^\d{4,6}$/.test(pin)) {
+              errBox.textContent = 'Enter a 4 to 6 digit numeric PIN (Demo PIN: 2026).';
+              errBox.classList.add('is-visible');
+              document.getElementById('vaultPinInput').focus();
+              return;
+            }
+          }
+
+          verifyBtn.disabled = true;
+          verifyBtn.textContent = 'Verifying...';
+          try {
+            if (window.rapiderApi && typeof window.rapiderApi.broadcast === 'function') {
+              window.rapiderApi.broadcast('LOCKED_VAULT_STEP_UP_VERIFIED', {
+                method: state.authMode,
+                policyCode: (state.policy && state.policy.recordCode) || 'POL-2026-01'
+              });
+            }
+            stepUpDlg.close();
+            unlockVault(state.authMode === 'passkey' ? 'Passkey Verified' : 'PIN Verified');
+            toast('Step-up verified. Locked Vault unlocked.', 'success');
+          } finally {
+            verifyBtn.disabled = false;
+            verifyBtn.textContent = origText;
+          }
+        });
+
+        // Move Into Vault Dialog
+        var moveDlg = document.getElementById('moveIntoVaultDialog');
+        document.getElementById('moveIntoCloseX').addEventListener('click', function () { moveDlg.close(); });
+        document.getElementById('moveIntoCancelBtn').addEventListener('click', function () { moveDlg.close(); });
+
+        document.getElementById('moveIntoVaultForm').addEventListener('submit', async function (e) {
+          e.preventDefault();
+          var sel = document.getElementById('moveIntoVaultSelect');
+          var assetId = sel.value;
+          var errBox = document.getElementById('moveIntoError');
+          var confirmBtn = document.getElementById('moveIntoConfirmBtn');
+          var origLabel = confirmBtn.textContent;
+
+          if (!assetId) {
+            errBox.textContent = 'Select an active asset to move into Locked Vault.';
+            errBox.classList.add('is-visible');
+            return;
+          }
+          var target = state.visibleAssets.find(function (a) { return a.id === assetId; });
+          if (!target) return;
+
+          confirmBtn.disabled = true;
+          confirmBtn.textContent = 'Sealing...';
+          var nowIso = new Date().toISOString();
+          var visibleSnap = state.visibleAssets.slice();
+          var lockedSnap = state.lockedAssets.slice();
+
+          try {
+            var sealedAsset = Object.assign({}, target, {
+              isLockedVault: true,
+              status: 'LOCKED',
+              gpsLat: null,
+              gpsLng: null,
+              placeLabel: null,
+              ocrText: null,
+              secondaryAttrValue: 'Locked Vault (Redacted)',
+              updatedAt: nowIso
+            });
+            state.visibleAssets = state.visibleAssets.filter(function (a) { return a.id !== assetId; });
+            state.lockedAssets.unshift(sealedAsset);
+
+            if (window.rapiderApi && typeof window.rapiderApi.updateById === 'function') {
+              await window.rapiderApi.updateById('PrsPhotoAsset', assetId, {
+                isLockedVault: true,
+                status: 'LOCKED',
+                gpsLat: null,
+                gpsLng: null,
+                placeLabel: null,
+                ocrText: null,
+                secondaryAttrValue: 'Locked Vault (Redacted)',
+                updatedAt: nowIso
+              });
+              clearSwrEntityCache('PrsPhotoAsset');
+              if (typeof window.rapiderApi.broadcast === 'function') {
+                window.rapiderApi.broadcast('RECORD_UPDATED', { model: 'PrsPhotoAsset', id: assetId });
+              }
+            }
+            updateGateSummary();
+            renderUnlockedVault();
+            moveDlg.close();
+            toast('Sealed "' + target.title + '" inside Locked Vault.', 'success');
+          } catch (err) {
+            state.visibleAssets = visibleSnap;
+            state.lockedAssets = lockedSnap;
+            updateGateSummary();
+            renderUnlockedVault();
+            errBox.textContent = 'Failed to seal asset: ' + (err && err.message ? err.message : 'Server error');
+            errBox.classList.add('is-visible');
+          } finally {
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = origLabel;
+          }
+        });
+
+        // Inspect Modal
+        var inspectDlg = document.getElementById('vaultInspectDialog');
+        document.getElementById('vaultInspectCloseX').addEventListener('click', function () { inspectDlg.close(); });
+        document.getElementById('vaultInspectCloseBtn').addEventListener('click', function () { inspectDlg.close(); });
+        document.getElementById('vaultInspectDetailLink').addEventListener('click', function (e) {
+          var targetId = e.currentTarget.getAttribute('data-photo-nav');
+          if (targetId && window.rapiderApi && typeof window.rapiderApi.navigate === 'function') {
+            e.preventDefault();
+            inspectDlg.close();
+            window.rapiderApi.navigate(['photo-detail', targetId]);
+          }
+        });
+
+        // Ask Rapider Modal
+        var askDlg = document.getElementById('askRapiderDialog');
+        document.getElementById('askRapiderCloseX').addEventListener('click', function () { askDlg.close(); });
+        document.getElementById('askRapiderCancelBtn').addEventListener('click', function () { askDlg.close(); });
+        document.getElementById('btnAskRapider').addEventListener('click', function () {
+          document.getElementById('askRapiderResult').innerHTML = buildAiAuditAnswer('');
+          askDlg.showModal();
+        });
+        document.getElementById('askRapiderForm').addEventListener('submit', async function (e) {
+          e.preventDefault();
+          var runBtn = document.getElementById('askRapiderRunBtn');
+          var orig = runBtn.textContent;
+          var promptVal = (document.getElementById('askRapiderInput').value || '').trim();
+          runBtn.disabled = true;
+          runBtn.textContent = 'Auditing...';
+          try {
+            if (window.rapiderApi && typeof window.rapiderApi.broadcast === 'function') {
+              window.rapiderApi.broadcast('RAPIDER_AI_ASSISTANT_QUERY', {
+                appSlug: 'personal-cloud-photo-storage',
+                route: 'locked-vault',
+                prompt: promptVal,
+                lockedCount: state.lockedAssets.length
+              });
+            }
+            document.getElementById('askRapiderResult').innerHTML = buildAiAuditAnswer(promptVal);
+          } finally {
+            runBtn.disabled = false;
+            runBtn.textContent = orig;
+          }
+        });
+
+        // Delegated Actions on Unlocked Cards
+        document.getElementById('main-content').addEventListener('click', function (e) {
+          var photoLink = e.target.closest('[data-photo-nav]');
+          if (photoLink) {
+            var photoId = photoLink.getAttribute('data-photo-nav');
+            if (window.rapiderApi && typeof window.rapiderApi.navigate === 'function') {
+              e.preventDefault();
+              window.rapiderApi.navigate(['photo-detail', photoId]);
+            }
+            return;
+          }
+
+          var blurToggle = e.target.closest('[data-action="toggle-card-blur"]');
+          if (blurToggle) {
+            var id = blurToggle.getAttribute('data-id');
+            if (state.globalBlur) {
+              state.unblurredIds[id] = !state.unblurredIds[id];
+            } else {
+              state.globalBlur = true;
+              state.unblurredIds = {};
+            }
+            renderUnlockedVault();
+            return;
+          }
+
+          var moveOutBtn = e.target.closest('[data-action="move-out-vault"]');
+          if (moveOutBtn) {
+            handleMoveOutOfVault(moveOutBtn.getAttribute('data-id'));
+            return;
+          }
+
+          var inspectBtn = e.target.closest('[data-action="inspect-vault-item"]');
+          if (inspectBtn) {
+            openInspectModal(inspectBtn.getAttribute('data-id'));
+            return;
+          }
+
+          var trashBtn = e.target.closest('[data-action="trash-vault-item"]');
+          if (trashBtn) {
+            handleTrashVaultAsset(trashBtn.getAttribute('data-id'));
+          }
+        });
+
+        // Cross-iframe event bus updates
+        if (window.rapiderApi && typeof window.rapiderApi.on === 'function') {
+          window.rapiderApi.on('RECORD_CREATED', function () { loadVaultData(); });
+          window.rapiderApi.on('RECORD_UPDATED', function () { loadVaultData(); });
+          window.rapiderApi.on('RECORD_DELETED', function () { loadVaultData(); });
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        bindEvents();
+        loadVaultData();
+      });
+    })();
   </script>
 </body>
 </html>

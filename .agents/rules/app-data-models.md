@@ -291,8 +291,9 @@ Below is a compliant sample model demonstrating the `scope` field for global que
 ## 3. Sample Data Generation Rules (`sample-data.json`)
 Every application must be accompanied by a `sample-data.json` at the root of the application repository.
 - **Data Model Coverage:** Must contain arrays for each entity model defined in `dataModels`.
-- **Zeroed-Out Initial 8-Character Block Standard (`00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx`):**
-  - **STRICT REQUIREMENT:** Every sample record's `id` and `_id` MUST zero out the initial 8-character block of the UUID:
-    e.g. `00000000-74c6-417b-b141-468b9dbf3d5e` or `00000000-1111-4111-8111-111111111111`.
-  - **Foreign Key Alignment:** All relations (e.g. `projectId`, `accountId`, `categoryId`) referencing sample data MUST link to the corresponding target's `00000000-...` UUID.
+- **Zeroed-Out Initial 8-Character Block with Truly Random Remaining Digits (`00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx`):**
+  - **STRICT PREFIX REQUIREMENT:** Every sample record's `id` and `_id` MUST zero out the initial 8-character block of the UUID (`00000000-`).
+  - **MANDATORY RANDOM REMAINING CHUNKS:** The remaining 24 hex characters (`-xxxx-xxxx-xxxx-xxxxxxxxxxxx`) MUST be truly random hexadecimal digits (e.g., `00000000-74c6-417b-b141-468b9dbf3d5e` or `00000000-a8f3-4e2b-9c1d-8f7a6b5c4d3e`).
+  - **STRICT BAN ON ALL-ZERO OR SEQUENTIAL IDS:** NEVER generate sequential zero-padded IDs (e.g. `00000000-0000-0000-0000-000000000001`, `00000000-0001-4000-a000-000000000001`, `00000000-1111-4111-8111-111111111111`). All-zero endings inevitably cause duplicate collisions across entities, tables, and microapplications. Use `'00000000-' + crypto.randomUUID().slice(9)` to generate unique sample IDs.
+  - **Foreign Key Alignment:** All relations (e.g. `projectId`, `accountId`, `categoryId`) referencing sample data MUST link to the corresponding target's exact `00000000-...` UUID.
   - **Regex Purge Safety:** This convention enables administrative scripts to delete sample records via regex (`/^00000000-/`) without touching user-generated production data.

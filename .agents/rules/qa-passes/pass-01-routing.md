@@ -17,10 +17,10 @@ In production, Rapider microapplication pages are served from DigitalOcean Space
 3. **Ensure Action Buttons Trigger Valid Handlers:**
    - Ensure action buttons (Submit, Save, Delete) trigger the correct API functions.
    - **CRITICAL DOM Timing:** If you use a global event delegator (e.g. `document.body.addEventListener`), wrap it in `DOMContentLoaded` or place the script at the end of `<body>`.
-4. **STRICT RECORD ID ROUTING (`?id=<uuid>` — NEVER Name-Based `?person=`):**
-   - All links and navigations to detail, profile, edit, or change-request pages **MUST** pass the entity's unique `id` (`href="#/profile?id=${emp.id}"`, `href="#/edit-employee?id=${emp.id}"`, `href="#/change-employee?id=${emp.id}"`).
-   - **NEVER** route by display name (`?person=Marcus+Vance` or `?name=...`). Names are non-unique and break relational lookups.
-   - Detail and edit pages **MUST** resolve the record ID using `window.rapiderApi?.getRouteParam?.('id') || new URLSearchParams(window.location.hash.split('?')[1] || window.location.search).get('id')`.
+4. **STRICT RECORD ID PATH ROUTING (`#/<route>/<uuid>` — NEVER `?id=` or Name-Based `?person=`):**
+   - `rapider-ui` resolves entity routes via path parameters (`/:pageKey/:entityId`). All links and navigations to detail, profile, edit, or change-request pages **MUST** pass the entity's unique `id` as a path segment (`href="#/profile/${encodeURIComponent(emp.id)}"`, `href="#/edit-employee/${encodeURIComponent(emp.id)}"`, `href="#/change-employee/${encodeURIComponent(emp.id)}"`, or `window.rapiderApi.navigate(['profile', emp.id])`). Trailing secondary params go after the ID (`#/profile/${encodeURIComponent(emp.id)}?tab=history`).
+   - **NEVER** emit `?id=<uuid>` query-parameter entity links (`?id=` fails in `rapider-ui` `srcdoc` iframes) and **NEVER** route by display name (`?person=Marcus+Vance` or `?name=...`).
+   - Detail and edit pages **MUST** resolve the record ID checking: (1) `window.rapiderApi?.getRouteParam?.('id')`, (2) the 2nd path segment from `window.location.hash` / `window.location.pathname` after `/<route>/`, and (3) `URLSearchParams` fallback.
 5. **DETAIL PAGE TABS MUST SWITCH IN-PAGE PANELS (NEVER NAVIGATE TO ROOT PAGES):**
    - Tab bars (`<nav class="tabs">`, `[role="tablist"]`) inside a record detail/profile page (e.g. `Overview`, `Job & employment`, `Documents`, `History & changes`) **MUST** switch in-page tab panels (`<button type="button" data-tab="...">`) showing **that specific record's** scoped data.
    - **NEVER** wire detail-page tabs as `<a href="#/documents">` or `<a href="#/lifecycle">` that navigate away from the record detail page to root app pages!

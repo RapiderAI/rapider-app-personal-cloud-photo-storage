@@ -45,8 +45,8 @@ element.innerText = opportunity.account.name;
 
 ## Sample Data Convention (`sample-data.json`)
 Every app must supply rich, realistic `sample-data.json` covering all defined `dataModels`.
-- **Mandatory Zeroed-Out Initial 8-Character Block (`00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx`):**
-  All sample record IDs (`id` and `_id`) MUST zero out their initial 8 characters:
-  e.g., `00000000-74c6-417b-b141-468b9dbf3d5e` or `00000000-1111-4111-8111-111111111111`.
-- **Foreign Keys:** Any foreign keys referencing sample records (e.g. `accountId`, `ledgerId`) must link to the corresponding `00000000-...` ID.
+- **Mandatory Zeroed-Out Initial 8-Character Block with Truly Random Remaining Digits (`00000000-xxxx-xxxx-xxxx-xxxxxxxxxxxx`):**
+  All sample record IDs (`id` and `_id`) MUST zero out their initial 8 characters (`00000000-`), while the remaining 24 hex characters MUST be truly random (e.g., `00000000-74c6-417b-b141-468b9dbf3d5e` or `00000000-a8f3-4e2b-9c1d-8f7a6b5c4d3e`).
+  - **STRICT BAN ON ALL-ZERO OR SEQUENTIAL IDS:** NEVER generate sequential zero-padded IDs (e.g. `00000000-0000-0000-0000-000000000001`, `00000000-0001-4000-a000-000000000001`, `00000000-1111-4111-8111-111111111111`). All-zero endings cause cross-model duplicate collisions. Generate with `'00000000-' + crypto.randomUUID().slice(9)`.
+- **Foreign Keys:** Any foreign keys referencing sample records (e.g. `accountId`, `ledgerId`) must link to the corresponding target's exact `00000000-...` ID.
 - **Regex Purge Safety:** This guarantees backend cleanups and migration scripts can delete sample records via regex (`/^00000000-/`) without touching user-created data.

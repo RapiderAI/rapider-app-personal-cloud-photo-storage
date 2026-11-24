@@ -3376,7 +3376,8 @@
       "pageTitle": "Photos Timeline",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Scrubbable Year/Month/Day gallery + table toggle (findSWR), drag-and-drop resumable uploader, *On This Day* Memories carousel (with quick *Hide Date/Person*), Favorite heart toggle, and #activeFilterTagsBar with [Clear all]."
+      "description": "Scrubbable Year/Month/Day gallery + table toggle (findSWR), drag-and-drop resumable uploader, *On This Day* Memories carousel (with quick *Hide Date/Person*), Favorite heart toggle, and #activeFilterTagsBar with [Clear all].",
+      "enabled": true
     },
     {
       "name": "Search, OCR & Places",
@@ -3391,7 +3392,8 @@
       "pageTitle": "Search, OCR & Places",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Instant Classic Search / Ask Photos mode switcher, media-type pills (*Videos*, *Screenshots*, *Documents & Receipts*, *RAW*), OCR text match highlights, Places city/country map clusters, and #activeFilterTagsBar."
+      "description": "Instant Classic Search / Ask Photos mode switcher, media-type pills (*Videos*, *Screenshots*, *Documents & Receipts*, *RAW*), OCR text match highlights, Places city/country map clusters, and #activeFilterTagsBar.",
+      "enabled": true
     },
     {
       "name": "People, Pets & Memories",
@@ -3406,7 +3408,8 @@
       "pageTitle": "People, Pets & Memories",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Explicit opt-in biometric consent banner (when disabled), private PrsPhotoPersonCluster grid (label, merge, split, hide), and PrsPhotoMemoryRule sensitive date/person mute list."
+      "description": "Explicit opt-in biometric consent banner (when disabled), private PrsPhotoPersonCluster grid (label, merge, split, hide), and PrsPhotoMemoryRule sensitive date/person mute list.",
+      "enabled": true
     },
     {
       "name": "Albums & Collections",
@@ -3421,7 +3424,8 @@
       "pageTitle": "Albums & Collections",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Pinned personal & collaborative PrsPhotoAlbum grid/table (findSWR), #activeFilterTagsBar, clickable Album Title -> album-detail, icon+text Edit, and icon-only Delete (removes album container without trashing underlying photos)."
+      "description": "Pinned personal & collaborative PrsPhotoAlbum grid/table (findSWR), #activeFilterTagsBar, clickable Album Title -> album-detail, icon+text Edit, and icon-only Delete (removes album container without trashing underlying photos).",
+      "enabled": true
     },
     {
       "name": "Photo Curation Board",
@@ -3436,7 +3440,8 @@
       "pageTitle": "Photo Curation Board",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Interactive <rapider-kanban> shoot/event workflow (UNREVIEWED -> SHORTLIST -> NEEDS_EDIT -> FINAL_ALBUM -> REJECT_CANDIDATE) with batch promote-to-album and #activeFilterTagsBar."
+      "description": "Interactive <rapider-kanban> shoot/event workflow (UNREVIEWED -> SHORTLIST -> NEEDS_EDIT -> FINAL_ALBUM -> REJECT_CANDIDATE) with batch promote-to-album and #activeFilterTagsBar.",
+      "enabled": true
     },
     {
       "name": "Shared & Partner Library",
@@ -3451,7 +3456,8 @@
       "pageTitle": "Shared & Partner Library",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Active shared albums, expiring password-protected share links, and Partner Sharing rules (shareFromDate, selected PrsPhotoPersonCluster filter, GPS-strip status) with instant 1-click revoke."
+      "description": "Active shared albums, expiring password-protected share links, and Partner Sharing rules (shareFromDate, selected PrsPhotoPersonCluster filter, GPS-strip status) with instant 1-click revoke.",
+      "enabled": true
     },
     {
       "name": "Locked Vault",
@@ -3466,7 +3472,8 @@
       "pageTitle": "Locked Vault",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Step-up session verification gate unlocking isLockedVault == true sensitive photos/IDs, *Move Out of Vault*, and automatic session re-lock timer."
+      "description": "Step-up session verification gate unlocking isLockedVault == true sensitive photos/IDs, *Move Out of Vault*, and automatic session re-lock timer.",
+      "enabled": true
     },
     {
       "name": "Storage & Deduplication",
@@ -3481,7 +3488,8 @@
       "pageTitle": "Storage & Deduplication",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Decimal128 GiB quota bar (Photos / Videos / RAW / Trash), side-by-side perceptual duplicate merge (PrsPhotoCleanupBatch), blurry/large-video/old-screenshot cleanup cards, and 30-Day Trash restore/purge table."
+      "description": "Decimal128 GiB quota bar (Photos / Videos / RAW / Trash), side-by-side perceptual duplicate merge (PrsPhotoCleanupBatch), blurry/large-video/old-screenshot cleanup cards, and 30-Day Trash restore/purge table.",
+      "enabled": true
     },
     {
       "name": "Import, Export & Privacy",
@@ -3496,7 +3504,8 @@
       "pageTitle": "Import, Export & Privacy",
       "type": "AppPage",
       "displayOnMenu": true,
-      "description": "Biometric consent & *Wipe All Face Embeddings* switch (PrsPhotoVaultPolicy), Google Takeout importer, lossless full-library export archive, and cryptographic cascade vault erasure."
+      "description": "Biometric consent & *Wipe All Face Embeddings* switch (PrsPhotoVaultPolicy), Google Takeout importer, lossless full-library export archive, and cryptographic cascade vault erasure.",
+      "enabled": true
     },
     {
       "name": "Photo Lightbox & Non-Destructive Editor",
@@ -3511,7 +3520,8 @@
       "pageTitle": "Photo Lightbox & Non-Destructive Editor",
       "type": "AppPage",
       "displayOnMenu": false,
-      "description": "Full-res viewer (#/photo-detail?id=...) with EXIF/XMP/OCR inspector, batch/single capture-date & timezone editor, non-destructive Light/Color/Crop sliders + Revert to Original, single-receipt push to #178, and Back to list state restoration."
+      "description": "Full-res viewer (#/photo-detail?id=...) with EXIF/XMP/OCR inspector, batch/single capture-date & timezone editor, non-destructive Light/Color/Crop sliders + Revert to Original, single-receipt push to #178, and Back to list state restoration.",
+      "enabled": true
     },
     {
       "name": "Album Story & Gallery",
@@ -3526,7 +3536,8 @@
       "pageTitle": "Album Story & Gallery",
       "type": "AppPage",
       "displayOnMenu": false,
-      "description": "Single album workspace (#/album-detail?id=...) with cover banner, narrative story blocks, photo grid/list, projectChannelMessage family comments, *Share Album* trigger, and #activeFilterTagsBar."
+      "description": "Single album workspace (#/album-detail?id=...) with cover banner, narrative story blocks, photo grid/list, projectChannelMessage family comments, *Share Album* trigger, and #activeFilterTagsBar.",
+      "enabled": true
     },
     {
       "name": "Upload & Batch EXIF Drawer",
@@ -3541,7 +3552,8 @@
       "pageTitle": "Upload & Batch EXIF Drawer",
       "type": "AppPage",
       "displayOnMenu": false,
-      "description": "Sliding drawer for multi-file upload, SHA-256 duplicate skip summary, optional target album assignment, and camera-clock timezone override; resets button in finally and calls closePageDrawer()."
+      "description": "Sliding drawer for multi-file upload, SHA-256 duplicate skip summary, optional target album assignment, and camera-clock timezone override; resets button in finally and calls closePageDrawer().",
+      "enabled": true
     },
     {
       "name": "Share Album / Partner Rule Drawer",
@@ -3556,7 +3568,8 @@
       "pageTitle": "Share Album / Partner Rule Drawer",
       "type": "AppPage",
       "displayOnMenu": false,
-      "description": "Sliding drawer configuring named collaborator grants (with <rapider-phone-input> E.164 SMS/contact lookup or email), password/expiry link settings, and stripExifGps = true default; calls closePageDrawer()."
+      "description": "Sliding drawer configuring named collaborator grants (with <rapider-phone-input> E.164 SMS/contact lookup or email), password/expiry link settings, and stripExifGps = true default; calls closePageDrawer().",
+      "enabled": true
     }
   ],
   "workflows": [],
@@ -3758,5 +3771,224 @@
       "displayOnMenu": false,
       "description": "Sliding drawer configuring named collaborator grants (with <rapider-phone-input> E.164 SMS/contact lookup or email), password/expiry link settings, and stripExifGps = true default; calls closePageDrawer()."
     }
-  ]
+  ],
+  "developBuild": {
+    "version": "develop",
+    "buildNumber": "1795564071520",
+    "commitSha": "b688274fd53036ed8150e6e0cdb2b876075fd218",
+    "commitMessage": "feat(design-preview): publish Stage 1 UI preview pages for live review (pre-Stage 2 QA)",
+    "commitDate": "2026-11-24T23:47:03Z",
+    "manifestSha": "83a0119717aedb54da747029594caea24142f023",
+    "pageShas": {
+      "index.html": "27c50fd973adcbd1c01d344837fb9b3014619612",
+      "pages/album-detail/album-detail.html": "6e8d79f7c3c2399ad84d4d6f41813a24a5552b48",
+      "pages/albums-collections/albums-collections.html": "5a9097678540891f395cb548a39fac54fd8c8f66",
+      "pages/curation-board/curation-board.html": "a2093c75447f4f0cd00a724c3e1e3d97a26e44f7",
+      "pages/locked-vault/locked-vault.html": "b5d34b9e5083ad88a5525866bb23cbaf78f12f51",
+      "pages/people-and-pets/people-and-pets.html": "0da842436b8672470240c4f681886e40ea312f5c",
+      "pages/photo-detail/photo-detail.html": "066605b1c002926f9009f551629e982cbac7a758",
+      "pages/photos-timeline/photos-timeline.html": "e7c4b1d0a51e82efcfb44343bdf2f9a0e6dc0378",
+      "pages/privacy-portability/privacy-portability.html": "fa93c279efc0641c3d74d50008b119e4c027b657",
+      "pages/search-explore/search-explore.html": "76295297cdbe497896c7a47f5652656fea687c5a",
+      "pages/share-album-drawer/share-album-drawer.html": "a176ec6d28a3b513f9f00f397aba755c1052d220",
+      "pages/shared-with-family/shared-with-family.html": "999e4279f9a29ff906bf4d65a0702efd819a37f1",
+      "pages/storage-cleanup/storage-cleanup.html": "d627da974827707159b8188cfa0eca2174200261",
+      "pages/upload-import-drawer/upload-import-drawer.html": "66c66151d24ba64c5a0de668fcb5eb350b79e8d8"
+    },
+    "assetShas": {
+      ".agents/rules/app-data-models.md": "4731dc7d8a4cb908c45a1ebe971a74eb114e3297",
+      ".agents/rules/app-definition.md": "1480d6698ec378dde143554cc934cd1a96ad8c0b",
+      ".agents/rules/app-metadata.md": "d6c0d01a60ad1946daa6431ef932d3c66663f49b",
+      ".agents/rules/app-page-html.md": "f675b409e483595535a4bfb8198ad6361fc0f349",
+      ".agents/rules/app-page.md": "f876707020cc2a2a389b6b5b01e47f8b71926537",
+      ".agents/rules/app-qa-workflow.md": "a57f9576066f2381d70e4da5d9621c6b4121a4fd",
+      ".agents/rules/app-sample-data.md": "085f5ea83197197c728372a60e9d7f4b076b883f",
+      ".agents/rules/qa-passes/pass-01-routing.md": "7eab6906c9304096779528cd4cd3891421d22b45",
+      ".agents/rules/qa-passes/pass-02-swr.md": "0f3523edc2e4dbefdeed771d2b60cc68fa653793",
+      ".agents/rules/qa-passes/pass-03-data-models.md": "29cd7b5858727e442a3a76c75b9130e781550ddc",
+      ".agents/rules/qa-passes/pass-04-modals.md": "d1ddacfb8019f37fc954f7ca3fdfd3b5562abbe2",
+      ".agents/rules/qa-passes/pass-05-drawers.md": "d228c52e6ccc8aafedfd060b9813c37989d6c272",
+      ".agents/rules/qa-passes/pass-06-responsive.md": "b70f1c866bb63b999ac30d3bddec9f48e229180f",
+      ".agents/rules/qa-passes/pass-07-themes.md": "3a251a8a24596ad792d8832117109d44434c662f",
+      ".agents/rules/qa-passes/pass-08-notifications.md": "dba3b8bda7fc51962875df0cd9c4371eb44360b2",
+      ".agents/rules/qa-passes/pass-09-payloads.md": "40cc4b8c4c7d20373c977d77898ab7c5885b157a",
+      ".agents/rules/qa-passes/pass-10-components.md": "69d11aba4824432be812ec20205ec974b2456bff",
+      ".agents/rules/qa-passes/pass-11-e2e-expectations.md": "0440f4464e79438b2185c654c2a40381c1a869fc",
+      ".agents/rules/qa-passes/pass-12-asset-externalization.md": "3d3884916d6332b1e8fc75ed34dfc1c02c7fd820",
+      ".agents/rules/qa-passes/pass-13-manifest-sync.md": "368fdb29dfde4bb65ce94f0db044f3392467c7e9",
+      ".agents/rules/qa-passes/pass-14-ui-states.md": "4ee89a8287806972922acee628b08c7b6fcd2838",
+      ".agents/rules/qa-passes/pass-15-security.md": "55c8ec9444c503e2451ecf3327b496d1a188a769",
+      ".agents/rules/qa-passes/pass-16-accessibility.md": "b6e692cb5787217c84a5b75db7c27595ef31757b",
+      ".agents/rules/qa-passes/pass-17-input-formatting.md": "87102dff8a1b81022229e264827510e3903d59ee",
+      ".agents/rules/qa-passes/pass-18-kanban-list-views.md": "1b6d0ccc18c3f7fb5cf8d163a58df30abb44b010",
+      ".agents/rules/qa-passes/pass-19-ui-best-practices.md": "e1f56c6e8569bac8c2be634e48febb2ae101b9e3",
+      ".agents/rules/qa-passes/pass-20-search-filters.md": "dd9b64cf122ac5b2594bf4847e0a0848e8f3dfc3",
+      ".agents/rules/qa-passes/pass-21-collapsible-suite-sidebar.md": "c1d7bbe00b914763768854db01b1208077070cf9",
+      ".agents/rules/qa-passes/pass-22-domain-fidelity-anti-clone.md": "1b3f04326b6b29dde7bab4e99ff36bb556d107ec",
+      ".agents/rules/suite-sidebar-navigation.md": "b2b03ae4b0927dc68c7b675b0792c8e9fa98e0c8",
+      ".agents/skills/rapider-design-guided-page-evolution/SKILL.md": "ce9a619ad06ad68306ccebc9e2f7605d226eb9f5",
+      ".agents/skills/rapider-design-guided-page-evolution/references/design-token-and-component-mapping.md": "c1a9db7d2e923237aac2200f82f31fa7aa6e8667",
+      ".agents/skills/rapider-modern-saas-page-craft/SKILL.md": "51d2ab20f74fe4c76282b49672b8828bccd841e2",
+      ".cursorrules": "21b52e50933ef5f3ef85802f76bdd971a8b2e25f",
+      ".windsurfrules": "21b52e50933ef5f3ef85802f76bdd971a8b2e25f",
+      "AGENTS.md": "1946ece7f4c571357d504a66e6549d59ff5ae5ec",
+      "README.md": "d45cded013974e33463daf0e0b8184fc6b88bccb",
+      "agent_prompts.md": "6afa8f92079f0ba2b65b0067b76d20b7e6460275",
+      "app.build.json": "4b226e703e368d9627e1f2721d19e7a67aa89758",
+      "app.build.schema.json": "40e00b3bd74cd88076ce9c01f9a297720484f8cc",
+      "app.manifest.json": "83a0119717aedb54da747029594caea24142f023",
+      "assets/themes/rapider-design-system.css": "15b5659253050a3f26bd8c88d7c6095d98607ce9",
+      "assets/themes/rapider-tailwind-theme.css": "0a8822d897677ae06e6c8721e421d9b51ac05a41",
+      "assets/themes/theme-amber-gold.css": "b0492379a51be217da88eb734536f43a69b6b65b",
+      "assets/themes/theme-crimson-rose.css": "ec0f75893ba42c65e45e06e151560c93581f6adc",
+      "assets/themes/theme-default.css": "7133935dc6d476f2d02b40dee887d4dbe0096a39",
+      "assets/themes/theme-emerald-ledger.css": "116ce78ee1ca47803f5676c4051e07100c54b9df",
+      "assets/themes/theme-graphite-minimal.css": "505813063647fbbf21b9c046d45349e6ee30b99b",
+      "assets/themes/theme-nordic-cyan.css": "5d44b0bb1c69c77d33fc1a98adbf7d494e8b474a",
+      "assets/themes/theme-obsidian-compact.css": "eecb44185e6e651bae600bf248299b01ceca770e",
+      "assets/themes/theme-plum-berry.css": "b636487e05efebb3e68d34e336dbfb3ceffd5543",
+      "assets/themes/theme-sage-botanical.css": "ce8eee178b69c49bdb12e9e2007909d4e49bafc3",
+      "assets/themes/theme-sapphire-trust.css": "7af40925095db3efd0894638006219fc28398a87",
+      "assets/themes/theme-teal-horizon.css": "465ba6a6127f7295bbaaba0645f3e2785654a78f",
+      "assets/themes/theme-terracotta-warm.css": "aa912d34fcd6efa35f16bda47eac3c4ac6d12f86",
+      "assets/themes/themes.json": "bcf114076d3bb3bbdf67ce8ebefde15a00c1e400",
+      "data/sample-data.json": "8b835d841a3eac23d15a1854bbae4fc2f81b5498",
+      "index.html": "27c50fd973adcbd1c01d344837fb9b3014619612",
+      "pages/album-detail/album-detail.html": "6e8d79f7c3c2399ad84d4d6f41813a24a5552b48",
+      "pages/albums-collections/albums-collections.html": "5a9097678540891f395cb548a39fac54fd8c8f66",
+      "pages/curation-board/curation-board.html": "a2093c75447f4f0cd00a724c3e1e3d97a26e44f7",
+      "pages/locked-vault/locked-vault.html": "b5d34b9e5083ad88a5525866bb23cbaf78f12f51",
+      "pages/people-and-pets/people-and-pets.html": "0da842436b8672470240c4f681886e40ea312f5c",
+      "pages/photo-detail/photo-detail.html": "066605b1c002926f9009f551629e982cbac7a758",
+      "pages/photos-timeline/photos-timeline.html": "e7c4b1d0a51e82efcfb44343bdf2f9a0e6dc0378",
+      "pages/privacy-portability/privacy-portability.html": "fa93c279efc0641c3d74d50008b119e4c027b657",
+      "pages/search-explore/search-explore.html": "76295297cdbe497896c7a47f5652656fea687c5a",
+      "pages/share-album-drawer/share-album-drawer.html": "a176ec6d28a3b513f9f00f397aba755c1052d220",
+      "pages/shared-with-family/shared-with-family.html": "999e4279f9a29ff906bf4d65a0702efd819a37f1",
+      "pages/storage-cleanup/storage-cleanup.html": "d627da974827707159b8188cfa0eca2174200261",
+      "pages/upload-import-drawer/upload-import-drawer.html": "66c66151d24ba64c5a0de668fcb5eb350b79e8d8",
+      "rapider-idea-request.md": "11f3d6bfa33dbc0151f68363b3a28c17ade829ce",
+      "rapider-sow.md": "11f3d6bfa33dbc0151f68363b3a28c17ade829ce",
+      "run-sync.sh": "d56c51f081a4bfced00a2db8801a9613fb009e24",
+      "sample-data.json": "9fb17e7263c19c072e69e57e972aa76f2df77e72",
+      "update-ai-rules.sh": "1b1f313eb61a7b98e29e44b59d99f00e82a33b4d"
+    },
+    "manifestUrl": "https://rapider.nyc3.cdn.digitaloceanspaces.com/app/af797b59-95ec-4842-98f3-0eed0c420649/develop/manifest.json?b=1795564071520",
+    "rawManifestUrl": "https://rapider.nyc3.cdn.digitaloceanspaces.com/app/af797b59-95ec-4842-98f3-0eed0c420649/develop/manifest.json",
+    "updatedAt": "2026-11-24T23:47:55.334Z",
+    "pagesCount": 13
+  },
+  "githubRepo": {
+    "name": "rapider-app-personal-cloud-photo-storage"
+  },
+  "pipeline": {
+    "currentStage": "app-metadata-completed",
+    "statusLabel": "Architecture Manifested",
+    "currentStep": 6,
+    "totalSteps": 14,
+    "progressPercent": 42,
+    "message": "Synchronized from GitHub application manifest",
+    "version": null,
+    "updatedAt": "2026-11-02T09:49:48.515Z",
+    "milestones": [
+      {
+        "key": "submitted",
+        "label": "Idea Submitted",
+        "icon": "fas fa-lightbulb",
+        "status": "completed",
+        "description": "App concept and requirements registered."
+      },
+      {
+        "key": "approved",
+        "label": "Community Approved",
+        "icon": "fas fa-check-circle",
+        "status": "completed",
+        "description": "Idea reviewed, vetted, and approved by community/admins."
+      },
+      {
+        "key": "sow_plan",
+        "label": "SOW & Implementation Plan",
+        "icon": "fas fa-file-contract",
+        "status": "completed",
+        "description": "Requirements analyzed and architecture roadmap generated."
+      },
+      {
+        "key": "sow_approved",
+        "label": "SOW Community Approval",
+        "icon": "fas fa-user-check",
+        "status": "completed",
+        "description": "Human in the loop: Scope of work and architecture roadmap approved by community."
+      },
+      {
+        "key": "queued",
+        "label": "Queued for Build",
+        "icon": "fas fa-layer-group",
+        "status": "completed",
+        "description": "Waiting in line for autonomous agent harness pipeline."
+      },
+      {
+        "key": "manifest",
+        "label": "Architecture Manifested",
+        "icon": "fas fa-cubes",
+        "status": "completed",
+        "description": "GitHub repository and application manifest scaffolded."
+      },
+      {
+        "key": "data_models",
+        "label": "Data Schemas & API Models",
+        "icon": "fas fa-database",
+        "status": "pending",
+        "description": "Data schemas, API definitions, and entity relations generated."
+      },
+      {
+        "key": "backend_api",
+        "label": "Database & API Development",
+        "icon": "fas fa-network-wired",
+        "status": "pending",
+        "description": "Isolated database, OpenAPI endpoints, and mock records implemented."
+      },
+      {
+        "key": "frontend",
+        "label": "Frontend UI Built",
+        "icon": "fas fa-paint-brush",
+        "status": "pending",
+        "description": "Responsive HTML layouts, web components, and pages constructed."
+      },
+      {
+        "key": "workflows",
+        "label": "Workflows & Functions",
+        "icon": "fas fa-diagram-project",
+        "status": "pending",
+        "description": "Rapider workflows, lambda functions, AI step functions, and pub/sub events integrated."
+      },
+      {
+        "key": "testing",
+        "label": "End-to-End Testing",
+        "icon": "fas fa-vial-circle-check",
+        "status": "pending",
+        "description": "Automated test suite, scenario runs, and smoke tests verified."
+      },
+      {
+        "key": "qa_approved",
+        "label": "Release Community Approval",
+        "icon": "fas fa-user-shield",
+        "status": "pending",
+        "description": "Human in the loop: Test results, QA verification, and pre-release build approved by community."
+      },
+      {
+        "key": "versioning",
+        "label": "Version Released",
+        "icon": "fas fa-rocket",
+        "status": "pending",
+        "description": "Immutable release version tagged with locked changelog."
+      },
+      {
+        "key": "deployment",
+        "label": "Live Cloud Deployment",
+        "icon": "fas fa-cloud-upload-alt",
+        "status": "pending",
+        "description": "Application deployed to cloud and available for workspace install."
+      }
+    ]
+  }
 }
